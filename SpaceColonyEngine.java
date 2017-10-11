@@ -39,21 +39,7 @@ public class SpaceColonyEngine implements ISCError{
 					System.out.println("Invalid Input. Try Again.")
 			}
 		}
-		done = false;
-			//load or save.
-		while(done == false){
-			System.out.println(_scsdm.getDisplayText("NEW_OR_LOAD");
-			iInput = Integer.parseInt(sInput);
-			switch(iInput){
-				case N:
-					done = true;
-					break;
-				case L:
-					System.out.println("Feature not yet implemented");
-					break;
-				default:
-					System.out.println("Invalid Input. Try Again.");
-					break;
+		loadOrNew();
 
 			}
 		}
@@ -76,28 +62,6 @@ public class SpaceColonyEngine implements ISCError{
 
 
 	}
-
-	public void handleException(Exception thisException){
-
-	}
-
-	public void randomEvent(){
-		int iRandomEventTag = 100*Math.rand();
-	}
-
-	public void randomEffects(){
-
-	}
-
-	public void produce(){
-	//Mining production happens here. SHoudl manufacturing be done here also, or should it bwe its own thing?
-	// idea: instead of producing 1 unit per worker, each worker could potentialy produce 1d4 units. Woudl it be Nd4, or 1d4*N? Etheir way works. But one produces a curve, and the other does not. Both are posible, but they have differing ramifications.
-	}
-
-	public void consume(){
-	//food is eaten, and procuction matereals are consumed.
-	}
-
 	public void traderMagic(){
 	//if yess, do the freighter things. If not, it will go to the next thing.
 		while (SCS.iMerchantCountDown == 0){
@@ -121,41 +85,28 @@ public class SpaceColonyEngine implements ISCError{
 								System.out.println("Invalid Input. Try Again.")
 						}
 
+
+		public void loadOrNew(){
+			done = false;
+						//load or save.
+				while(done == false){
+				System.out.println(_scsdm.getDisplayText("NEW_OR_LOAD");
+				iInput = Integer.parseInt(sInput);
+				switch(iInput){
+					case N:
+						done = true;
+						break;
+					case L:
+						System.out.println("Feature not yet implemented");
+						break;
+					default:
+						System.out.println("Invalid Input. Try Again.");
+			break;
+
+		}
+
+
 			}
 		}
 	 }
-
-	public void setFreighterArrivalDate(){
-	//2d4 is an idea taht I had. Anything else shoudl work.
-	}
-
-	public void displayInventory(){
-		//Prints out all of the items you have and quantities therof.
-	}
-
-	public void buy(){
-		System.out.println(_scsdm.getDisplayText("BUY_WHAT");
-	}
-
-	public void sell(){
-		System.out.println(_scsdm.getDisplayText("SELL_WHAT");
-	}
-
-	public void displayLabour(){
-		//tells you what you used last turn for owrker assignmetns.
-		System.out.println(_scsdm.getDisplayText("PREV_WORK_ASSIGN");
-	}
-
-	public void modifyLabour(){
-		//to set production for next turn. You have the option to simply leave it with the
-	}
-
-	public void checkAsignments(){
-		//are there too manny or too few workers assigned.
-	}
-
-	public void endTurnMiscelanea(){
-		//Incremetns turn-count, an any other miscelaneous things that we may think of later
-	}
-
 }
