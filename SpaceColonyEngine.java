@@ -1,6 +1,8 @@
 public class SpaceColonyEngine implements ISCError{
+	//for Joey, compile with: Call "C:\Program Files (x86)\Java\jdk1.8.0_91\bin\javac.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim" SpaceColonyEngine.java
+	//and Compile with Call "C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim;C:\Joey's coding stuf\SpaceColonySim\sqlite-jdbc-3.18.0.jar" SpaceColonyEngine
 
-	private static final String CONSTR = "jdbc:sqlite:C:/Joey's coding stuf/SpaceColonySim/SCSDataBase.db";//For Sean D:\Dev\JavaJoe\SCS, for joey C:\Joey's coding stuf\SpaceColonySim;
+	private static final String CONSTR = "jdbc:sqlite:C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim\\SCSDataBase.db";//For Sean D:\\Dev\\JavaJoe\\SCS, for joey C:\\Joey's coding stuf\\SpaceColonySim;
 	private SCSDataModule _scsdm;
 	private SpaceColonyGame SCG;
 
@@ -28,11 +30,11 @@ public class SpaceColonyEngine implements ISCError{
 			switch(iInput){
 				case 1:
 					_scsdm.setLanguage("ENG");
-					done = true
+					done = true;
 					break;
 				case 2:
 					_scsdm.setLanguage("ESP");
-					done = true
+					done = true;
 					break;
 
 				default:
@@ -53,8 +55,9 @@ public class SpaceColonyEngine implements ISCError{
 			System.out.println("The data base could not be connected to. Exiting game");
 			break;
 		}
-		_scsdm.traderMagic();
 		System.out.println(_scsdm.getDisplayText("INVENTORY");
+		_scsdm.traderMagic();
+
 		_scsdm.displayLabour
 
 
@@ -64,25 +67,26 @@ public class SpaceColonyEngine implements ISCError{
 	}
 	public void traderMagic(){
 	//if yess, do the freighter things. If not, it will go to the next thing.
-		while (SCS.iMerchantCountDown == 0){
+		if (traderAriveOrNot() == true){
 			System.out.println(_scsdm.getDisplayText("TRADER_ARIVES");
 			sInput = System.console.readln()
 						switch(sInput){
 							case B:
-								engine.buy();
-								iTraderCountDown = Math.rint(3 * Math.rand())+1;
+								System.out.println(_scsdm.getDisplayText("INCOMPLETE");
+								//iTraderCountDown = Math.rint(3 * Math.rand())+1;
 								break;
 							case S:
-								engine.sell();
-								iTraderCountDown = Math.rint(3 * Math.rand())+1
+								System.out.println(_scsdm.getDisplayText("INCOMPLETE");
+
+								//iTraderCountDown = Math.rint(3 * Math.rand())+1;
 								break;
 							case N:
-								iTraderCountDown = Math.rint(3 * Math.rand())+1
+								//iTraderCountDown = Math.rint(3 * Math.rand())+1;
 								//Then it just leaves.
 								break;
 
 							default:
-								System.out.println("Invalid Input. Try Again.")
+								System.out.println("Invalid Input. Try Again.");
 						}
 
 
@@ -97,16 +101,22 @@ public class SpaceColonyEngine implements ISCError{
 						done = true;
 						break;
 					case L:
-						System.out.println("Feature not yet implemented");
+						System.out.println(_scsdm.getDisplayText("INCOMPLETE");
 						break;
 					default:
 						System.out.println("Invalid Input. Try Again.");
 			break;
 
 		}
+		private boolean traderAriveOrNot(){
+			if (SCG.iMerchantCountDown == 0){
+				return true;
+			}else{
+				return false;
+			}
 
-
+					}
 			}
 		}
-	 }
+	}
 }
