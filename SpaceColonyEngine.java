@@ -38,7 +38,7 @@ public class SpaceColonyEngine implements ISCError{
 					break;
 
 				default:
-					System.out.println("Invalid Input. Try Again.")
+					System.out.println("Invalid Input. Try Again.");
 			}
 		}
 		loadOrNew();
