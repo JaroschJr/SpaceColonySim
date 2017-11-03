@@ -13,9 +13,9 @@ public class SpaceColonyEngine implements ISCError{
 		engine.launchGame();
 	}
 
-	private void launchGame(){
-
-	}
+	//private void launchGame(){
+	//
+	//}
 
 	private void initialize(){
 		_scsdm = new SCSDataModule();
@@ -43,8 +43,8 @@ public class SpaceColonyEngine implements ISCError{
 		}
 		loadOrNew();
 
-			}
-		}
+			//}//
+
 		done = false;
 
 		_scsdm.connect();
@@ -55,28 +55,24 @@ public class SpaceColonyEngine implements ISCError{
 			System.out.println("The data base could not be connected to. Exiting game");
 			break;
 		}
-		System.out.println(_scsdm.getDisplayText("INVENTORY");
-		_scsdm.traderMagic();
-
-		_scsdm.displayLabour
-
-
-
+		//System.out.println(_scsdm.getDisplayText("INVENTORY");
+		//_scsdm.traderMagic();
+//		_scsdm.displayLabour
 
 
 	}
 	public void traderMagic(){
 	//if yess, do the freighter things. If not, it will go to the next thing.
 		if (traderAriveOrNot() == true){
-			System.out.println(_scsdm.getDisplayText("TRADER_ARIVES");
-			sInput = System.console.readln()
+			System.out.println(_scsdm.getDisplayText("TRADER_ARIVES"));
+			sInput = System.console.readln();
 						switch(sInput){
 							case B:
-								System.out.println(_scsdm.getDisplayText("INCOMPLETE");
+								System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
 								//iTraderCountDown = Math.rint(3 * Math.rand())+1;
 								break;
 							case S:
-								System.out.println(_scsdm.getDisplayText("INCOMPLETE");
+								System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
 
 								//iTraderCountDown = Math.rint(3 * Math.rand())+1;
 								break;
@@ -94,14 +90,14 @@ public class SpaceColonyEngine implements ISCError{
 			done = false;
 						//load or save.
 				while(done == false){
-				System.out.println(_scsdm.getDisplayText("NEW_OR_LOAD");
+				System.out.println(_scsdm.getDisplayText("NEW_OR_LOAD"));
 				iInput = Integer.parseInt(sInput);
 				switch(iInput){
 					case N:
 						done = true;
 						break;
 					case L:
-						System.out.println(_scsdm.getDisplayText("INCOMPLETE");
+						System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
 						break;
 					default:
 						System.out.println("Invalid Input. Try Again.");
@@ -119,4 +115,5 @@ public class SpaceColonyEngine implements ISCError{
 			}
 		}
 	}
+}
 }
