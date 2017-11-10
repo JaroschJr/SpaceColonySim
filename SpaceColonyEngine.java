@@ -1,8 +1,8 @@
-public class SpaceColonyEngine implements ISCError{
+public class SpaceColonyEngine implements ISCSError{
 	//for Joey, compile with: Call "C:\Program Files (x86)\Java\jdk1.8.0_91\bin\javac.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim" SpaceColonyEngine.java
 	//and Compile with Call "C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim;C:\Joey's coding stuf\SpaceColonySim\sqlite-jdbc-3.18.0.jar" SpaceColonyEngine
 
-	private static final String CONSTR = "jdbc:sqlite:C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim\\SCSDataBase.db";//For Sean D:\\Dev\\JavaJoe\\SCS, for joey C:\\Joey's coding stuf\\SpaceColonySim;
+	private static final String CONSTR = "jdbc:sqlite:C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim\\SCSDataBase.db";     //For Sean D:\\Dev\\JavaJoe\\SCS, for joey C:\\Joey's coding stuf\\SpaceColonySim;
 	private SCSDataModule _scsdm;
 	private SpaceColonyGame SCG;
 
@@ -13,9 +13,9 @@ public class SpaceColonyEngine implements ISCError{
 		engine.launchGame();
 	}
 
-	//private void launchGame(){
-	//
-	//}
+	private void launchGame(){
+
+	}
 
 	private void initialize(){
 		_scsdm = new SCSDataModule();
@@ -43,7 +43,7 @@ public class SpaceColonyEngine implements ISCError{
 		}
 		loadOrNew();
 
-			//}//
+
 
 		done = false;
 
@@ -58,9 +58,9 @@ public class SpaceColonyEngine implements ISCError{
 		//System.out.println(_scsdm.getDisplayText("INVENTORY");
 		//_scsdm.traderMagic();
 //		_scsdm.displayLabour
-
-
 	}
+
+
 	public void traderMagic(){
 	//if yess, do the freighter things. If not, it will go to the next thing.
 		if (traderAriveOrNot() == true){
@@ -84,36 +84,35 @@ public class SpaceColonyEngine implements ISCError{
 							default:
 								System.out.println("Invalid Input. Try Again.");
 						}
-
-
-		public void loadOrNew(){
-			done = false;
-						//load or save.
-				while(done == false){
-				System.out.println(_scsdm.getDisplayText("NEW_OR_LOAD"));
-				iInput = Integer.parseInt(sInput);
-				switch(iInput){
-					case N:
-						done = true;
-						break;
-					case L:
-						System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
-						break;
-					default:
-						System.out.println("Invalid Input. Try Again.");
-			break;
-
-		}
-		private boolean traderAriveOrNot(){
-			if (SCG.iMerchantCountDown == 0){
-				return true;
-			}else{
-				return false;
-			}
-
 					}
+				}
+
+
+	public void loadOrNew(){
+		done = false;
+					//load or save.
+			while(done == false){
+			System.out.println(_scsdm.getDisplayText("NEW_OR_LOAD"));
+			iInput = Integer.parseInt(sInput);
+			switch(iInput){
+				case N:
+					done = true;
+					break;
+				case L:
+					System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
+					break;
+				default:
+					System.out.println("Invalid Input. Try Again.");
+		break;
 			}
 		}
 	}
-}
+
+	private boolean traderAriveOrNot(){
+		if (SCG.iMerchantCountDown == 0){
+			return true;
+		}else{
+				return false;
+		}
+	}
 }
