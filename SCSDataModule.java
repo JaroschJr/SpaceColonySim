@@ -31,7 +31,7 @@ public class SCSDataModule{
 		  _conn = null;
 		}
 	}catch(SQLException ExcepVar){
-		errorHandler.HandleException( ExcepVar );
+		errorHandler.handleException( ExcepVar );
 	}
 		_connectionStr = value;
 	}
@@ -47,7 +47,7 @@ public class SCSDataModule{
 		}//end try
 		catch(SQLException sqle){
 			_conn = null;
-			errorHandler.HandleException( sqle);
+			errorHandler.handleException( sqle);
 
 		}//end catch sqle
 
@@ -60,7 +60,7 @@ public class SCSDataModule{
 			_conn.close();
 			}
 		}catch(SQLException eException){
-			errorHandler.HandleException( eException );
+			errorHandler.handleException( eException );
 		}
 	}
 
@@ -73,7 +73,7 @@ public class SCSDataModule{
 			ResultSet _FlufText = sStatement.executeQuery(SQLQuery);
 			sProxy = _FlufText.getString("DISPLAY_TEXT");
 		}catch(SQLException EXCEPTIONVARIABLE){
-			errorHandler.HandleException( EXCEPTIONVARIABLE );
+			errorHandler.handleException( EXCEPTIONVARIABLE );
 		}
 		// finnish this, trychatch stuf, the like, ect.
 		return sProxy;

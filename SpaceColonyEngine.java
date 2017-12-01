@@ -17,13 +17,21 @@ public class SpaceColonyEngine implements ISCSError{
 
 	}
 
+	public void handleException(Exception thisException){
+
+	}
+
 	private void initialize(){
+		//_scsdm startup
 		_scsdm = new SCSDataModule();
 		_scsdm.errorHandler = this;
 		_scsdm.setConnectionString(CONSTR);
+		_scsdm.connect();
+
+		//other setup
 		SCG = new SpaceColonyGame();
 		System.out.println("Press 1 for English, 2 para Espanol");
-		String sInput = System.console.readln();
+		String sInput = System.console().readLine();
 		int iInput = Integer.parseInt(sInput);
 		boolean done = false;
 		while(done == false){
@@ -42,22 +50,16 @@ public class SpaceColonyEngine implements ISCSError{
 			}
 		}
 		loadOrNew();
-
-
-
-		done = false;
-
-		_scsdm.connect();
 		//if it is not connected, why bother?
 		if(_scsdm.isConnected() == true){
 			//nothing, exit the loop.
 		}else{
 			System.out.println("The data base could not be connected to. Exiting game");
-			break;
+			return;
 		}
-		//System.out.println(_scsdm.getDisplayText("INVENTORY");
+		System.out.println(_scsdm.getDisplayText("INVENTORY"));
 		//_scsdm.traderMagic();
-//		_scsdm.displayLabour
+		//_scsdm.displayLabour();
 	}
 
 
@@ -65,18 +67,18 @@ public class SpaceColonyEngine implements ISCSError{
 	//if yess, do the freighter things. If not, it will go to the next thing.
 		if (traderAriveOrNot() == true){
 			System.out.println(_scsdm.getDisplayText("TRADER_ARIVES"));
-			sInput = System.console.readln();
+			String sInput = System.console().readLine();
 						switch(sInput){
-							case B:
+							case "B":
 								System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
 								//iTraderCountDown = Math.rint(3 * Math.rand())+1;
 								break;
-							case S:
+							case "S":
 								System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
 
 								//iTraderCountDown = Math.rint(3 * Math.rand())+1;
 								break;
-							case N:
+							case "N":
 								//iTraderCountDown = Math.rint(3 * Math.rand())+1;
 								//Then it just leaves.
 								break;
@@ -89,16 +91,16 @@ public class SpaceColonyEngine implements ISCSError{
 
 
 	public void loadOrNew(){
-		done = false;
+		boolean done = false;
 					//load or save.
 			while(done == false){
 			System.out.println(_scsdm.getDisplayText("NEW_OR_LOAD"));
-			iInput = Integer.parseInt(sInput);
-			switch(iInput){
-				case N:
+			String sInput = System.console().readLine();
+			switch(sInput){
+				case "N":
 					done = true;
 					break;
-				case L:
+				case "L":
 					System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
 					break;
 				default:
