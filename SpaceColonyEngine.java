@@ -68,6 +68,7 @@ public class SpaceColonyEngine implements ISCSError{
 		if (traderAriveOrNot() == true){
 			System.out.println(_scsdm.getDisplayText("TRADER_ARIVES"));
 			String sInput = System.console().readLine();
+				sInput = sInput.toUpperCase();
 						switch(sInput){
 							case "B":
 								System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
@@ -96,6 +97,7 @@ public class SpaceColonyEngine implements ISCSError{
 			while(done == false){
 			System.out.println(_scsdm.getDisplayText("NEW_OR_LOAD"));
 			String sInput = System.console().readLine();
+			sInput = sInput.toUpperCase();
 			switch(sInput){
 				case "N":
 					done = true;
