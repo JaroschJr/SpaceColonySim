@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 public class SCSDataModule{
 	public ISCSError errorHandler;
 	private String _Language;
+
 	public String getLanguage(){
 		return _Language;
 	}
@@ -25,6 +26,7 @@ public class SCSDataModule{
 
 	public void setConnectionString(String value)
 	{
+		System.out.println("The setConnectionString() is used...");
 	try{
 		if(_conn != null){
 		  _conn.close();
@@ -32,18 +34,25 @@ public class SCSDataModule{
 		}
 	}catch(SQLException ExcepVar){
 		errorHandler.handleException( ExcepVar );
-	}
+		System.out.println("...And fails");
+		}
 		_connectionStr = value;
+		System.out.println("...And works");
 	}
 
 	public boolean isConnected(){
-		return (_conn != null);
+		if(_conn != null){
+			return true;
+		}else{
+			return false;
+		}
 	}
 
 	public boolean connect(){
 		try{
+			System.out.println("It tries to connect...");
 			_conn = DriverManager.getConnection(_connectionStr);
-			//System.out.println("It Is Connected. Whoo Whoo.");
+			System.out.println("...and it does");
 		}//end try
 		catch(SQLException sqle){
 			_conn = null;

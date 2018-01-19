@@ -1,14 +1,17 @@
 public class SpaceColonyEngine implements ISCSError{
 	//for Joey, compile with: Call "C:\Program Files (x86)\Java\jdk1.8.0_91\bin\javac.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim" SpaceColonyEngine.java
-	//and Compile with Call "C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim;C:\Joey's coding stuf\SpaceColonySim\sqlite-jdbc-3.18.0.jar" SpaceColonyEngine
-
-	private static final String CONSTR = "jdbc:sqlite:C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim\\SCSDataBase.db";     //For Sean D:\\Dev\\JavaJoe\\SCS, for joey C:\\Joey's coding stuf\\SpaceColonySim;
+	//and run with Call "C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim;C:\Joey's coding stuf\SpaceColonySim\sqlite-jdbc-3.18.0.jar" SpaceColonyEngine
+		//For joey CONSTR woudl be jdbc:sqlite:C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim\\SCSDataBase.db
+	private static String CONSTR = "";     //For Sean D:\\Dev\\JavaJoe\\SCS, for joey C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim;
 	private SCSDataModule _scsdm;
 	private SpaceColonyGame SCG;
 
 
 	public static void main(String[] args){
+		CONSTR = args[0];
+		System.out.println("args Created");
 		SpaceColonyEngine engine = new SpaceColonyEngine();
+		System.out.println("datamodule Created");
 		engine.initialize();
 		engine.launchGame();
 	}
@@ -24,9 +27,18 @@ public class SpaceColonyEngine implements ISCSError{
 	private void initialize(){
 		//_scsdm startup
 		_scsdm = new SCSDataModule();
+		System.out.println("DataModule Created");
 		_scsdm.errorHandler = this;
+		System.out.println("errorHandler Created");
 		_scsdm.setConnectionString(CONSTR);
+		System.out.println("Connection String Set");
 		_scsdm.connect();
+		if(_scsdm.isConnected() == true){
+					//nothing, exit the loop.
+				}else{
+					System.out.println("The data base could not be connected to. Exiting game");
+					return;
+		}
 
 		//other setup
 		SCG = new SpaceColonyGame();
@@ -51,12 +63,6 @@ public class SpaceColonyEngine implements ISCSError{
 		}
 		loadOrNew();
 		//if it is not connected, why bother?
-		if(_scsdm.isConnected() == true){
-			//nothing, exit the loop.
-		}else{
-			System.out.println("The data base could not be connected to. Exiting game");
-			return;
-		}
 		System.out.println(_scsdm.getDisplayText("INVENTORY"));
 		//_scsdm.traderMagic();
 		//_scsdm.displayLabour();

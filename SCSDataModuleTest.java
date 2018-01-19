@@ -5,7 +5,7 @@ public class SCSDataModuleTest implements ISCSError{
 
 	private static final String CONSTR = "jdbc:sqlite:C:/Joey's coding stuf/SpaceColonySim/SCSDataBase.db";//For Sean D:\Dev\JavaJoe\SCS, for joey C:\Joey's coding stuf\SpaceColonySim
 
-	public static void main (String args[]){
+	public static void main (String[] args){
 		SCSDataModuleTest whoCares = new SCSDataModuleTest();
 		whoCares.WorkAround();
 
