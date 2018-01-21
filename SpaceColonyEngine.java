@@ -16,9 +16,7 @@ public class SpaceColonyEngine implements ISCSError{
 		engine.launchGame();
 	}
 
-	private void launchGame(){
 
-	}
 
 	public void handleException(Exception thisException){
 
@@ -27,11 +25,8 @@ public class SpaceColonyEngine implements ISCSError{
 	private void initialize(){
 		//_scsdm startup
 		_scsdm = new SCSDataModule();
-		System.out.println("DataModule Created");
 		_scsdm.errorHandler = this;
-		System.out.println("errorHandler Created");
 		_scsdm.setConnectionString(CONSTR);
-		System.out.println("Connection String Set");
 		_scsdm.connect();
 		if(_scsdm.isConnected() == true){
 					//nothing, exit the loop.
@@ -40,34 +35,36 @@ public class SpaceColonyEngine implements ISCSError{
 					return;
 		}
 
-		//other setup
-		SCG = new SpaceColonyGame();
-		System.out.println("Press 1 for English, 2 para Espanol");
-		String sInput = System.console().readLine();
-		int iInput = Integer.parseInt(sInput);
-		boolean done = false;
-		while(done == false){
-			switch(iInput){
-				case 1:
-					_scsdm.setLanguage("ENG");
-					done = true;
-					break;
-				case 2:
-					_scsdm.setLanguage("ESP");
-					done = true;
-					break;
 
-				default:
-					System.out.println("Invalid Input. Try Again.");
-			}
-		}
-		loadOrNew();
-		//if it is not connected, why bother?
-		System.out.println(_scsdm.getDisplayText("INVENTORY"));
-		//_scsdm.traderMagic();
-		//_scsdm.displayLabour();
 	}
 
+	private void launchGame(){
+		SCG = new SpaceColonyGame();
+			System.out.println("Press 1 for English, 2 para Espanol");
+			String sInput = System.console().readLine();
+			int iInput = Integer.parseInt(sInput);
+			boolean done = false;
+			while(done == false){
+				switch(iInput){
+					case 1:
+						_scsdm.setLanguage("ENG");
+						done = true;
+						break;
+					case 2:
+						_scsdm.setLanguage("ESP");
+						done = true;
+						break;
+
+					default:
+						System.out.println("Invalid Input. Try Again.");
+				}
+			}
+			loadOrNew();
+			//if it is not connected, why bother?
+			System.out.println(_scsdm.getDisplayText("INVENTORY"));
+			//_scsdm.traderMagic();
+			//_scsdm.displayLabour();
+	}
 
 	public void traderMagic(){
 	//if yess, do the freighter things. If not, it will go to the next thing.
