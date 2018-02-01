@@ -9,9 +9,7 @@ public class SpaceColonyEngine implements ISCSError{
 
 	public static void main(String[] args){
 		CONSTR = args[0];
-		System.out.println("args Created");
 		SpaceColonyEngine engine = new SpaceColonyEngine();
-		System.out.println("datamodule Created");
 		engine.initialize();
 		engine.launchGame();
 	}

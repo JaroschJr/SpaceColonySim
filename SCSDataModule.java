@@ -26,7 +26,6 @@ public class SCSDataModule{
 
 	public void setConnectionString(String value)
 	{
-		System.out.println("The setConnectionString() is used...");
 	try{
 		if(_conn != null){
 		  _conn.close();
@@ -34,10 +33,8 @@ public class SCSDataModule{
 		}
 	}catch(SQLException ExcepVar){
 		errorHandler.handleException( ExcepVar );
-		System.out.println("...And fails");
 		}
 		_connectionStr = value;
-		System.out.println("...And works");
 	}
 
 	public boolean isConnected(){
@@ -50,9 +47,7 @@ public class SCSDataModule{
 
 	public boolean connect(){
 		try{
-			System.out.println("It tries to connect...");
 			_conn = DriverManager.getConnection(_connectionStr);
-			System.out.println("...and it does");
 		}//end try
 		catch(SQLException sqle){
 			_conn = null;
