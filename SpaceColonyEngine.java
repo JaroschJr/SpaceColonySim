@@ -48,14 +48,14 @@ public class SpaceColonyEngine implements ISCSError{
 		_scsdm.errorHandler = this;
 		_scsdm.setConnectionString(CONSTR);
 		_scsdm.connect();
-		if(_scsdm.isConnected() == true){
-					//nothing, exit the loop.
-				}else{
-					System.out.println("The data base could not be connected to. Exiting game");
-					return;
-		}
 
-
+		//check if the database connection has been
+		//established, if not then display an error
+		//message and close the application
+		if(!_scsdm.isConnected()){
+			System.out.println("The data base could not be connected to. Exiting game");
+			System.exit(1);
+		}//end if
 	}
 
 	/**
