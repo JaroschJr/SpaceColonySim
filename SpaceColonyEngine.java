@@ -1,12 +1,25 @@
+/**
+ * Class to manage the execution of the the game and
+ * direct the interface with the user.  This class
+ * will be responsible for talking to the database,
+ * user I/O, and will create and own the actual
+ * game object.
+ */
 public class SpaceColonyEngine implements ISCSError{
 	//for Joey, compile with: Call "C:\Program Files (x86)\Java\jdk1.8.0_91\bin\javac.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim" SpaceColonyEngine.java
 	//and run with Call "C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim;C:\Joey's coding stuf\SpaceColonySim\sqlite-jdbc-3.18.0.jar" SpaceColonyEngine
-		//For joey CONSTR woudl be jdbc:sqlite:C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim\\SCSDataBase.db
+	//For joey CONSTR woudl be jdbc:sqlite:C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim\\SCSDataBase.db
 	private static String CONSTR = "";     //For Sean D:\\Dev\\JavaJoe\\SCS, for joey C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim;
 	private SCSDataModule _scsdm;
 	private SpaceColonyGame SCG;
 
-
+	/**
+	 * Standard main method for executing a playthrough
+	 * of the game.
+	 * @param args The SQLite connectionn string
+	 *             should be passed in as a command
+	 *             line argument.
+	 */
 	public static void main(String[] args){
 		CONSTR = args[0];
 		SpaceColonyEngine engine = new SpaceColonyEngine();
@@ -14,12 +27,21 @@ public class SpaceColonyEngine implements ISCSError{
 		engine.launchGame();
 	}
 
-
-
+	/**
+	 * Callback method for dealing with exceptions
+	 * which occur wuthin the game object.
+	 * @param thisException The exception which
+	 *                      has occurred.
+	 */
 	public void handleException(Exception thisException){
 
 	}
 
+	/**
+	 * Initializes the state of the game engine.
+	 * Sets up the database connection, and
+	 * establishes the users language preference.
+	 */
 	private void initialize(){
 		//_scsdm startup
 		_scsdm = new SCSDataModule();
@@ -36,6 +58,11 @@ public class SpaceColonyEngine implements ISCSError{
 
 	}
 
+	/**
+	 * Creates the game object and prepares it
+	 * for a playthrough, either initializing
+	 * a new game or loading a previous game.
+	 */
 	private void launchGame(){
 		SCG = new SpaceColonyGame();
 			System.out.println("Press 1 for English, 2 para Espanol");
@@ -60,38 +87,14 @@ public class SpaceColonyEngine implements ISCSError{
 			loadOrNew();
 			//if it is not connected, why bother?
 			System.out.println(_scsdm.getDisplayText("INVENTORY"));
-			//_scsdm.traderMagic();
-			//_scsdm.displayLabour();
 	}
 
-	public void traderMagic(){
-	//if yess, do the freighter things. If not, it will go to the next thing.
-		if (traderAriveOrNot() == true){
-			System.out.println(_scsdm.getDisplayText("TRADER_ARIVES"));
-			String sInput = System.console().readLine();
-				sInput = sInput.toUpperCase();
-						switch(sInput){
-							case "B":
-								System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
-								//iTraderCountDown = Math.rint(3 * Math.rand())+1;
-								break;
-							case "S":
-								System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
-
-								//iTraderCountDown = Math.rint(3 * Math.rand())+1;
-								break;
-							case "N":
-								//iTraderCountDown = Math.rint(3 * Math.rand())+1;
-								//Then it just leaves.
-								break;
-
-							default:
-								System.out.println("Invalid Input. Try Again.");
-						}
-					}
-				}
-
-
+	/**
+	 * Asks the user if the game is to be a new
+	 * game or loading a proviously saved game.
+	 * Prepares the game object according to
+	 * the choice.
+	 */
 	public void loadOrNew(){
 		boolean done = false;
 					//load or save.
@@ -117,7 +120,7 @@ public class SpaceColonyEngine implements ISCSError{
 		if (SCG.iMerchantCountDown == 0){
 			return true;
 		}else{
-				return false;
+			return false;
 		}
 	}
 }

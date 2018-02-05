@@ -4,6 +4,10 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
 
+/**
+ * Class responsible for facilitating communication
+ * to and from the database.
+ */
 public class SCSDataModule{
 	public ISCSError errorHandler;
 	private String _Language;
@@ -37,6 +41,12 @@ public class SCSDataModule{
 		_connectionStr = value;
 	}
 
+	/**
+	 * Determines if the database connection
+	 * is currently active.
+	 * @return Returns true is the database is
+	 *         connnected; false if not.
+	 */
 	public boolean isConnected(){
 		if(_conn != null){
 			return true;
@@ -45,6 +55,13 @@ public class SCSDataModule{
 		}
 	}
 
+	/**
+	 * Attempts to extablish a connection to the
+	 * database using the connection string
+	 * property.
+	 * @return Returns true if the arrempt was
+	 *         successful; false if not.
+	 */
 	public boolean connect(){
 		try{
 			_conn = DriverManager.getConnection(_connectionStr);
@@ -58,6 +75,10 @@ public class SCSDataModule{
 		return isConnected();
 	}
 
+	/**
+	 * Terminates the active connection to the
+	 * database.
+	 */
 	public void disConnect(){
 		try{
 			if (_conn != null){
@@ -68,6 +89,14 @@ public class SCSDataModule{
 		}
 	}
 
+	/**
+	 * Retrieves text for display purposes from
+	 * the database based on the current language
+	 * preferece setting.
+	 * @param textCode The code specifying the
+	 *                 text to retrieve.
+	 * @return Returns the texxt to display.
+	 */
 	public String getDisplayText(String textCode)
 	{
 		String sProxy = "PROXY";
@@ -79,7 +108,7 @@ public class SCSDataModule{
 		}catch(SQLException EXCEPTIONVARIABLE){
 			errorHandler.handleException( EXCEPTIONVARIABLE );
 		}
-		// finnish this, trychatch stuf, the like, ect.
+		// finish this, trychatch stuf, the like, ect.
 		return sProxy;
 	}
 }

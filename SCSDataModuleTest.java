@@ -1,3 +1,6 @@
+/**
+ * Test class for exercising the data module.
+ */
 public class SCSDataModuleTest implements ISCSError{
 
 	//to compile : Call "C:\Program Files (x86)\Java\jdk1.8.0_91\bin\javac.exe" -cp "C:\Joey's coding stuf\SpaceColonySim" SCSDataModuleTest.java
