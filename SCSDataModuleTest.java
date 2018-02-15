@@ -32,6 +32,12 @@ public class SCSDataModuleTest implements ISCSError{
 				DisplayText = Thing.getDisplayText("WELCOME");
 				System.out.println("The Display Text Is " + DisplayText);
 
+		String[][] sLangs;
+		sLangs = Thing.getLanguages();
+		for(int i = 0; i < sLangs.length; i++){
+			System.out.println("Lang " + i + " " + sLangs[i][0] + " - " + sLangs[i][1]);
+		}//end for i
+
 		Thing.disConnect();
 	}
 

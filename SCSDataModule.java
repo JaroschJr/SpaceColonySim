@@ -111,4 +111,35 @@ public class SCSDataModule{
 		// finish this, trychatch stuf, the like, ect.
 		return sProxy;
 	}
+
+	public String[][] getLanguages()
+	{
+		String[][] _langs = null;
+		String _count_query = "SELECT COUNT(*) AS CNT FROM SCS_LANGUAGES";
+		String _lang_query = "SELECT NAME, CODE FROM SCS_LANGUAGES";
+		int _count = 0;
+
+		try{
+			Statement _stat = _conn.createStatement();
+
+			//first get the record counnt so we can initialize
+			//the result array
+			ResultSet _rs = _stat.executeQuery(_count_query);
+			_count = _rs.getInt("CNT");
+			_langs = new String[_count][2];
+
+			//now get the data
+			_rs = _stat.executeQuery(_lang_query);
+			while(_rs.next()){
+				int i = _rs.getRow() - 1;
+				_langs[i][0] = _rs.getString("CODE");
+				_langs[i][1] = _rs.getString("NAME");
+			}//end while
+		}//end try
+		catch(SQLException sqle){
+			errorHandler.handleException(sqle);
+		}//end catch)
+
+		return _langs;
+	}
 }
