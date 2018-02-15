@@ -112,6 +112,13 @@ public class SCSDataModule{
 		return sProxy;
 	}
 
+	/**
+	 * Retrieves an array of languages supported
+	 * by the database.
+	 * @return Returns a matrix of languages and
+	 *         codes which are supported by the
+	 *         database.
+	 */
 	public String[][] getLanguages()
 	{
 		String[][] _langs = null;
