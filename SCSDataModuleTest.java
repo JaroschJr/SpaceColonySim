@@ -6,12 +6,13 @@ public class SCSDataModuleTest implements ISCSError{
 	//to compile : Call "C:\Program Files (x86)\Java\jdk1.8.0_91\bin\javac.exe" -cp "C:\Joey's coding stuf\SpaceColonySim" SCSDataModuleTest.java
 	//to run w DB: Call "C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe" -cp "C:\Joey's coding stuf\SpaceColonySim;C:\Joey's coding stuf\SpaceColonySim\sqlite-jdbc-3.18.0.jar" SCSDataModuleTest
 
-	private static final String CONSTR = "jdbc:sqlite:C:/Joey's coding stuf/SpaceColonySim/SCSDataBase.db";//For Sean D:\Dev\JavaJoe\SCS, for joey C:\Joey's coding stuf\SpaceColonySim
+	private static String CONSTR;
 
 	public static void main (String[] args){
 		SCSDataModuleTest whoCares = new SCSDataModuleTest();
+		CONSTR = args[0];
 		whoCares.WorkAround();
-
+ 
 	}
 	public void WorkAround(){
 		SCSDataModule Thing = new SCSDataModule();
@@ -34,7 +35,7 @@ public class SCSDataModuleTest implements ISCSError{
 		Thing.disConnect();
 	}
 
-	public void HandleException(Exception ThisException){
+	public void handleException(Exception ThisException){
 		System.out.println(ThisException.getMessage());
 
 		}
