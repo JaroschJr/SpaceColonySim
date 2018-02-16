@@ -12,6 +12,7 @@ public class SpaceColonyEngine implements ISCSError{
 	private static String CONSTR = "";     //For Sean D:\\Dev\\JavaJoe\\SCS, for joey C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim;
 	private SCSDataModule _scsdm;
 	private SpaceColonyGame SCG;
+	private ISCSIO _ioman;
 
 	/**
 	 * Standard main method for executing a playthrough
@@ -49,11 +50,14 @@ public class SpaceColonyEngine implements ISCSError{
 		_scsdm.setConnectionString(CONSTR);
 		_scsdm.connect();
 
+		_ioman = new SCSConsoleIO();
+
 		//check if the database connection has been
 		//established, if not then display an error
 		//message and close the application
 		if(!_scsdm.isConnected()){
-			System.out.println("The data base could not be connected to. Exiting game");
+			_ioman.lineOut("The data base could not be connected to. Exiting game");
+			//System.out.println("The data base could not be connected to. Exiting game");
 			System.exit(1);
 		}//end if
 	}
@@ -113,7 +117,7 @@ public class SpaceColonyEngine implements ISCSError{
 		//exit the program if there are no
 		//languages in the database
 		if(_langs.length == 0){
-			System.out.println("No languages found!");
+			_ioman.lineOut("No languages found!");
 			System.exit(2);
 		}//end if
 
@@ -121,31 +125,23 @@ public class SpaceColonyEngine implements ISCSError{
 		String _langCode = null;
 		while(_langCode == null){
 			for(int i = 0; i < _langs.length; i++){
-				System.out.println(i + ": " + _langs[i][1]);
+				_ioman.lineOut(i + ": " + _langs[i][1]);
 			}//end for i
 
-			System.out.println("Select your preferred language.");
-			String sInput = System.console().readLine();
-			int idx = -1;
-			try{
-				idx = Integer.parseInt(sInput);
-			}//end try
-			catch(NumberFormatException nfe){
-				idx = -2;
-			}//end catch
+			int idx = _ioman.intIn("Select your preferred language.");
 
 			if((idx >= 0)&& (idx < _langs.length)){
 				_langCode = _langs[idx][0];
 			}//end if
 			else{
-				System.out.println("Invalid, enter 0 - " + (_langs.length - 1));
+				_ioman.lineOut("Invalid, enter 0 - " + (_langs.length - 1));
 			}//end else
 		}//end while
 
 		//set the language code on the data module
 		_scsdm.setLanguage(_langCode);
 
-		System.out.println(_scsdm.getDisplayText("WELCOME"));
+		_ioman.lineOut(_scsdm.getDisplayText("WELCOME"));
 	}
 
 	private boolean traderAriveOrNot(){
