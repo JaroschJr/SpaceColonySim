@@ -65,28 +65,11 @@ public class SpaceColonyEngine implements ISCSError{
 	 */
 	private void launchGame(){
 		SCG = new SpaceColonyGame();
-			System.out.println("Press 1 for English, 2 para Espanol");
-			String sInput = System.console().readLine();
-			int iInput = Integer.parseInt(sInput);
-			boolean done = false;
-			while(done == false){
-				switch(iInput){
-					case 1:
-						_scsdm.setLanguage("ENG");
-						done = true;
-						break;
-					case 2:
-						_scsdm.setLanguage("ESP");
-						done = true;
-						break;
 
-					default:
-						System.out.println("Invalid Input. Try Again.");
-				}
-			}
-			loadOrNew();
-			//if it is not connected, why bother?
-			System.out.println(_scsdm.getDisplayText("INVENTORY"));
+		getLanguagePreference();
+		loadOrNew();
+
+		System.out.println(_scsdm.getDisplayText("INVENTORY"));
 	}
 
 	/**
@@ -114,6 +97,55 @@ public class SpaceColonyEngine implements ISCSError{
 		break;
 			}
 		}
+	}
+
+	/**
+	 * Asks the user to set the language preference
+	 * for the current playthrough.
+	 */
+	private void getLanguagePreference(){
+		//get the matrix of languages supported
+		//by the database.
+		String[][] _langs;
+
+		_langs = _scsdm.getLanguages();
+
+		//exit the program if there are no
+		//languages in the database
+		if(_langs.length == 0){
+			System.out.println("No languages found!");
+			System.exit(2);
+		}//end if
+
+		//ask the user to choose the language
+		String _langCode = null;
+		while(_langCode == null){
+			for(int i = 0; i < _langs.length; i++){
+				System.out.println(i + ": " + _langs[i][1]);
+			}//end for i
+
+			System.out.println("Select your preferred language.");
+			String sInput = System.console().readLine();
+			int idx = -1;
+			try{
+				idx = Integer.parseInt(sInput);
+			}//end try
+			catch(NumberFormatException nfe){
+				idx = -2;
+			}//end catch
+
+			if((idx >= 0)&& (idx < _langs.length)){
+				_langCode = _langs[idx][0];
+			}//end if
+			else{
+				System.out.println("Invalid, enter 0 - " + (_langs.length - 1));
+			}//end else
+		}//end while
+
+		//set the language code on the data module
+		_scsdm.setLanguage(_langCode);
+
+		System.out.println(_scsdm.getDisplayText("WELCOME"));
 	}
 
 	private boolean traderAriveOrNot(){
