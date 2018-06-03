@@ -5,6 +5,7 @@
  * user I/O, and will create and own the actual
  * game object.
  */
+import java.util.Random;
 public class SpaceColonyEngine implements ISCSError{
 	//for Joey, compile with: Call "C:\Program Files (x86)\Java\jdk1.8.0_91\bin\javac.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim" SpaceColonyEngine.java
 	//and run with Call "C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim;C:\Joey's coding stuf\SpaceColonySim\sqlite-jdbc-3.18.0.jar" SpaceColonyEngine
@@ -13,6 +14,7 @@ public class SpaceColonyEngine implements ISCSError{
 	private SCSDataModule _scsdm;
 	private SpaceColonyGame SCG;
 	private ISCSIO _ioman;
+	Random rand = new Random();
 
 	/**
 	 * Standard main method for executing a playthrough
@@ -23,6 +25,7 @@ public class SpaceColonyEngine implements ISCSError{
 	 */
 	public static void main(String[] args){
 		CONSTR = args[0];
+		//Random rand = new Random();
 		SpaceColonyEngine engine = new SpaceColonyEngine();
 		engine.initialize();
 		engine.launchGame();
@@ -92,7 +95,10 @@ public class SpaceColonyEngine implements ISCSError{
 			switch(sInput){
 				case "N":
 					done = true;
+					SCG.gameReset();
+					SCG.iMerchantCountDown = rand.nextInt(5);
 					break;
+
 				case "L":
 					System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
 					break;
