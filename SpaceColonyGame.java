@@ -9,7 +9,7 @@ public class SpaceColonyGame{
 	public int iPopulation = 0;
 	public int iMoney = 50;
 	public int iOre = 0;
-	public int iScilicon = 0;
+	public int iSilicon = 0;
 	public int iMerchantCountDown = 0;
 
 	public void gameReset(){
@@ -17,7 +17,7 @@ public class SpaceColonyGame{
 		iPopulation = 0;
 		iMoney = 50;
 		iOre = 0;
-		iScilicon = 0;
+		iSilicon = 0;
 		iMerchantCountDown = 0;
 
 	}

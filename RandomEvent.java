@@ -1,14 +1,18 @@
+
 public class RandomEvent {
 	 
 	 int iProbWeight;
 	 String sGuid;
 	 String sFluffAccess;
+	 SCSEnum.eSign eSignExample = SCSEnum.eSign.POSITIVE;
+	  
 	 //constructor
-	 public RandomEvent(){		 
+	 public RandomEvent(){	
+	 
 	 }
 	 
 	 
-	 public void preformEvent(){
+	 public void performEvent(){
 		 
 	 }
 }
