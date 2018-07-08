@@ -16,5 +16,10 @@ public class SCSEnum{
 		ORE, SILICON, ICE, FACTORY
 	}
 	
+	public enum eRandomEventClasses{
+		RandomEvent, ProductionMultiplyingEvent,
+		StatModifierEvent
+	}
+	
 	
 }
