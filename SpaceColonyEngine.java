@@ -14,8 +14,13 @@ public class SpaceColonyEngine implements ISCSError{
 	private SCSDataModule _scsdm;
 	private SpaceColonyGame SCG;
 	private ISCSIO _ioman;
-	private RandomInputEvent rEvent;
-	private ProductionCancellingEvent pEvent;
+	
+	//Begining of example random events, to check for bugs.
+	private RandomInputEvent aEvent;
+	private ProductionCancellingEvent bEvent;
+	private StatModifierEvent cEvent;
+	//End of example random events.
+	
 	Random rand = new Random();
 
 	/**

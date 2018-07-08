@@ -1,6 +1,6 @@
 public class ProductionMultiplyingEvent extends RandomEvent{
 	double dProdMultFactor;
-	// Variable vTargetStat
+	SCSEnum.eProductionModded eTargetProduction;
 	//Constuctor
 	public ProductionMultiplyingEvent(){
 		

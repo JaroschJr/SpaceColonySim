@@ -5,14 +5,14 @@ public class SCSEnum{
 	}
 	
 	public enum eFactorType{
-		ADSUB, MULTIPLY
+		ADD, MULTIPLY
 	}
 	
 	public enum eStatModded{
 		TurnCount, Population, Money, Ore, Silicon
 	}
 	
-	public enum productionModded{
+	public enum eProductionModded{
 		ORE, SILICON, ICE, FACTORY
 	}
 	
