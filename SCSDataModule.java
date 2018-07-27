@@ -90,12 +90,32 @@ public class SCSDataModule{
 	}
 
 	/**
+	 * Retrieves a result set from the database
+	 * given a SQL statement.
+	 * @param sql The SQL statement to run.
+	 * @return Returns a result set of data.
+	 */
+	public ResultSet getResultSet(String sql){
+		ResultSet _rs = null;
+
+		try{
+			Statment _stat = _conn.createStatement();
+			_rs = _stat.executeQuery(sql);
+		}//end try
+		catch(SQLException sqle){
+			errorHandler.handleException(sqle);
+		}//end catch sqle
+
+		return _rs;
+	}
+
+	/**
 	 * Retrieves text for display purposes from
 	 * the database based on the current language
 	 * preferece setting.
 	 * @param textCode The code specifying the
 	 *                 text to retrieve.
-	 * @return Returns the texxt to display.
+	 * @return Returns the text to display.
 	 */
 	public String getDisplayText(String textCode)
 	{
@@ -129,7 +149,7 @@ public class SCSDataModule{
 		try{
 			Statement _stat = _conn.createStatement();
 
-			//first get the record counnt so we can initialize
+			//first get the record count so we can initialize
 			//the result array
 			ResultSet _rs = _stat.executeQuery(_count_query);
 			_count = _rs.getInt("CNT");
