@@ -70,6 +70,7 @@ public class SpaceColonyEngine implements ISCSError{
 			//System.out.println("The data base could not be connected to. Exiting game");
 			System.exit(1);
 		}//end if
+		RandomEventFactory rEventFactory = new RandomEventFactory(_scsdm);
 	}
 
 	/**

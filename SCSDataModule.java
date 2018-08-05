@@ -99,7 +99,7 @@ public class SCSDataModule{
 		ResultSet _rs = null;
 
 		try{
-			Statment _stat = _conn.createStatement();
+			Statement _stat = _conn.createStatement();
 			_rs = _stat.executeQuery(sql);
 		}//end try
 		catch(SQLException sqle){
