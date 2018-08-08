@@ -70,8 +70,9 @@ public class RandomEventFactory
         //   call createEvent method
 		rResultEvent = CreateEvent(classType);
         //4. set the properties - call readFromDB on the event
-		//rResultEvent = 
+		rResultEvent.readFromDB(resultSet);
         //5. return the event
+		return rRandomEvent
     }
 
     private RandomEvent createEvent(SCSEnum.eRandomEventClasses classType){
