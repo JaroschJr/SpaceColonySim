@@ -1,4 +1,4 @@
-
+import java.sql.*;
 public class RandomEvent {
 	 int iProbWeight;//database: OCCURANCE
 	 String sGuid;//database: ID
@@ -18,7 +18,7 @@ public class RandomEvent {
 		 
 	 }
 
-	 public void readFromDB(ResultSet resultSet){
+	 public void readFromDB (ResultSet resultSet)throws SQLException{
 		 iProbWeight = resultSet.getInt(RandomEvent.FIELD_OCCURANCE);
 		 sGuid = resultSet.getString(RandomEvent.FIELD_ID);
 		 sFluffAccess = resultSet.getString(RandomEvent.FIELD_TEXT_ID);

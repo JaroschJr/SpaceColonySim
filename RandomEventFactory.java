@@ -1,4 +1,5 @@
-import java.SQL.ResultSet;
+import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * Class for reading random events in from
@@ -25,23 +26,25 @@ public class RandomEventFactory
      *         objects.
      */
     public ArrayList<RandomEvent> getList(){
+		ResultSet rResultSet;
+		//1. create the array list that will be returned
+		ArrayList<RandomEvent> rResultData = new ArrayList<RandomEvent>();
 		try{
-			//1. create the array list that will be returned
-			ArrayList<RandomEvent> rResultData = new ArrayList<RandomEvent>(1);
 			//2. get the data from the database
 			//   look at SCSDataModule.getLanguages for help
 			//   use the SCSDataModule.getResultSet method
-			public rResultSet = _data.getResultSet("SELECT * FROM SCS_RANDOM_EVENTS");
+			rResultSet = _data.getResultSet("SELECT * FROM SCS_RANDOM_EVENTS");
 			//3. loop through the result set and process each row
 			//   call readEvent pass in the result set
 			//4. put the event in the array list
-			while(boolean bMoreLines = true){
+			boolean bMoreLines = true;
+			while(bMoreLines = true){
 				bMoreLines = rResultSet.next();// I call it first, because per documentation, the cursor is initialy ABOVE the first row.
 				rResultData.add(readEvent(rResultSet));
 				
 			}
 		}catch(SQLException sqle){
-			System.out.println(sqle.getErrorCode);
+			System.out.println(sqle.getMessage());
 		}
         //5. return the array list
 		return rResultData;
@@ -59,8 +62,8 @@ public class RandomEventFactory
      * @return Returns the random event object
      *         as defined in the database.
      */
-    private RandomEvent readEvent(ResultSet resultSet){
-		rRandomEvent rResultEvent = new RandomEvent();
+    private RandomEvent readEvent(ResultSet resultSet)throws SQLException{
+		RandomEvent rResultEvent = new RandomEvent();
         //1. find the class of the event - read from
         //   column CLASS_NAME
 		String sClass_Name = resultSet.getString("CLASS_NAME");
@@ -68,22 +71,22 @@ public class RandomEventFactory
 		SCSEnum.eRandomEventClasses classType = SCSEnum.eRandomEventClasses.valueOf(sClass_Name);// I leanred this trick here: https://stackoverflow.com/questions/7056959/convert-string-to-equivalent-enum-value
         //3. create the event based on the enumeration
         //   call createEvent method
-		rResultEvent = CreateEvent(classType);
+		rResultEvent = createEvent(classType);
         //4. set the properties - call readFromDB on the event
 		rResultEvent.readFromDB(resultSet);
         //5. return the event
-		return rRandomEvent
+		return rResultEvent;
     }
 
     private RandomEvent createEvent(SCSEnum.eRandomEventClasses classType){
-		RandomEvent rReturnEvent;
+		RandomEvent rReturnEvent = null;
         //1. create the event - use a switch
 		switch (classType){
-			case SCSEnum.eRandomEventClasses.RandomEvent: rReturnEvent = new RandomEvent();
+			case RandomEvent: rReturnEvent = new RandomEvent();
 				break;
-			case SCSEnum.eRandomEventClasses.ProductionMultiplyingEvent: rReturnEvent = new ProductionMultiplyingEvent();
+			case ProductionMultiplyingEvent: rReturnEvent = new ProductionMultiplyingEvent();
 				break;
-			case SCSEnum.eRandomEventClasses.StatModifierEvent: rReturnEvent = new StatModifierEvent();
+			case StatModifierEvent: rReturnEvent = new StatModifierEvent();
 				break;
 			
 		}
