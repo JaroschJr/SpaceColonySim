@@ -12,14 +12,14 @@ public class ProductionMultiplyingEvent extends RandomEvent{
 	}
 	
 	public void readFromDB(ResultSet resultSet){
-		super(resultSet);
+		//super.readFromDB(resultSet);
 		
-		dProdMultFactor = resultSet.getDouble(FIELD_PROD_VALUE);
-		
+		//dProdMultFactor = resultSet.getDouble(FIELD_PROD_VALUE);
+		/*
 		String sType = resultSet.getString(FIELD_PROD_TYPE);
 		if(sType != null){
 			eTargetProduction = SCSEnum.eProductionModded.valueOf(sType);
-		}//end if
+		}//end if */
 	}
 
 }
