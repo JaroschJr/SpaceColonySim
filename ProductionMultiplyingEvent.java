@@ -21,5 +21,9 @@ public class ProductionMultiplyingEvent extends RandomEvent{
 			eTargetProduction = SCSEnum.eProductionModded.valueOf(sType);
 		}//end if */
 	}
+	public String toString(){
+		String rReturnString = "Production Multiplying Event. Multiplies" + eTargetProduction.name() + " By " + dProdMultFactor + super.toString();
+		return rReturnString;
+	}
 
 }
