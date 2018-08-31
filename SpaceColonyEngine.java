@@ -6,6 +6,7 @@
  * game object.
  */
 import java.util.Random;
+import java.util.ArrayList;
 public class SpaceColonyEngine implements ISCSError{
 	//for Joey, compile with: Call "C:\Program Files (x86)\Java\jdk1.8.0_91\bin\javac.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim" SpaceColonyEngine.java
 	//and run with Call "C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim;C:\Joey's coding stuf\SpaceColonySim\sqlite-jdbc-3.18.0.jar" SpaceColonyEngine
@@ -71,6 +72,7 @@ public class SpaceColonyEngine implements ISCSError{
 			System.exit(1);
 		}//end if
 		RandomEventFactory rEventFactory = new RandomEventFactory(_scsdm);
+		ArrayList<RandomEvent> events = rEventFactory.getList();
 	}
 
 	/**
