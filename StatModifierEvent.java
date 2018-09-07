@@ -13,6 +13,12 @@ public class StatModifierEvent extends RandomEvent{
 	}
 	
 	
+	@Override
+	public void readFromDB(ResultSet resultSet)throws SQLException{
+		
+	}
+	
+	
 	public String toString(){
 		String returnString =  " STAT_TYPE " + eStat.name() + ", STAT_SIGN " + eThisSign.name() + ", STAT_FACTOR " + eHowToFactor.name() + ", STAT_DICE_QUAN " + iDiceCount + ", STAT_DICE_SIZE " + iDiceSide + super.toString();
 		

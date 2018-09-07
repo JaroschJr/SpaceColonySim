@@ -10,8 +10,8 @@ public class ProductionMultiplyingEvent extends RandomEvent{
 	public ProductionMultiplyingEvent(){
 		
 	}
-	
-	public void readFromDB(ResultSet resultSet){
+		@Override
+	public void readFromDB(ResultSet resultSet)throws SQLException{
 		//super.readFromDB(resultSet);
 		
 		//dProdMultFactor = resultSet.getDouble(FIELD_PROD_VALUE);
