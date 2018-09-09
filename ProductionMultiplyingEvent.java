@@ -12,17 +12,19 @@ public class ProductionMultiplyingEvent extends RandomEvent{
 	}
 		@Override
 	public void readFromDB(ResultSet resultSet)throws SQLException{
-		//super.readFromDB(resultSet);
+		super.readFromDB(resultSet);
 		
-		//dProdMultFactor = resultSet.getDouble(FIELD_PROD_VALUE);
-		/*
+		dProdMultFactor = resultSet.getDouble(FIELD_PROD_VALUE);
+		
 		String sType = resultSet.getString(FIELD_PROD_TYPE);
 		if(sType != null){
 			eTargetProduction = SCSEnum.eProductionModded.valueOf(sType);
-		}//end if */
+		}//end if
 	}
+	
+	@Override
 	public String toString(){
-		String rReturnString = "Production Multiplying Event. Multiplies" + eTargetProduction.name() + " By " + dProdMultFactor + super.toString();
+		String rReturnString = super.toString() + ", Production Multiplying Event. Multiplies" + eTargetProduction.name() + " By " + dProdMultFactor;
 		return rReturnString;
 	}
 

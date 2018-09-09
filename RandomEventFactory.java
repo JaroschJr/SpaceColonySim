@@ -40,13 +40,14 @@ public class RandomEventFactory
 			boolean bMoreLines = true;
 			while(bMoreLines = true){
 				bMoreLines = rResultSet.next();// I call it first, because per documentation, the cursor is initialy ABOVE the first row.
-				rResultData.add(readEvent(rResultSet));
-				
+				rResultData.add(readEvent(rResultSet));			
 			}
 		}catch(SQLException sqle){
 			System.out.println(sqle.getMessage());
 		}
         //5. return the array list
+		System.out.println(rResultData.toString());
+		System.out.println("   ");
 		return rResultData;
     }
 
@@ -64,14 +65,17 @@ public class RandomEventFactory
      */
     private RandomEvent readEvent(ResultSet resultSet)throws SQLException{
 		RandomEvent rResultEvent = new RandomEvent();
+		
         //1. find the class of the event - read from
         //   column CLASS_NAME
 		String sClass_Name = resultSet.getString("CLASS_NAME");
+
         //2. convert the class name to its enumeration value
 		SCSEnum.eRandomEventClasses classType = SCSEnum.eRandomEventClasses.valueOf(sClass_Name);// I leanred this trick here: https://stackoverflow.com/questions/7056959/convert-string-to-equivalent-enum-value
-        //3. create the event based on the enumeration
+		//3. create the event based on the enumeration
         //   call createEvent method
 		rResultEvent = createEvent(classType);
+		
         //4. set the properties - call readFromDB on the event
 		rResultEvent.readFromDB(resultSet);
         //5. return the event

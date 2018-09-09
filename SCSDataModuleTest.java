@@ -5,8 +5,8 @@ import java.util.*;
  */
 public class SCSDataModuleTest implements ISCSError{
 
-	//to compile : Call "C:\Program Files (x86)\Java\jdk1.8.0_91\bin\javac.exe" -cp "C:\Joey's coding stuf\SpaceColonySim" SCSDataModuleTest.java
-	//to run w DB: Call "C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe" -cp "C:\Joey's coding stuf\SpaceColonySim;C:\Joey's coding stuf\SpaceColonySim\sqlite-jdbc-3.18.0.jar" SCSDataModuleTest
+	//to compile : Call "C:\Program Files\Java\jdk-10.0.1\bin\javac.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim" SCSDataModuleTest.java
+	//to run w DB: Call "C:\Program Files\Java\jdk-10.0.1\bin\java.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim\;C:\Joey's coding stuf\SpaceColonySim\sqlite-jdbc-3.18.0.jar" SCSDataModuleTest "jdbc:sqlite:C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim\\SCSDataBase.db"
 
 	private static String CONSTR;
 
@@ -44,6 +44,7 @@ public class SCSDataModuleTest implements ISCSError{
 		
 		for(int i = 0; i < events.size(); i++){
 			System.out.println(events.get(i).toString());
+			System.out.println("   ");
 		}//end for i
 
 		Thing.disConnect();

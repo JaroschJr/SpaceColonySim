@@ -14,7 +14,7 @@ public class RandomEvent {
 	 }
 	 
 	 public String toString(){
-		 String sReturnString = ", Probabillity" + iProbWeight + ", Guid " + sGuid + ", Fluff Text ID " + sFluffAccess + ".";
+		 String sReturnString = "Probabillity " + iProbWeight + ", Guid " + sGuid + ", Fluff Text ID " + sFluffAccess;
 		 return sReturnString;
 	 }
 	 
