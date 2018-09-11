@@ -38,16 +38,17 @@ public class RandomEventFactory
 			//   call readEvent pass in the result set
 			//4. put the event in the array list
 			boolean bMoreLines = true;
-			while(bMoreLines = true){
-				bMoreLines = rResultSet.next();// I call it first, because per documentation, the cursor is initialy ABOVE the first row.
-				rResultData.add(readEvent(rResultSet));			
+			bMoreLines = rResultSet.next();
+			while(bMoreLines == true){
+				
+				rResultData.add(readEvent(rResultSet));		
+				bMoreLines = rResultSet.next();
 			}
 		}catch(SQLException sqle){
 			System.out.println(sqle.getMessage());
 		}
         //5. return the array list
-		System.out.println(rResultData.toString());
-		System.out.println("   ");
+		//System.out.println(rResultData.toString());
 		return rResultData;
     }
 
