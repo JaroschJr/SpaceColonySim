@@ -8,7 +8,7 @@ public class RandomInputEvent extends RandomEvent{
 	
 	@Override
 	public void readFromDB(ResultSet resultSet)throws SQLException{
-		
+		super.readFromDB(resultSet);
 	}
 	@Override
 	public String toString(){
