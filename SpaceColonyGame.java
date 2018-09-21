@@ -5,6 +5,7 @@
  * also contain the logic for the game mechanics.
  */
 public class SpaceColonyGame{
+	public boolean bIsOngoing;
 	public int iTurnCount = 1;
 	public int iPopulation = 0;
 	public int iMoney = 50;
@@ -13,6 +14,7 @@ public class SpaceColonyGame{
 	public int iMerchantCountDown = 0;
 
 	public void gameReset(){
+		bIsOngoing = true;
 		iTurnCount = 1;
 		iPopulation = 0;
 		iMoney = 50;

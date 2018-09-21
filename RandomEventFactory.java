@@ -25,10 +25,10 @@ public class RandomEventFactory
      * @return Returns the list of random event
      *         objects.
      */
-    public ArrayList<RandomEvent> getList(){
+    public RandomEventList getList(){
 		ResultSet rResultSet;
 		//1. create the array list that will be returned
-		ArrayList<RandomEvent> rResultData = new ArrayList<RandomEvent>();
+		RandomEventList rResultData = new RandomEventList();
 		try{
 			//2. get the data from the database
 			//   look at SCSDataModule.getLanguages for help

@@ -15,13 +15,17 @@ public class SpaceColonyEngine implements ISCSError{
 	private SCSDataModule _scsdm;
 	private SpaceColonyGame SCG;
 	private ISCSIO _ioman;
+	private RandomEventFactory rEventFactory;
+	private RandomEventList events;
+	private RandomEvent currentEvent;
 	
+	/*
 	//Begining of example random events, to check for bugs.
 	private RandomInputEvent aEvent;
 	private ProductionCancellingEvent bEvent;
 	private StatModifierEvent cEvent;
 	//End of example random events.
-	
+	*/
 	Random rand = new Random();
 
 	/**
@@ -37,6 +41,7 @@ public class SpaceColonyEngine implements ISCSError{
 		SpaceColonyEngine engine = new SpaceColonyEngine();
 		engine.initialize();
 		engine.launchGame();
+		engine.turns();
 	}
 
 	/**
@@ -71,8 +76,8 @@ public class SpaceColonyEngine implements ISCSError{
 			//System.out.println("The data base could not be connected to. Exiting game");
 			System.exit(1);
 		}//end if
-		RandomEventFactory rEventFactory = new RandomEventFactory(_scsdm);
-		ArrayList<RandomEvent> events = rEventFactory.getList();
+		rEventFactory = new RandomEventFactory(_scsdm);
+		events = rEventFactory.getList();
 	}
 
 	/**
@@ -86,7 +91,7 @@ public class SpaceColonyEngine implements ISCSError{
 		getLanguagePreference();
 		loadOrNew();
 
-		System.out.println(_scsdm.getDisplayText("INVENTORY"));
+		//System.out.println(_scsdm.getDisplayText("INVENTORY"));
 	}
 
 	/**
@@ -158,6 +163,19 @@ public class SpaceColonyEngine implements ISCSError{
 		_scsdm.setLanguage(_langCode);
 
 		_ioman.lineOut(_scsdm.getDisplayText("WELCOME"));
+	}
+	
+	private void turns(){
+		
+		while(SCG.bIsOngoing == true){//Per the flowchart on the Cloud:
+		
+			//Tennative suggestion: Some kind of status update?
+			currentEvent = events.generateEvent();// Neither of these
+			currentEvent.performEvent();//			 do anything right now.
+			//Freightery things
+			//labour related things
+			SCG.iTurnCount++;
+		}
 	}
 
 	private boolean traderAriveOrNot(){
