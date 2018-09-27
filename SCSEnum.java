@@ -18,7 +18,7 @@ public class SCSEnum{
 	
 	public enum eRandomEventClasses{
 		RandomEvent, ProductionMultiplyingEvent,
-		StatModifierEvent
+		StatModifierEvent, FluffEvent
 	}
 	
 	
