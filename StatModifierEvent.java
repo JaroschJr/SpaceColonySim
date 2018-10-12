@@ -1,5 +1,8 @@
 import java.sql.*;
+import java.util.Random;
+import java.util.Formatter;
 public class StatModifierEvent extends RandomEvent{
+	Random rng = new Random();
 	SCSEnum.eStatModded eStat;//database: STAT_TYPE
 	SCSEnum.eSign eThisSign;//database: STAT_SIGN
 	SCSEnum.eFactorType eHowToFactor;//database: STAT_FACTOR
@@ -15,7 +18,6 @@ public class StatModifierEvent extends RandomEvent{
 	public StatModifierEvent(){
 		
 	}
-	
 	
 	@Override
 	public void readFromDB(ResultSet resultSet)throws SQLException{
@@ -38,6 +40,67 @@ public class StatModifierEvent extends RandomEvent{
 		
 		iDiceCount = resultSet.getInt("STAT_DICE_QUAN");
 		iDiceSide = resultSet.getInt("STAT_DIE_SIZE");
+		
+	}
+	
+	@Override
+	public void performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){
+		//te creation of the random number.
+		int iOutcome = 0;
+		double dOutcome = 0;
+		String sToPrint = null;
+		for(int i = 0; i<iDiceCount; i++){
+			iOutcome += 1+rng.nextInt(iDiceSide);
+			
+		}
+		//made it increase or decrease.
+		if(eThisSign == SCSEnum.eSign.NEGATIVE){
+			iOutcome += iOutcome * -1;
+		}
+		//multiply or add?
+		
+		//if mult.
+		if(eHowToFactor == SCSEnum.eFactorType.MULTIPLY){
+			dOutcome = iOutcome;
+			dOutcome = 1 + dOutcome/100;
+			
+			if(eStat == SCSEnum.eStatModded.Population){
+				scg.iPopulation *= iOutcome; 
+			}else if(eStat == SCSEnum.eStatModded.Money){
+				scg.iMoney *= iOutcome; 
+			}else if(eStat == SCSEnum.eStatModded.Ore){
+				scg.iOre *= iOutcome; 
+			}else if(eStat == SCSEnum.eStatModded.Silicon){
+				scg.iSilicon *= iOutcome; 
+			}else{//
+				scg.iMerchantCountDown += iOutcome; 
+			}
+		
+			//add is default
+		}else{
+		//an if loop for picking the stat.
+			if(eStat == SCSEnum.eStatModded.Population){
+				scg.iPopulation += iOutcome; 
+			}else if(eStat == SCSEnum.eStatModded.Money){
+				scg.iMoney += iOutcome; 
+			}else if(eStat == SCSEnum.eStatModded.Ore){
+				scg.iOre += iOutcome; 
+			}else if(eStat == SCSEnum.eStatModded.Silicon){
+				scg.iSilicon += iOutcome; 
+			}else{//
+				scg.iMerchantCountDown += iOutcome; 
+			}
+			//Now the Fluff.
+			
+			
+		}
+		sToPrint = dbm.getDisplayText(sFluffAccess);
+		if(eHowToFactor == SCSEnum.eFactorType.MULTIPLY){
+			sToPrint = String.format(sToPrint,eStat.name(), dOutcome);
+			}else{
+			sToPrint = String.format(sToPrint,eStat.name(), iOutcome);
+		}
+		ioman.lineOut(sToPrint);
 		
 	}
 	

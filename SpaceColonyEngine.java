@@ -41,6 +41,7 @@ public class SpaceColonyEngine implements ISCSError{
 		SpaceColonyEngine engine = new SpaceColonyEngine();
 		engine.initialize();
 		engine.launchGame();
+		System.out.println("Start turns");
 		engine.turns();
 	}
 
@@ -168,14 +169,17 @@ public class SpaceColonyEngine implements ISCSError{
 	private void turns(){
 		
 		while(SCG.bIsOngoing == true){//Per the flowchart on the Cloud:
-		
+			System.out.println("turn "+ SCG.iTurnCount);
 			//Tennative suggestion: Some kind of status update?
-			currentEvent = events.generateEvent();// Neither of these
-			currentEvent.performEvent();//			 do anything right now.
+			currentEvent = events.generateEvent();
+			currentEvent.performEvent(SCG, _ioman, _scsdm);
 			//Freightery things
 			//labour related things
 			SCG.iTurnCount++;
+			//truncate it so it does one and only one iteration.
+			SCG.bIsOngoing = false;//truncate it so it does one and only one iteration. Its looping infinitely caused issues during testing to complex to understand here.
 		}
+		System.out.println("It can run through one loop");
 	}
 
 	private boolean traderAriveOrNot(){

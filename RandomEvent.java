@@ -1,4 +1,5 @@
 import java.sql.*;
+import java.util.Formatter;
 public class RandomEvent {
 	 int iProbWeight;//database: OCCURANCE
 	 String sGuid;//database: ID
@@ -19,7 +20,7 @@ public class RandomEvent {
 	 }
 	 
 	 
-	 public void performEvent(){
+	 public void performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){//dbm=DataBaseManager
 		 
 	 }
 
