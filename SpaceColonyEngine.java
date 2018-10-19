@@ -120,7 +120,7 @@ public class SpaceColonyEngine implements ISCSError{
 					break;
 				default:
 					System.out.println("Invalid Input. Try Again.");
-		break;
+					break;
 			}
 		}
 	}
@@ -169,7 +169,7 @@ public class SpaceColonyEngine implements ISCSError{
 	private void turns(){
 		
 		while(SCG.bIsOngoing == true){//Per the flowchart on the Cloud:
-			System.out.println("turn "+ SCG.iTurnCount);
+			report();
 			//Tennative suggestion: Some kind of status update?
 			currentEvent = events.generateEvent();
 			currentEvent.performEvent(SCG, _ioman, _scsdm);
@@ -177,7 +177,9 @@ public class SpaceColonyEngine implements ISCSError{
 			//labour related things
 			SCG.iTurnCount++;
 			//truncate it so it does one and only one iteration.
+			if (SCG.iTurnCount >20){
 			SCG.bIsOngoing = false;//truncate it so it does one and only one iteration. Its looping infinitely caused issues during testing to complex to understand here.
+			}
 		}
 		System.out.println("It can run through one loop");
 	}
@@ -187,6 +189,62 @@ public class SpaceColonyEngine implements ISCSError{
 			return true;
 		}else{
 			return false;
+		}
+	}
+	
+	private void report(){
+		String placeholderA = "";
+		String placeholderB = "";
+		System.out.println("");//A blank line, to help break it up.
+		if(SCG.iTurnCount>1000){
+			_ioman.lineOut("Turn            "+SCG.iTurnCount);
+		}else if(SCG.iTurnCount>100){
+			_ioman.lineOut("Turn             "+SCG.iTurnCount);
+		}else if(SCG.iTurnCount>10){
+			_ioman.lineOut("Turn              "+SCG.iTurnCount);
+		}else{
+			_ioman.lineOut("Turn               "+SCG.iTurnCount);
+		}
+		//population and Money.
+		if(SCG.iPopulation>1000){
+			placeholderA ="population:     "+SCG.iPopulation;
+		}else if(SCG.iPopulation>100){
+			placeholderA ="population:      "+SCG.iPopulation;
+		}else if(SCG.iPopulation>10){
+			placeholderA ="population:       "+SCG.iPopulation;
+		}else{
+			placeholderA ="population:        "+SCG.iPopulation;
+		}
+		
+			
+		if(SCG.iMoney>1000){
+			_ioman.lineOut("Money:          "+SCG.iMoney + "          " + placeholderA);
+		}else if(SCG.iMoney>100){
+			_ioman.lineOut("Money:           "+SCG.iMoney + "          " + placeholderA);
+		}else if(SCG.iMoney>10){
+			_ioman.lineOut("Money:            "+SCG.iMoney + "          " + placeholderA);
+		}else{
+			_ioman.lineOut("Money:             "+SCG.iMoney + "          " + placeholderA);
+		}
+		
+		if(SCG.iOre>1000){
+			placeholderB = "Ore:            "+SCG.iOre;
+		}else if(SCG.iOre>100){
+			placeholderB = "Ore:             "+SCG.iOre;
+		}else if(SCG.iOre>10){
+			placeholderB = "Ore:              "+SCG.iOre;
+		}else{
+			placeholderB = "Ore:               "+SCG.iOre;
+		}
+		
+		if(SCG.iSilicon>1000){
+			_ioman.lineOut("Silicon:        "+SCG.iSilicon + "          " + placeholderB);
+		}else if(SCG.iSilicon>100){
+			_ioman.lineOut("Silicon:         "+SCG.iSilicon + "          " + placeholderB);
+		}else if(SCG.iSilicon>10){
+			_ioman.lineOut("Silicon:          "+SCG.iSilicon + "          " + placeholderB);
+		}else{
+			_ioman.lineOut("Silicon:           "+SCG.iSilicon + "          " + placeholderB);
 		}
 	}
 }

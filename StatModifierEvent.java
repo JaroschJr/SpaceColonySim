@@ -55,7 +55,7 @@ public class StatModifierEvent extends RandomEvent{
 		}
 		//made it increase or decrease.
 		if(eThisSign == SCSEnum.eSign.NEGATIVE){
-			iOutcome += iOutcome * -1;
+			iOutcome = iOutcome * -1;
 		}
 		//multiply or add?
 		
@@ -63,22 +63,47 @@ public class StatModifierEvent extends RandomEvent{
 		if(eHowToFactor == SCSEnum.eFactorType.MULTIPLY){
 			dOutcome = iOutcome;
 			dOutcome = 1 + dOutcome/100;
-			
-			if(eStat == SCSEnum.eStatModded.Population){
-				scg.iPopulation *= iOutcome; 
-			}else if(eStat == SCSEnum.eStatModded.Money){
-				scg.iMoney *= iOutcome; 
-			}else if(eStat == SCSEnum.eStatModded.Ore){
-				scg.iOre *= iOutcome; 
-			}else if(eStat == SCSEnum.eStatModded.Silicon){
-				scg.iSilicon *= iOutcome; 
-			}else{//
-				scg.iMerchantCountDown += iOutcome; 
+			switch(eStat){
+				case Population: scg.iPopulation *= dOutcome;
+					break;
+				case Money: scg.iMoney *= dOutcome;
+					break;
+				case Ore: scg.iOre *= dOutcome;
+					break;
+				case Silicon: scg.iSilicon *= dOutcome;
+					break;
+				default: scg.iMerchantCountDown *= dOutcome;
 			}
+			/*
+			if(eStat == SCSEnum.eStatModded.Population){
+				scg.iPopulation *= dOutcome; 
+			}else if(eStat == SCSEnum.eStatModded.Money){
+				scg.iMoney *= dOutcome; 
+			}else if(eStat == SCSEnum.eStatModded.Ore){
+				scg.iOre *= dOutcome; 
+			}else if(eStat == SCSEnum.eStatModded.Silicon){
+				scg.iSilicon *= dOutcome; 
+			}else{//
+				scg.iMerchantCountDown *= dOutcome; 
+			}
+			*/
+			
 		
 			//add is default
 		}else{
-		//an if loop for picking the stat.
+		//a swich statement for picking the stat.
+			switch(eStat){
+				case Population: scg.iPopulation += iOutcome;
+					break;
+				case Money: scg.iMoney += iOutcome;
+					break;
+				case Ore: scg.iOre += iOutcome;
+					break;
+				case Silicon: scg.iSilicon += iOutcome;
+					break;
+				default: scg.iMerchantCountDown += iOutcome;
+			}
+			/*
 			if(eStat == SCSEnum.eStatModded.Population){
 				scg.iPopulation += iOutcome; 
 			}else if(eStat == SCSEnum.eStatModded.Money){
@@ -90,6 +115,8 @@ public class StatModifierEvent extends RandomEvent{
 			}else{//
 				scg.iMerchantCountDown += iOutcome; 
 			}
+			*/
+			
 			//Now the Fluff.
 			
 			
