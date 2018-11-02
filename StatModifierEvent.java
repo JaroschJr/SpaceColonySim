@@ -47,7 +47,8 @@ public class StatModifierEvent extends RandomEvent{
 	public void performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){
 		//te creation of the random number.
 		int iOutcome = 0;
-		double dOutcome = 0;
+		double dWorkingDouble1 = 0;
+		double dWorkingDouble2 = 0;
 		String sToPrint = null;
 		for(int i = 0; i<iDiceCount; i++){
 			iOutcome += 1+rng.nextInt(iDiceSide);
@@ -61,32 +62,38 @@ public class StatModifierEvent extends RandomEvent{
 		
 		//if mult.
 		if(eHowToFactor == SCSEnum.eFactorType.MULTIPLY){
-			dOutcome = iOutcome;
-			dOutcome = 1 + dOutcome/100;
+			
 			switch(eStat){
-				case Population: scg.iPopulation *= dOutcome;
+				case Population:
+					dWorkingDouble1 = iOutcome;
+					dWorkingDouble2 = dWorkingDouble1/100;
+					iOutcome = (int) Math.floor(scg.iPopulation*dWorkingDouble2);
+					scg.iPopulation += iOutcome;
 					break;
-				case Money: scg.iMoney *= dOutcome;
+				case Money:
+					dWorkingDouble1 = iOutcome;
+					dWorkingDouble2 = dWorkingDouble1/100;
+					iOutcome = (int) Math.floor(scg.iMoney*dWorkingDouble2);
+					scg.iMoney += iOutcome;
 					break;
-				case Ore: scg.iOre *= dOutcome;
+				case Ore:
+					dWorkingDouble1 = iOutcome;
+					dWorkingDouble2 = dWorkingDouble1/100;
+					iOutcome = (int) Math.floor(scg.iOre*dWorkingDouble2);
+					scg.iOre += iOutcome;
 					break;
-				case Silicon: scg.iSilicon *= dOutcome;
+				case Silicon:
+					dWorkingDouble1 = iOutcome;
+					dWorkingDouble2 = dWorkingDouble1/100;
+					iOutcome = (int) Math.floor(scg.iSilicon*dWorkingDouble2);
+					scg.iSilicon += iOutcome;
 					break;
-				default: scg.iMerchantCountDown *= dOutcome;
+				default: 
+					dWorkingDouble1 = iOutcome;
+					dWorkingDouble2 = dWorkingDouble1/100;
+					iOutcome = (int) Math.floor(scg.iMerchantCountDown*dWorkingDouble2);
+					scg.iMerchantCountDown += iOutcome;
 			}
-			/*
-			if(eStat == SCSEnum.eStatModded.Population){
-				scg.iPopulation *= dOutcome; 
-			}else if(eStat == SCSEnum.eStatModded.Money){
-				scg.iMoney *= dOutcome; 
-			}else if(eStat == SCSEnum.eStatModded.Ore){
-				scg.iOre *= dOutcome; 
-			}else if(eStat == SCSEnum.eStatModded.Silicon){
-				scg.iSilicon *= dOutcome; 
-			}else{//
-				scg.iMerchantCountDown *= dOutcome; 
-			}
-			*/
 			
 		
 			//add is default
@@ -103,30 +110,22 @@ public class StatModifierEvent extends RandomEvent{
 					break;
 				default: scg.iMerchantCountDown += iOutcome;
 			}
-			/*
-			if(eStat == SCSEnum.eStatModded.Population){
-				scg.iPopulation += iOutcome; 
-			}else if(eStat == SCSEnum.eStatModded.Money){
-				scg.iMoney += iOutcome; 
-			}else if(eStat == SCSEnum.eStatModded.Ore){
-				scg.iOre += iOutcome; 
-			}else if(eStat == SCSEnum.eStatModded.Silicon){
-				scg.iSilicon += iOutcome; 
-			}else{//
-				scg.iMerchantCountDown += iOutcome; 
-			}
-			*/
 			
 			//Now the Fluff.
 			
 			
 		}
 		sToPrint = dbm.getDisplayText(sFluffAccess);
-		if(eHowToFactor == SCSEnum.eFactorType.MULTIPLY){
-			sToPrint = String.format(sToPrint,eStat.name(), dOutcome);
+		if(iOutcome<0){
+			iOutcome *= -1;
+		}
+		sToPrint = String.format(sToPrint,eStat.name(), iOutcome);
+		/*if(eHowToFactor == SCSEnum.eFactorType.MULTIPLY){
+			sToPrint = String.format(sToPrint,eStat.name(), iOutcome);
 			}else{
 			sToPrint = String.format(sToPrint,eStat.name(), iOutcome);
-		}
+			}
+		*/
 		ioman.lineOut(sToPrint);
 		
 	}

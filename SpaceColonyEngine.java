@@ -193,58 +193,47 @@ public class SpaceColonyEngine implements ISCSError{
 	}
 	
 	private void report(){
-		String placeholderA = "";
-		String placeholderB = "";
-		System.out.println("");//A blank line, to help break it up.
-		if(SCG.iTurnCount>1000){
-			_ioman.lineOut("Turn            "+SCG.iTurnCount);
-		}else if(SCG.iTurnCount>100){
-			_ioman.lineOut("Turn             "+SCG.iTurnCount);
-		}else if(SCG.iTurnCount>10){
-			_ioman.lineOut("Turn              "+SCG.iTurnCount);
-		}else{
-			_ioman.lineOut("Turn               "+SCG.iTurnCount);
-		}
-		//population and Money.
-		if(SCG.iPopulation>1000){
-			placeholderA ="population:     "+SCG.iPopulation;
-		}else if(SCG.iPopulation>100){
-			placeholderA ="population:      "+SCG.iPopulation;
-		}else if(SCG.iPopulation>10){
-			placeholderA ="population:       "+SCG.iPopulation;
-		}else{
-			placeholderA ="population:        "+SCG.iPopulation;
-		}
+		int iSpacesNeeded = 0;
+		String sPartA = "";
+		String sPartB = "";
+		String sPlaceholderA = "";
+		String sPlaceholderB = "";
+		//turn
+		sPartA = _scsdm.getDisplayText("TURN_REPORT_TURN");
+		iSpacesNeeded = 20 - sPartA.length()- (int) Math.log10(SCG.iTurnCount);
+		sPlaceholderA = getSpacer(iSpacesNeeded);
+		_ioman.lineOut(sPartA + sPlaceholderA+SCG.iTurnCount);
 		
-			
-		if(SCG.iMoney>1000){
-			_ioman.lineOut("Money:          "+SCG.iMoney + "          " + placeholderA);
-		}else if(SCG.iMoney>100){
-			_ioman.lineOut("Money:           "+SCG.iMoney + "          " + placeholderA);
-		}else if(SCG.iMoney>10){
-			_ioman.lineOut("Money:            "+SCG.iMoney + "          " + placeholderA);
-		}else{
-			_ioman.lineOut("Money:             "+SCG.iMoney + "          " + placeholderA);
-		}
+		//money and population
+		sPartA = _scsdm.getDisplayText("TURN_REPORT_MONEY");
+		iSpacesNeeded = 20 - sPartA.length()- (int) Math.log10(SCG.iMoney+1);
+		sPlaceholderA = getSpacer(iSpacesNeeded);
+		sPartA = sPartA + sPlaceholderA+SCG.iMoney+"$         ";
 		
-		if(SCG.iOre>1000){
-			placeholderB = "Ore:            "+SCG.iOre;
-		}else if(SCG.iOre>100){
-			placeholderB = "Ore:             "+SCG.iOre;
-		}else if(SCG.iOre>10){
-			placeholderB = "Ore:              "+SCG.iOre;
-		}else{
-			placeholderB = "Ore:               "+SCG.iOre;
-		}
+		sPartB = _scsdm.getDisplayText("TURN_REPORT_POPULATION");
+		iSpacesNeeded = 20 - sPartB.length()- (int) Math.log10(SCG.iPopulation+1);
+		sPlaceholderB = getSpacer(iSpacesNeeded);
+		sPartB = sPartB + sPlaceholderB+SCG.iPopulation+"          ";
+		_ioman.lineOut(sPartA+sPartB);
 		
-		if(SCG.iSilicon>1000){
-			_ioman.lineOut("Silicon:        "+SCG.iSilicon + "          " + placeholderB);
-		}else if(SCG.iSilicon>100){
-			_ioman.lineOut("Silicon:         "+SCG.iSilicon + "          " + placeholderB);
-		}else if(SCG.iSilicon>10){
-			_ioman.lineOut("Silicon:          "+SCG.iSilicon + "          " + placeholderB);
-		}else{
-			_ioman.lineOut("Silicon:           "+SCG.iSilicon + "          " + placeholderB);
+		sPartA = _scsdm.getDisplayText("TURN_REPORT_ORE");
+		iSpacesNeeded = 20 - sPartA.length()- (int) Math.log10(SCG.iOre+1);
+		sPlaceholderA = getSpacer(iSpacesNeeded);
+		sPartA = sPartA + sPlaceholderA+SCG.iOre+"          ";
+		
+		sPartB = _scsdm.getDisplayText("TURN_REPORT_SILICON");
+		iSpacesNeeded = 20 - sPartB.length()- (int) Math.log10(SCG.iPopulation+1);
+		sPlaceholderB = getSpacer(iSpacesNeeded);
+		sPartB = sPartB + sPlaceholderB+SCG.iSilicon+"          ";
+		_ioman.lineOut(sPartA+sPartB);
+		
+		
+	}
+	public String getSpacer(int iSize){
+		String returnString = "";
+		for(int i = 0; i<iSize; i++){
+			returnString+=" ";
 		}
+		return returnString;
 	}
 }
