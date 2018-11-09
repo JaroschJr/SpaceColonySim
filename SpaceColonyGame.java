@@ -9,6 +9,7 @@ public class SpaceColonyGame{
 	public int iTurnCount = 1;
 	public int iPopulation = 0;
 	public int iMoney = 50;
+	public int iFood = 0;
 	public int iOre = 0;
 	public int iSilicon = 0;
 	public int iMerchantCountDown = 0;

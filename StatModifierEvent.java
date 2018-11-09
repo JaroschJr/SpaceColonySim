@@ -88,11 +88,18 @@ public class StatModifierEvent extends RandomEvent{
 					iOutcome = (int) Math.floor(scg.iSilicon*dWorkingDouble2);
 					scg.iSilicon += iOutcome;
 					break;
-				default: 
+				case Food:
+					dWorkingDouble1 = iOutcome;
+					dWorkingDouble2 = dWorkingDouble1/100;
+					iOutcome = (int) Math.floor(scg.iFood*dWorkingDouble2);
+					scg.iFood += iOutcome;
+					break;
+				case TurnCount: 
 					dWorkingDouble1 = iOutcome;
 					dWorkingDouble2 = dWorkingDouble1/100;
 					iOutcome = (int) Math.floor(scg.iMerchantCountDown*dWorkingDouble2);
 					scg.iMerchantCountDown += iOutcome;
+					break;
 			}
 			
 		
@@ -108,7 +115,9 @@ public class StatModifierEvent extends RandomEvent{
 					break;
 				case Silicon: scg.iSilicon += iOutcome;
 					break;
-				default: scg.iMerchantCountDown += iOutcome;
+				case Food: scg.iFood +=iOutcome;
+					break;
+				case TurnCount: scg.iMerchantCountDown += iOutcome;
 			}
 			
 			//Now the Fluff.

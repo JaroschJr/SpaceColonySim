@@ -177,9 +177,15 @@ public class SpaceColonyEngine implements ISCSError{
 			//labour related things
 			SCG.iTurnCount++;
 			//truncate it so it does one and only one iteration.
+			/*
 			if (SCG.iTurnCount >20){
 			SCG.bIsOngoing = false;//truncate it so it does one and only one iteration. Its looping infinitely caused issues during testing to complex to understand here.
 			}
+			*/
+			_ioman.lineOut("Enter to continue");
+			String SINN = _ioman.stringIn("");
+			
+			
 		}
 		System.out.println("It can run through one loop");
 	}
@@ -202,13 +208,20 @@ public class SpaceColonyEngine implements ISCSError{
 		sPartA = _scsdm.getDisplayText("TURN_REPORT_TURN");
 		iSpacesNeeded = 20 - sPartA.length()- (int) Math.log10(SCG.iTurnCount);
 		sPlaceholderA = getSpacer(iSpacesNeeded);
-		_ioman.lineOut(sPartA + sPlaceholderA+SCG.iTurnCount);
+		sPartA = sPartA + sPlaceholderA+SCG.iTurnCount+"          ";
+		//_ioman.lineOut(sPartA + sPlaceholderA+SCG.iTurnCount);
 		
-		//money and population
-		sPartA = _scsdm.getDisplayText("TURN_REPORT_MONEY");
-		iSpacesNeeded = 20 - sPartA.length()- (int) Math.log10(SCG.iMoney+1);
+		sPartB = _scsdm.getDisplayText("TURN_REPORT_MONEY");
+		iSpacesNeeded = 20 - sPartB.length()- (int) Math.log10(SCG.iMoney+1);
+		sPlaceholderB = getSpacer(iSpacesNeeded);
+		sPartB = sPartB + sPlaceholderB+SCG.iMoney+"$         ";
+		_ioman.lineOut(sPartA+sPartB);
+		
+		//Food and population
+		sPartA = _scsdm.getDisplayText("TURN_REPORT_FOOD");
+		iSpacesNeeded = 20 - sPartA.length()- (int) Math.log10(SCG.iFood+1);
 		sPlaceholderA = getSpacer(iSpacesNeeded);
-		sPartA = sPartA + sPlaceholderA+SCG.iMoney+"$         ";
+		sPartA = sPartA + sPlaceholderA+SCG.iFood+"          ";
 		
 		sPartB = _scsdm.getDisplayText("TURN_REPORT_POPULATION");
 		iSpacesNeeded = 20 - sPartB.length()- (int) Math.log10(SCG.iPopulation+1);
@@ -216,6 +229,7 @@ public class SpaceColonyEngine implements ISCSError{
 		sPartB = sPartB + sPlaceholderB+SCG.iPopulation+"          ";
 		_ioman.lineOut(sPartA+sPartB);
 		
+		//ore and Silicon
 		sPartA = _scsdm.getDisplayText("TURN_REPORT_ORE");
 		iSpacesNeeded = 20 - sPartA.length()- (int) Math.log10(SCG.iOre+1);
 		sPlaceholderA = getSpacer(iSpacesNeeded);

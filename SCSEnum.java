@@ -9,11 +9,11 @@ public class SCSEnum{
 	}
 	
 	public enum eStatModded{
-		TurnCount, Population, Money, Ore, Silicon
+		TurnCount, Population, Money, Ore, Silicon, Ice, Food
 	}
 	
 	public enum eProductionModded{
-		ORE, SILICON, ICE, FACTORY
+		ORE, SILICON, ICE, FACTORY, FOOD
 	}
 	
 	public enum eRandomEventClasses{
