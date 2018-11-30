@@ -94,6 +94,18 @@ public class StatModifierEvent extends RandomEvent{
 					iOutcome = (int) Math.floor(scg.iFood*dWorkingDouble2);
 					scg.iFood += iOutcome;
 					break;
+				case Ice:
+					dWorkingDouble1 = iOutcome;
+					dWorkingDouble2 = dWorkingDouble1/100;
+					iOutcome = (int) Math.floor(scg.iIce*dWorkingDouble2);
+					scg.iIce += iOutcome;
+					break;
+				case Water:
+					dWorkingDouble1 = iOutcome;
+					dWorkingDouble2 = dWorkingDouble1/100;
+					iOutcome = (int) Math.floor(scg.iWater*dWorkingDouble2);
+					scg.iWater += iOutcome;
+					break;
 				case TurnCount: 
 					dWorkingDouble1 = iOutcome;
 					dWorkingDouble2 = dWorkingDouble1/100;
@@ -116,6 +128,10 @@ public class StatModifierEvent extends RandomEvent{
 				case Silicon: scg.iSilicon += iOutcome;
 					break;
 				case Food: scg.iFood +=iOutcome;
+					break;
+				case Ice: scg.iIce += iOutcome;
+					break;
+				case Water: scg.iWater+=iOutcome;
 					break;
 				case TurnCount: scg.iMerchantCountDown += iOutcome;
 			}

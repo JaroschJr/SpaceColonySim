@@ -18,6 +18,9 @@ public class SpaceColonyEngine implements ISCSError{
 	private RandomEventFactory rEventFactory;
 	private RandomEventList events;
 	private RandomEvent currentEvent;
+	//to test to see if Structure and descendat classed were made correctly.
+	private Structure testStructure;
+	private MineOre testMine;
 	
 	/*
 	//Begining of example random events, to check for bugs.
@@ -239,6 +242,18 @@ public class SpaceColonyEngine implements ISCSError{
 		iSpacesNeeded = 20 - sPartB.length()- (int) Math.log10(SCG.iPopulation+1);
 		sPlaceholderB = getSpacer(iSpacesNeeded);
 		sPartB = sPartB + sPlaceholderB+SCG.iSilicon+"          ";
+		_ioman.lineOut(sPartA+sPartB);
+		
+		//ice and water
+		sPartA = _scsdm.getDisplayText("TURN_REPORT_ICE");
+		iSpacesNeeded = 20 - sPartA.length()- (int) Math.log10(SCG.iIce+1);
+		sPlaceholderA = getSpacer(iSpacesNeeded);
+		sPartA = sPartA + sPlaceholderA+SCG.iIce+"          ";
+		
+		sPartB = _scsdm.getDisplayText("TURN_REPORT_WATER");
+		iSpacesNeeded = 20 - sPartB.length()- (int) Math.log10(SCG.iWater+1);
+		sPlaceholderB = getSpacer(iSpacesNeeded);
+		sPartB = sPartB + sPlaceholderB+SCG.iWater+"          ";
 		_ioman.lineOut(sPartA+sPartB);
 		
 		

@@ -13,6 +13,8 @@ public class SpaceColonyGame{
 	public int iOre = 0;
 	public int iSilicon = 0;
 	public int iMerchantCountDown = 0;
+	public int iIce = 0;
+	public int iWater = 0;
 
 	public void gameReset(){
 		bIsOngoing = true;
