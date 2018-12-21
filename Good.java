@@ -16,7 +16,6 @@ public class Good{
 		sName = resultSet.getString(Good.FIELD_NAME);
 		sTextCode = resultSet.getString(Good.FIELD_TEXT_CODE);
 		sGuid = resultSet.getString(Good.FIELD_ID);
-		i = resultSet.getInt(Good.FIELD_PUBLISHED);
-		bReport = (i == 1);
+		Report = SCSDataModule.getBoolean(resultSet, Good.PUBLISHED)
 	 }
 }
