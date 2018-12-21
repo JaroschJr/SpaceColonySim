@@ -22,6 +22,9 @@ public class SpaceColonyEngine implements ISCSError{
 	private Structure testStructure;
 	private MineOre testMine;
 	
+	private InventoryFactory InvFact;
+	
+	
 	/*
 	//Begining of example random events, to check for bugs.
 	private RandomInputEvent aEvent;
@@ -91,6 +94,11 @@ public class SpaceColonyEngine implements ISCSError{
 	 */
 	private void launchGame(){
 		SCG = new SpaceColonyGame();
+		
+		InvFact = new InventoryFactory(_scsdm);
+		SCG.iInv = InvFact.getList();
+		//Good g = SCG.iInv.get(0);
+		//System.out.println(g.sName);
 
 		getLanguagePreference();
 		loadOrNew();
