@@ -46,7 +46,18 @@ public class SCSDataModuleTest implements ISCSError{
 			System.out.println(events.get(i).toString());
 			System.out.println("   ");
 		}//end for i
-
+		
+		InventoryFactory invFac = new InventoryFactory(Thing);
+		Inventory inv = invFac.getList();
+		
+		for(int i = 0; i < inv.size(); i++){
+			System.out.println(inv.get(i).toString());
+			System.out.println("   ");
+		}//end for i
+		
+		Good g = inv.getGoodByName("Ore");
+		System.out.println("Ore " + g.toString());
+		
 		Thing.disConnect();
 	}
 
