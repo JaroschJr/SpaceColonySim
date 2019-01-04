@@ -98,7 +98,7 @@ public class SpaceColonyEngine implements ISCSError{
 		InvFact = new InventoryFactory(_scsdm);
 		SCG.iInv = InvFact.getList();
 		//Good g = SCG.iInv.get(0);
-		//System.out.println(g.sName);
+		//System.out.println(g.sName)
 
 		getLanguagePreference();
 		loadOrNew();
@@ -183,6 +183,7 @@ public class SpaceColonyEngine implements ISCSError{
 			report();
 			//Tennative suggestion: Some kind of status update?
 			currentEvent = events.generateEvent();
+			//System.out.println(currentEvent.toString());
 			currentEvent.performEvent(SCG, _ioman, _scsdm);
 			//Freightery things
 			//labour related things
@@ -210,6 +211,23 @@ public class SpaceColonyEngine implements ISCSError{
 	}
 	
 	private void report(){
+		_ioman.lineOut("Turn " + SCG.iTurnCount);
+		//_ioman.lineOut("Turn " + SCG.iTurnCount);
+		for(int i = 0; i<SCG.iInv.size(); i++){
+			int iSpacesNeeded;
+			String sOut = "";
+			Good gPrint = SCG.iInv.get(i);
+			if(gPrint.bPublish){
+				sOut = _scsdm.getDisplayText(gPrint.sTextCode);
+				String sPlaceHolder = getSpacer(20-sOut.length()-(int)Math.log10(gPrint.iQuant+1));
+				
+				sOut += sPlaceHolder + gPrint.iQuant;
+				_ioman.lineOut(sOut);
+			}
+			
+		}
+		
+		/*
 		int iSpacesNeeded = 0;
 		String sPartA = "";
 		String sPartB = "";
@@ -264,7 +282,7 @@ public class SpaceColonyEngine implements ISCSError{
 		sPartB = sPartB + sPlaceholderB+SCG.iWater+"          ";
 		_ioman.lineOut(sPartA+sPartB);
 		
-		
+		*/
 	}
 	public String getSpacer(int iSize){
 		String returnString = "";

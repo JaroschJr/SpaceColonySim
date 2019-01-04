@@ -3,7 +3,7 @@ import java.util.Random;
 import java.util.Formatter;
 public class StatModifierEvent extends RandomEvent{
 	Random rng = new Random();
-	SCSEnum.eStatModded eStat;//database: STAT_TYPE
+	String StatToMod;//database: STAT_TYPE
 	SCSEnum.eSign eThisSign;//database: STAT_SIGN
 	SCSEnum.eFactorType eHowToFactor;//database: STAT_FACTOR
 	int iDiceCount;//database: STAT_DICE_QUAN
@@ -25,7 +25,7 @@ public class StatModifierEvent extends RandomEvent{
 		
 		String sTypeA = resultSet.getString(TYPE);
 			if(sTypeA != null){
-				eStat = SCSEnum.eStatModded.valueOf(sTypeA);
+				StatToMod = sTypeA;
 			}
 		
 		String sTypeB = resultSet.getString(SIGN);
@@ -45,11 +45,13 @@ public class StatModifierEvent extends RandomEvent{
 	
 	@Override
 	public void performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){
-		//te creation of the random number.
+		//the creation of the random number.
 		int iOutcome = 0;
 		double dWorkingDouble1 = 0;
 		double dWorkingDouble2 = 0;
 		String sToPrint = null;
+		Good gGoodWorkedWith = scg.iInv.getGoodByName(StatToMod);
+		System.out.println("StatToMod is "+StatToMod);
 		for(int i = 0; i<iDiceCount; i++){
 			iOutcome += 1+rng.nextInt(iDiceSide);
 			
@@ -62,8 +64,15 @@ public class StatModifierEvent extends RandomEvent{
 		
 		//if mult.
 		if(eHowToFactor == SCSEnum.eFactorType.MULTIPLY){
+			dWorkingDouble1 = iOutcome;
+			dWorkingDouble2 = dWorkingDouble1/100;
+			iOutcome = (int) Math.floor(gGoodWorkedWith.iQuant*dWorkingDouble2);
+			gGoodWorkedWith.iQuant+=iOutcome;
 			
-			switch(eStat){
+			//scg.iPopulation += iOutcome;
+			
+			/*
+			switch(StatToMod){
 				case Population:
 					dWorkingDouble1 = iOutcome;
 					dWorkingDouble2 = dWorkingDouble1/100;
@@ -113,12 +122,14 @@ public class StatModifierEvent extends RandomEvent{
 					scg.iMerchantCountDown += iOutcome;
 					break;
 			}
+			*/
 			
 		
 			//add is default
 		}else{
 		//a swich statement for picking the stat.
-			switch(eStat){
+			/*
+			switch(StatToMod){
 				case Population: scg.iPopulation += iOutcome;
 					break;
 				case Money: scg.iMoney += iOutcome;
@@ -135,30 +146,36 @@ public class StatModifierEvent extends RandomEvent{
 					break;
 				case TurnCount: scg.iMerchantCountDown += iOutcome;
 			}
-			
+			*/
+			gGoodWorkedWith.iQuant+=iOutcome;
 			//Now the Fluff.
 			
 			
 		}
+		
+		scg.iInv.setGoodByName(StatToMod, gGoodWorkedWith);
+		
 		sToPrint = dbm.getDisplayText(sFluffAccess);
 		if(iOutcome<0){
 			iOutcome *= -1;
 		}
-		sToPrint = String.format(sToPrint,eStat.name(), iOutcome);
+		sToPrint = String.format(sToPrint, StatToMod, iOutcome);
 		/*if(eHowToFactor == SCSEnum.eFactorType.MULTIPLY){
-			sToPrint = String.format(sToPrint,eStat.name(), iOutcome);
+			sToPrint = String.format(sToPrint,StatToMod.name(), iOutcome);
 			}else{
-			sToPrint = String.format(sToPrint,eStat.name(), iOutcome);
+			sToPrint = String.format(sToPrint,StatToMod.name(), iOutcome);
 			}
 		*/
 		ioman.lineOut(sToPrint);
 		
+		///System.out.println("The good used internally is eventually " + gGoodWorkedWith.toString());
+		///System.out.println("The good selected post event is" + scg.iInv.getGoodByName(StatToMod).toString());
 	}
 	
 	@Override
 	public String toString(){
 		String returnString =  super.toString() + ", STAT_TYPE ";
-			returnString = returnString + eStat.name();
+			returnString = returnString + StatToMod;
 			returnString = returnString + ", STAT_SIGN ";
 			returnString = returnString + eThisSign.name() + ", STAT_FACTOR ";
 			returnString = returnString + eHowToFactor.name() + ", STAT_DICE_QUAN ";

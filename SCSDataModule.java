@@ -89,12 +89,12 @@ public class SCSDataModule{
 		}
 	}
 	
-	public static boolean getBoolean(ResultSet resultSet, String name){
+	public static boolean getBoolean(ResultSet resultSet, String name)throws SQLException{
 		int i = resultSet.getInt(name);
 		return (i == 1);
 	}
 	
-	public static void setBoolean(ResultSet resultSet, String name, boolean value){
+	public static void setBoolean(ResultSet resultSet, String name, boolean value)throws SQLException{
 		resultSet.updateInt(name, (value) ? 1 : 0);	
 	} 
 
