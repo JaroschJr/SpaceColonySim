@@ -68,28 +68,31 @@ public class StatModifierEvent extends RandomEvent{
 			if(eHowToFactor == SCSEnum.eFactorType.MULTIPLY){
 				dWorkingDouble1 = iOutcome;
 				dWorkingDouble2 = dWorkingDouble1/100;
-				iOutcome = (int) Math.floor(gGoodWorkedWith.iQuant*dWorkingDouble2);
+				iOutcome = (int) Math.floor(gGoodWorkedWith.iQuant*dWorkingDouble2);	
 				
-				gGoodWorkedWith.iQuant+=iOutcome;
-			}else{
-				gGoodWorkedWith.iQuant+=iOutcome;
 			}
 			
-			if(gGoodWorkedWith.iQuant <=0){
+			if(checkIsValid(iOutcome, gGoodWorkedWith) == false){
 				gGoodWorkedWith.iQuant = 0;
+			}else{
+				gGoodWorkedWith.iQuant+=iOutcome;
 			}
 			
 			scg.iInv.setGoodQuantByName(StatToMod, gGoodWorkedWith.iQuant);
 			
 			sToPrint = dbm.getDisplayText(sFluffAccess);
-			if(iOutcome<0){
-				iOutcome *= -1;
-			}
 			
-			sToPrint = String.format(sToPrint, StatToMod, iOutcome);
-			if(checkIsValid(scg, iOutcome, StatToMod)){
+				
+			if(doesItPrint(StatToMod, iOutcome)){
+				
+				if(iOutcome<0){
+				iOutcome *= -1;
+				}
+				
+				sToPrint = String.format(sToPrint, StatToMod, iOutcome);
 				ioman.lineOut(sToPrint);
 			}
+			
 		}//end if
 		return bOut;
 		
@@ -97,16 +100,24 @@ public class StatModifierEvent extends RandomEvent{
 	
 	//@Override
 	//overloads the parent, rather than overriding it- the origional still exists, per some manner of speaking.
-	public boolean checkIsValid(SpaceColonyGame scg, int iMod, String sTarget){
-		Boolean bValid = super.checkIsValid(scg);
-		if(iMod <= 0){
+	public boolean checkIsValid(int iMod, Good sModded){
+		boolean bValid = true;
+		if((iMod + sModded.iQuant)<0){
 			bValid = false;
 		}
 		
-		if(sTarget.equals("TurnCount")){
-			bValid = false;
-		}
 		return bValid;
+	}
+	
+	public boolean doesItPrint(String sStat, int iMod){
+		boolean bOut = true;
+		if(sStat.equals("TurnCount")){
+			bOut = false;
+		}else if(iMod == 0){
+			bOut = false;
+		}
+		return bOut;
+		
 	}
 	
 	@Override
