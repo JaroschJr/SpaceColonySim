@@ -20,13 +20,15 @@ public class RandomEvent {
 	}
 	 
 	 
-	public void performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){//dbm=DataBaseManager
+	public boolean performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){//dbm=DataBaseManager
+		boolean bRet;
 		if(checkIsValid(scg)){
-			
+			bRet = true;
 		}//end if
 		else{
-			
+			bRet = false;
 		}//end else
+		return bRet;
 	}
 	 
 	public boolean checkIsValid(SpaceColonyGame scg){

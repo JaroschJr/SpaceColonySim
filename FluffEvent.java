@@ -6,8 +6,8 @@ public class FluffEvent extends RandomEvent{//It is used  when there is a random
 	}
 	
 	@Override
-	public void performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){
-		 
+	public boolean performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){
+		 return true;
 	}
 	
 	

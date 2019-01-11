@@ -24,11 +24,12 @@ public class ProductionMultiplyingEvent extends RandomEvent{
 	}
 	
 	@Override
-	public void performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){
+	public boolean performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){
 		//it will multiply the production by a certain amount. currently this is not posible. come back to this once the rest of it is finished.
 		String sToPrint = dbm.getDisplayText(sFluffAccess); 
 		sToPrint = String.format(sToPrint,eTargetProduction.name(), dProdMultFactor);
 		ioman.lineOut(sToPrint);
+		return true;
 	
 	}
 	

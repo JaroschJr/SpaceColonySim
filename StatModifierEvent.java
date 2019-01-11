@@ -44,15 +44,16 @@ public class StatModifierEvent extends RandomEvent{
 	}
 	
 	@Override
-	public void performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){
-		if(super(scg, ioman, dbm)){
+	public boolean performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){
+		boolean bOut = false;
+		if(super.performEvent(scg, ioman, dbm)){
+			bOut = true;
 			//the creation of the random number.
 			int iOutcome = 0;
 			double dWorkingDouble1 = 0;
 			double dWorkingDouble2 = 0;
 			String sToPrint = null;
 			Good gGoodWorkedWith = scg.iInv.getGoodByName(StatToMod);
-			System.out.println("StatToMod is "+StatToMod);
 			for(int i = 0; i<iDiceCount; i++){
 				iOutcome += 1+rng.nextInt(iDiceSide);
 				
@@ -68,24 +69,44 @@ public class StatModifierEvent extends RandomEvent{
 				dWorkingDouble1 = iOutcome;
 				dWorkingDouble2 = dWorkingDouble1/100;
 				iOutcome = (int) Math.floor(gGoodWorkedWith.iQuant*dWorkingDouble2);
+				
 				gGoodWorkedWith.iQuant+=iOutcome;
 			}else{
 				gGoodWorkedWith.iQuant+=iOutcome;
 			}
 			
-			scg.iInv.setGoodByName(StatToMod, gGoodWorkedWith);
+			if(gGoodWorkedWith.iQuant <=0){
+				gGoodWorkedWith.iQuant = 0;
+			}
+			
+			scg.iInv.setGoodQuantByName(StatToMod, gGoodWorkedWith.iQuant);
 			
 			sToPrint = dbm.getDisplayText(sFluffAccess);
 			if(iOutcome<0){
 				iOutcome *= -1;
 			}
+			
 			sToPrint = String.format(sToPrint, StatToMod, iOutcome);
-
-			ioman.lineOut(sToPrint);
+			if(checkIsValid(scg, iOutcome, StatToMod)){
+				ioman.lineOut(sToPrint);
+			}
 		}//end if
+		return bOut;
 		
-		///System.out.println("The good used internally is eventually " + gGoodWorkedWith.toString());
-		///System.out.println("The good selected post event is" + scg.iInv.getGoodByName(StatToMod).toString());
+	}
+	
+	//@Override
+	//overloads the parent, rather than overriding it- the origional still exists, per some manner of speaking.
+	public boolean checkIsValid(SpaceColonyGame scg, int iMod, String sTarget){
+		Boolean bValid = super.checkIsValid(scg);
+		if(iMod <= 0){
+			bValid = false;
+		}
+		
+		if(sTarget.equals("TurnCount")){
+			bValid = false;
+		}
+		return bValid;
 	}
 	
 	@Override

@@ -12,7 +12,6 @@ public class Good{
 	boolean bPublish;
 	
 	public void readFromDB(ResultSet resultSet)throws SQLException{
-		int i;
 		sName = resultSet.getString(Good.FIELD_NAME);
 		sTextCode = resultSet.getString(Good.FIELD_TEXT_CODE);
 		sGuid = resultSet.getString(Good.FIELD_ID);
