@@ -33,11 +33,79 @@ public class InventoryFactory{
 		return rResultData;
     }
 	
+	public Inventory loadInventory(){
+		ResultSet rResultSet;
+		return new Inventory();
+		//this part wont do anything untill we have a loadSave
+	}
+	
+	public RecipeList getRecipeList(){
+		ResultSet rResultSet;
+		RecipeList rOutRecList = new RecipeList();
+		
+		try{
+			rResultSet = _data.getResultSet("SELECT * FROM SCS_RECIPES");
+			boolean bMoreLines = true;
+			bMoreLines = rResultSet.next();
+			while(bMoreLines){
+				rOutRecList.add(getRecipe(rResultSet));
+				bMoreLines = rResultSet.next();
+			}
+			
+		}catch(SQLException sqle){
+			System.out.println(sqle.getMessage());
+		}
+		return rOutRecList;
+	}
+	
+	private Recipe getRecipe(ResultSet resultSet) throws SQLException{
+		Recipe outRecipe = new Recipe();
+		outRecipe.ID = resultSet.getString(Recipe.FIELD_ID);
+		outRecipe.NAME = resultSet.getString(Recipe.FIELD_NAME);
+		outRecipe.TEXT_CODE = resultSet.getString(Recipe.FIELD_TEXT_CODE);
+		outRecipe.MAN_HOURS = resultSet.getInt(Recipe.FIELD_MAN_HOURS);
+		
+		//An exemplary SQL Query is 
+		/*
+		select a.NAME as RECIPE_NAME, a.MAN_HOURS, b.QUANTITY, c.NAME as INGREDIENT_NAME
+		from SCS_RECIPES a, SCS_RECIPE_GOODS b, SCS_INVENTORY_ITEMS c
+		where b.RECIPE = a.ID
+		and b.GOOD = c.ID
+		and a.NAME = 'farm'
+		*/
+		
+		ResultSet rOtherResultSet;
+		try{
+			rOtherResultSet = _data.getResultSet("select a.NAME as RECIPE_NAME, a.MAN_HOURS, b.QUANTITY, c.NAME as INGREDIENT_NAME from SCS_RECIPES a, SCS_RECIPE_GOODS b, SCS_INVENTORY_ITEMS c where b.RECIPE = a.ID and b.GOOD = c.ID and a.NAME = '" + outRecipe.NAME + "'");
+			boolean bMoreLines = true;
+			bMoreLines = rOtherResultSet.next();
+			
+			while(bMoreLines){
+				outRecipe.add(altGetGood(rOtherResultSet));
+				bMoreLines = rOtherResultSet.next();
+			}
+			
+		}catch(SQLException sqle){
+			System.out.println(sqle.getMessage());
+		}
+		return outRecipe;
+	}
+	
 	private Good getGood(ResultSet resultSet)throws SQLException{
 		Good gOut = new Good();
-		gOut.readFromDB(resultSet);
+		//gOut.readFromDB(resultSet); this method did what the thing below now does.
+		gOut.sName = resultSet.getString(Good.FIELD_NAME);
+		gOut.sTextCode = resultSet.getString(Good.FIELD_TEXT_CODE);
+		gOut.sGuid = resultSet.getString(Good.FIELD_ID);
+		gOut.bPublish = SCSDataModule.getBoolean(resultSet, Good.FIELD_PUBLISHED);
 		return gOut;
 		
 	}
-
+	
+	private Good altGetGood(ResultSet resultSet)throws SQLException{
+		Good gOut = new Good();
+		gOut.sName = resultSet.getString("INGREDIENT_NAME");
+		gOut.iQuant = resultSet.getInt("QUANTITY");
+		return gOut;
+	}
 }
