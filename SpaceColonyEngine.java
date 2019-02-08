@@ -20,9 +20,10 @@ public class SpaceColonyEngine implements ISCSError{
 	private RandomEvent currentEvent;
 	//to test to see if Structure and descendat classed were made correctly.
 	private Structure testStructure;
-	private MineOre testMine;
 	private RecipeList listOfRecipes;//For Testing.
 	private InventoryFactory InvFact;
+	private StructureFactory StructFact;
+	private StructureList StructList;
 	
 	
 	/*
@@ -97,7 +98,12 @@ public class SpaceColonyEngine implements ISCSError{
 		
 		InvFact = new InventoryFactory(_scsdm);
 		SCG.iInv = InvFact.getList();
-		listOfRecipes = InvFact.getRecipeList();//for testing purposes
+		listOfRecipes = InvFact.getRecipeList();
+		StructFact = new StructureFactory(_scsdm);
+		StructList = StructFact.getStructureList();
+		
+		//for testing purposes
+		//System.out.println(StructList.toString());
 		//System.out.println(listOfRecipes.get(0).get(0).toString());
 		//System.out.println(listOfRecipes.get(0).toString());
 		

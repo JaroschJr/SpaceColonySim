@@ -12,6 +12,10 @@ public class Recipe extends ArrayList<Good>{
 	//Man hours is always the first ingredient in the lsit
 	@Override
 	public String toString(){
-		return ID+" "+NAME+"  TEXT_CODE "+TEXT_CODE+" "+MAN_HOURS+"MAN_HOURS";
+		String sOut = ID+" "+NAME+"  TEXT_CODE "+TEXT_CODE+" MAN_HOURS "+MAN_HOURS + " ";
+		for(int i = 0; i<size(); i++){
+			sOut += " - Good no." + i + " " + get(i).toString() ;
+		}
+		return sOut;
 	}
 }

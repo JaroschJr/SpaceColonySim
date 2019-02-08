@@ -25,5 +25,9 @@ public class SCSEnum{
 		Population, Money, Ore, Silicon, Ice, Food, Water
 	}
 	
+	public enum eBenefit{
+		DockRig
+	}
+	
 	
 }
