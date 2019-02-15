@@ -6,13 +6,13 @@
  */
 public class SpaceColonyGame{
 	public boolean bIsOngoing;
-	Inventory iInv = null;
+	Inventory iInv;
 	
 	public int iTurnCount = 1;
 	
 	public int iMerchantCountDown = 0;
 	
-	public Population pop = null;
+	public Population pop;
 
 	public void gameReset(){
 		bIsOngoing = true;
