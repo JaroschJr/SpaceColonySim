@@ -10,4 +10,17 @@ public class PassiveBuilding extends Structure{
 		sOut += " NEED_WORKERS " + NEED_WORKERS + " BENNEFIT " + BENEFIT + " ";
 		return sOut;
 	}
+	
+	@Override
+	public PassiveBuilding clone(){
+		PassiveBuilding sOut = new PassiveBuilding();
+		sOut.ID = ID;
+		sOut.NAME = NAME;
+		sOut.TEXT_CODE = TEXT_CODE;
+		sOut.MAX_WORKERS = MAX_WORKERS;
+		sOut.NEED_WORKERS = NEED_WORKERS;
+		sOut.BENEFIT = BENEFIT;
+		
+		return sOut;
+	}
 }

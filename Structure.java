@@ -23,4 +23,20 @@ public class Structure{
 	public String toString(){
 		return ID+" "+NAME+" "+TEXT_CODE+"  MAX_WORKERS "+MAX_WORKERS +" ";
 	}
+	
+	public Structure clone(){//there will never be a Structure that is not of a subclass, so this is just to demonstrate that they will have one.
+		
+		return null;
+	}
+	
+	/*
+	public Structure clone(){
+		Structure sOut = new Structure();
+		sOut.ID = ID;
+		sOut.NAME = NAME;
+		sOut.TEXT_CODE = TEXT_CODE;
+		sOut.MAX_WORKERS = MAX_WORKERS;
+		return sOut;
+	}
+	*/
 }

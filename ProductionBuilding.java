@@ -15,5 +15,17 @@ public class ProductionBuilding extends Structure{
 		return sOut;
 	}
 	
+	@Override
+	public ProductionBuilding clone(){
+		ProductionBuilding sOut = new ProductionBuilding();
+		sOut.ID = ID;
+		sOut.NAME = NAME;
+		sOut.TEXT_CODE = TEXT_CODE;
+		sOut.MAX_WORKERS = MAX_WORKERS;
+		sOut.sPosibleRecipes = sPosibleRecipes;
+		
+		return sOut;
+	}
+	
 
 }
