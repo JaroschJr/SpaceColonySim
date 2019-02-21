@@ -25,18 +25,14 @@ public class Structure{
 	}
 	
 	public Structure clone(){//there will never be a Structure that is not of a subclass, so this is just to demonstrate that they will have one.
+		Structure s = new Structure();
+		s.ID = ID;
+		s.NAME = NAME;
+		s.TEXT_CODE = TEXT_CODE;
+		s.MAX_WORKERS = MAX_WORKERS;
 		
-		return null;
+		return s;
 	}
 	
-	/*
-	public Structure clone(){
-		Structure sOut = new Structure();
-		sOut.ID = ID;
-		sOut.NAME = NAME;
-		sOut.TEXT_CODE = TEXT_CODE;
-		sOut.MAX_WORKERS = MAX_WORKERS;
-		return sOut;
-	}
-	*/
+	
 }
