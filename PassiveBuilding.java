@@ -13,7 +13,8 @@ public class PassiveBuilding extends Structure{
 	
 	@Override
 	public Structure clone(){
-		PassiveBuilding sOut = (PassiveBuilding)super.clone();
+		PassiveBuilding sOut = new PassiveBuilding();
+		cloneStructure(sOut);
 		sOut.NEED_WORKERS = NEED_WORKERS;
 		sOut.BENEFIT = BENEFIT;
 		

@@ -48,7 +48,7 @@ public class SpaceColonyEngine implements ISCSError{
 		SpaceColonyEngine engine = new SpaceColonyEngine();
 		engine.initialize();
 		engine.launchGame();
-		System.out.println("Start turns");
+		//System.out.println("Start turns");
 		engine.turns();
 	}
 
@@ -80,7 +80,7 @@ public class SpaceColonyEngine implements ISCSError{
 		//established, if not then display an error
 		//message and close the application
 		if(!_scsdm.isConnected()){
-			_ioman.lineOut("The data base could not be connected to. Exiting game");
+			_ioman.lineOut("The database could not be connected to. Exiting game");
 			//System.out.println("The data base could not be connected to. Exiting game");
 			System.exit(1);
 		}//end if
@@ -101,6 +101,13 @@ public class SpaceColonyEngine implements ISCSError{
 		listOfRecipes = InvFact.getRecipeList();
 		StructFact = new StructureFactory(_scsdm);
 		StructList = StructFact.getStructureList();
+		//get copies of starting structures.
+		StructureList sList = new StructureList();
+		sList.add(StructList.getStructureByName("farm").clone());
+		sList.add(StructList.getStructureByName("oreMine").clone());
+		SCG.structures = sList;
+		SCG.pop = new Population();
+		//end gettign structures.
 		
 		//for testing purposes
 		//System.out.println(StructList.toString());
@@ -221,8 +228,8 @@ public class SpaceColonyEngine implements ISCSError{
 	}
 	
 	private void report(){
-		_ioman.lineOut("Turn " + SCG.iTurnCount);
-		//_ioman.lineOut("Turn " + SCG.iTurnCount);
+		_ioman.lineOut(_scsdm.getDisplayText("TURN_REPORT_TURN") +getSpacer(20-_scsdm.getDisplayText("TURN_REPORT_TURN").length()-(int)Math.log10(SCG.iTurnCount+1))+ SCG.iTurnCount);
+		_ioman.lineOut(_scsdm.getDisplayText("TURN_REPORT_POPULATION") +getSpacer(20-_scsdm.getDisplayText("TURN_REPORT_POPULATION").length()-(int)Math.log10(SCG.pop.size()+1))+ SCG.pop.size());
 		for(int i = 0; i<SCG.iInv.size(); i++){
 			int iSpacesNeeded;
 			String sOut = "";
@@ -236,63 +243,28 @@ public class SpaceColonyEngine implements ISCSError{
 			}
 			
 		}
+		//for a gap:
+		_ioman.lineOut(" ");
+		_ioman.lineOut(_scsdm.getDisplayText("TURN_REPORT_BUILDINGS"));
+		//reporting of structures
+		for(int i = 0; i<StructList.size(); i++){
+			int iNum = 0;
+			for(int j = 0; j<SCG.structures.size(); j++){
+				if(SCG.structures.get(j).NAME.equals(StructList.get(i).NAME)){
+					iNum++;
+				}
+			}
+			
+			if(iNum>0){
+			String sOut = "";
+			sOut = _scsdm.getDisplayText(StructList.get(i).TEXT_CODE);
+			sOut += getSpacer(20-sOut.length()-(int)Math.log10(iNum+1));
+			sOut += iNum;
+			_ioman.lineOut(sOut);
+			}
+			
+		}
 		
-		/*
-		int iSpacesNeeded = 0;
-		String sPartA = "";
-		String sPartB = "";
-		String sPlaceholderA = "";
-		String sPlaceholderB = "";
-		//turn
-		sPartA = _scsdm.getDisplayText("TURN_REPORT_TURN");
-		iSpacesNeeded = 20 - sPartA.length()- (int) Math.log10(SCG.iTurnCount);
-		sPlaceholderA = getSpacer(iSpacesNeeded);
-		sPartA = sPartA + sPlaceholderA+SCG.iTurnCount+"          ";
-		//_ioman.lineOut(sPartA + sPlaceholderA+SCG.iTurnCount);
-		
-		sPartB = _scsdm.getDisplayText("TURN_REPORT_MONEY");
-		iSpacesNeeded = 20 - sPartB.length()- (int) Math.log10(SCG.iMoney+1);
-		sPlaceholderB = getSpacer(iSpacesNeeded);
-		sPartB = sPartB + sPlaceholderB+SCG.iMoney+"$         ";
-		_ioman.lineOut(sPartA+sPartB);
-		
-		//Food and population
-		sPartA = _scsdm.getDisplayText("TURN_REPORT_FOOD");
-		iSpacesNeeded = 20 - sPartA.length()- (int) Math.log10(SCG.iFood+1);
-		sPlaceholderA = getSpacer(iSpacesNeeded);
-		sPartA = sPartA + sPlaceholderA+SCG.iFood+"          ";
-		
-		sPartB = _scsdm.getDisplayText("TURN_REPORT_POPULATION");
-		iSpacesNeeded = 20 - sPartB.length()- (int) Math.log10(SCG.iPopulation+1);
-		sPlaceholderB = getSpacer(iSpacesNeeded);
-		sPartB = sPartB + sPlaceholderB+SCG.iPopulation+"          ";
-		_ioman.lineOut(sPartA+sPartB);
-		
-		//ore and Silicon
-		sPartA = _scsdm.getDisplayText("TURN_REPORT_ORE");
-		iSpacesNeeded = 20 - sPartA.length()- (int) Math.log10(SCG.iOre+1);
-		sPlaceholderA = getSpacer(iSpacesNeeded);
-		sPartA = sPartA + sPlaceholderA+SCG.iOre+"          ";
-		
-		sPartB = _scsdm.getDisplayText("TURN_REPORT_SILICON");
-		iSpacesNeeded = 20 - sPartB.length()- (int) Math.log10(SCG.iPopulation+1);
-		sPlaceholderB = getSpacer(iSpacesNeeded);
-		sPartB = sPartB + sPlaceholderB+SCG.iSilicon+"          ";
-		_ioman.lineOut(sPartA+sPartB);
-		
-		//ice and water
-		sPartA = _scsdm.getDisplayText("TURN_REPORT_ICE");
-		iSpacesNeeded = 20 - sPartA.length()- (int) Math.log10(SCG.iIce+1);
-		sPlaceholderA = getSpacer(iSpacesNeeded);
-		sPartA = sPartA + sPlaceholderA+SCG.iIce+"          ";
-		
-		sPartB = _scsdm.getDisplayText("TURN_REPORT_WATER");
-		iSpacesNeeded = 20 - sPartB.length()- (int) Math.log10(SCG.iWater+1);
-		sPlaceholderB = getSpacer(iSpacesNeeded);
-		sPartB = sPartB + sPlaceholderB+SCG.iWater+"          ";
-		_ioman.lineOut(sPartA+sPartB);
-		
-		*/
 	}
 	public String getSpacer(int iSize){
 		String returnString = "";

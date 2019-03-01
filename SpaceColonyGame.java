@@ -13,6 +13,8 @@ public class SpaceColonyGame{
 	public int iMerchantCountDown = 0;
 	
 	public Population pop;
+	
+	public StructureList structures;
 
 	public void gameReset(){
 		bIsOngoing = true;

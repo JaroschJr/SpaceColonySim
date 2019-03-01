@@ -17,8 +17,8 @@ public class ProductionBuilding extends Structure{
 	
 	@Override
 	public Structure clone(){
-		ProductionBuilding sOut = (ProductionBuilding)super.clone();
-		
+		ProductionBuilding sOut = new ProductionBuilding();
+		cloneStructure(sOut);
 		sOut.sPosibleRecipes = sPosibleRecipes;
 		
 		return sOut;
