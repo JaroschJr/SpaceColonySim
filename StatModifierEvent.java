@@ -50,6 +50,7 @@ public class StatModifierEvent extends RandomEvent{
 			bOut = true;
 			//the creation of the random number.
 			int iOutcome = 0;
+			int iHolder = 0;
 			double dWorkingDouble1 = 0;
 			double dWorkingDouble2 = 0;
 			String sToPrint = null;
@@ -68,14 +69,34 @@ public class StatModifierEvent extends RandomEvent{
 			if(eHowToFactor == SCSEnum.eFactorType.MULTIPLY){
 				dWorkingDouble1 = iOutcome;
 				dWorkingDouble2 = dWorkingDouble1/100;
-				iOutcome = (int) Math.floor(gGoodWorkedWith.iQuant*dWorkingDouble2);	
+				if(StatToMod.equals("Population")){
+					//System.out.println("Increasing Population by "+iOutcome +"percent");
+					iOutcome = (int) Math.floor(scg.pop.size()*dWorkingDouble2);
+					iHolder = scg.pop.size();
+					//System.out.println("Increasing Population "+iOutcome +"people");
+				}else{
+					//System.out.println("Decreasing Population by "+iOutcome +"percent");
+					iOutcome = (int) Math.floor(gGoodWorkedWith.iQuant*dWorkingDouble2);
+					//System.out.println("Decreasing Population "+iOutcome +"people");
+				}
 				
 			}
-			
-			if(checkIsValid(iOutcome, gGoodWorkedWith) == false){
-				gGoodWorkedWith.iQuant = 0;
+			if(StatToMod.equals("Population")){
+				if(iOutcome>0){
+					iHolder = scg.pop.size();
+					scg.pop.gainPop(iOutcome);
+				}else if(iOutcome<0){
+					iHolder = scg.pop.size();
+					scg.pop.losePop(iOutcome*-1);
+				}
 			}else{
-				gGoodWorkedWith.iQuant+=iOutcome;
+				if(checkIsValid(iOutcome, gGoodWorkedWith, scg) == false){
+					iHolder = gGoodWorkedWith.iQuant;
+					gGoodWorkedWith.iQuant = 0;
+				}else{
+					iHolder = gGoodWorkedWith.iQuant;
+					gGoodWorkedWith.iQuant+=iOutcome;
+				}
 			}
 			
 			scg.iInv.setGoodQuantByName(StatToMod, gGoodWorkedWith.iQuant);
@@ -89,8 +110,10 @@ public class StatModifierEvent extends RandomEvent{
 				iOutcome *= -1;
 				}
 				
-				sToPrint = String.format(sToPrint, StatToMod, iOutcome);
-				ioman.lineOut(sToPrint);
+				if(iOutcome>0||iHolder!=0){
+					sToPrint = String.format(sToPrint, StatToMod, iOutcome);
+					ioman.lineOut(sToPrint);
+				}
 			}
 			
 		}//end if
@@ -100,10 +123,16 @@ public class StatModifierEvent extends RandomEvent{
 	
 	//@Override
 	//overloads the parent, rather than overriding it- the origional still exists, per some manner of speaking.
-	public boolean checkIsValid(int iMod, Good sModded){
+	public boolean checkIsValid(int iMod, Good sModded, SpaceColonyGame tSCG){
 		boolean bValid = true;
-		if((iMod + sModded.iQuant)<0){
-			bValid = false;
+		if(StatToMod.equals("Population")){
+			if((tSCG.pop.size()+iMod)<0){
+				bValid = false;
+			}
+		}else{
+			if((iMod + sModded.iQuant)<0){
+				bValid = false;
+			}
 		}
 		
 		return bValid;

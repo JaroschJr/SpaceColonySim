@@ -107,6 +107,7 @@ public class SpaceColonyEngine implements ISCSError{
 		sList.add(StructList.getStructureByName("oreMine").clone());
 		SCG.structures = sList;
 		SCG.pop = new Population();
+		SCG.pop.gainPop(10);
 		//end gettign structures.
 		
 		//for testing purposes

@@ -1,0 +1,64 @@
+Space Colony Sim Demo.
+
+0: Español
+1: English
+2: German
+Select your preferred language.
+1
+Welcome To Space Colony Simulator
+(N) ew game or (L) oad game?
+n
+Turn                1
+Population         10
+Ice                 0
+Ore                 0
+Food                0
+Silicon             0
+Water               0
+Money               0
+
+Buildings:
+Farm                2
+Ore Mine            1
+Factory             1                           // This line is for the purposes of this demonstration-
+By fluke of luck, you gained 11 Population.
+Enter to continue
+//Everything after this is 
+your assignments last turn were:
+Building           Workers      Recipe          //spacing tentative
+a-Ore Mine         3            Ore             //Out of an assumed max of five
+b-Farm X2          6            Food            //if the assigned workers are higher than the max, the nececary number of structures are assigned.
+c-Factory          1            MacGuffium	    //The factory has two possible ones: MacGuffium and Widgets
+Idle Workers:      0
+Would you like to change these assignemnts? (Y/N)
+y
+Which?
+b
+How many workers?
+5
+		//A Farm can only produce Food, so it does not query the player on this point.
+New Assignments:
+Building           Workers      Recipe 
+a-Ore Mine         3            Ore 
+b-Farm             5            Food    
+c-Farm             0            ----------      //if there were more vacant ones, there woudl be a XN after it
+d-Factory          1            MacGuffium	 
+Idle Workers:      1
+Would you like to change these assignemnts? (Y/N)
+y
+Which?
+d
+How many workers?
+3                                               //if the number is larger that the number of workers, it wil asign all of them. If it exceeds the max number of applicable factories, it will fill them up.
+Build What?
+a-MacGuffium        //Whatever materials go here
+b-Widgets			//likewise
+b
+New Asisgnments:
+Building           Workers      Recipe 
+a-Ore Mine         3            Ore 
+b-Farm             5            Food    
+c-Farm             0            ----------      
+d-Factory          2            MacGuffium	 
+Idle Workers:      0
+Would you like to change these assignemnts? (Y/N)
