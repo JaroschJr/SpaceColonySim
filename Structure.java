@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 public class Structure{
 	public static final String FIELD_ID = "ID";
 	public static final String FIELD_NAME = "NAME";
@@ -12,6 +13,8 @@ public class Structure{
 	String TEXT_CODE;
 	int iWorkers;
 	int MAX_WORKERS;
+	ArrayList<People> pWorkers = new ArrayList<People>();
+	
 	
 	//reading from db is handled in the factory for it.
 	
@@ -21,7 +24,11 @@ public class Structure{
 	//and the recepies it can make.
 	@Override
 	public String toString(){
-		return ID+" "+NAME+" "+TEXT_CODE+"  MAX_WORKERS "+MAX_WORKERS +" ";
+		String sOut = ID+" "+NAME+" "+TEXT_CODE+"  MAX_WORKERS "+MAX_WORKERS +" Workers " + pWorkers.size() +"\n";
+		for(int i = 0; i<pWorkers.size(); i++){
+			sOut += pWorkers.get(i).toString();
+		}
+		return sOut;
 	}
 	
 	public Structure clone(){//there will never be a Structure that is not of a subclass, so this is just to demonstrate that they will have one.
@@ -29,6 +36,34 @@ public class Structure{
 		cloneStructure(s);
 		
 		return s;
+	}
+	
+	public void setWork(Population pop, int workers){
+		for(int i = pWorkers.size() -1; i>=0; i--){
+			pWorkers.get(i).assigned = false;
+			pWorkers.remove(i);
+		}
+		
+		if(workers>=MAX_WORKERS){
+			workers = MAX_WORKERS;
+		}
+		
+		if(workers>pop.howManyUnassigned()){
+			workers = pop.howManyUnassigned();
+		}
+		
+		iWorkers = workers;
+		
+	
+		
+		for(int i = 0; i<workers; i++){
+			pWorkers.add(pop.firstUnassigned());
+			pWorkers.get(i).assigned = true;
+			
+				
+		}
+			
+		
 	}
 	
 	public void cloneStructure(Structure s){
