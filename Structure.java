@@ -59,7 +59,6 @@ public class Structure{
 		for(int i = 0; i<workers; i++){
 			pWorkers.add(pop.firstUnassigned());
 			pWorkers.get(i).assigned = true;
-			
 				
 		}
 			

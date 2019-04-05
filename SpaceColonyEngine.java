@@ -210,10 +210,6 @@ public class SpaceColonyEngine implements ISCSError{
 			//Tennative suggestion: Some kind of status update?
 			currentEvent = events.generateEvent();
 			//System.out.println(currentEvent.toString());
-			currentEvent.performEvent(SCG, _ioman, _scsdm);
-			//Freightery things
-			//labour related things
-			SCG.iTurnCount++;
 			//truncate it so it does one and only one iteration.
 			/*
 			if (SCG.iTurnCount >20){
@@ -223,93 +219,11 @@ public class SpaceColonyEngine implements ISCSError{
 			_ioman.lineOut("Enter to continue");
 			String SINN = _ioman.stringIn("");
 			
-			while(true){
-				String[][] structReport = new String[SCG.structures.size()+2][3];
-				structReport[0][0] = _scsdm.getDisplayText("BUILDING");
-				structReport[0][1] = _scsdm.getDisplayText("WORKERS");
-				structReport[0][2] = _scsdm.getDisplayText("RECIPE");
-					for(int i = 1;i<=SCG.structures.size(); i++){
-					
-						if(i<10){
-							structReport[i][0] =" "+i+"- " + _scsdm.getDisplayText(SCG.structures.get(i-1).TEXT_CODE);
-							//System.out.println(SCG.structures.get(i-1).toString());
-						}else{
-							structReport[i][0] =i+"- " + _scsdm.getDisplayText(SCG.structures.get(i-1).TEXT_CODE);
-							//System.out.println(SCG.structures.get(i-1).toString());
-						}
-					
-					
-						if(SCG.structures.get(i-1).MAX_WORKERS!=0){
-						structReport[i][1] = Integer.toString( SCG.structures.get(i-1).iWorkers);
-						//System.out.println(SCG.structures.get(i-1).toString());
-						}else{
-							structReport[i][1] = "-------";
-						}
-					
-						if(SCG.structures.get(i-1) instanceof ProductionBuilding){
-							ProductionBuilding tempPBSlot = (ProductionBuilding) SCG.structures.get(i-1);
-							//System.out.println(SCG.structures.get(i-1));
-						
-							//System.out.println(tempPBSlot.toString());
-							if(tempPBSlot.currentRecipe!=null){
-								structReport[i][2] = tempPBSlot.currentRecipe.NAME;
-							}else{
-								structReport[i][2] = "-------";
-							}
-							//System.out.println(SCG.structures.get(i-1).toString());
-						}else{
-							structReport[i][2] = "-------";
-						}
-					}
-				structReport[SCG.structures.size()+1][0] = _scsdm.getDisplayText("IDLE_WORKERS");
-				structReport[SCG.structures.size()+1][1] = Integer.toString(SCG.pop.howManyUnassigned());
-				structReport[SCG.structures.size()+1][2] = "-------";
-				Structure bWorkingBuilding;
-				int iAnswer = selectScreen(_scsdm.getDisplayText("SELECT_CURRENT_ASSIGNMENT"), _scsdm.getDisplayText("WHICH_TO_CHANGE" ), structReport);
-				if(iAnswer>0&&iAnswer <SCG.structures.size()+1){
-					bWorkingBuilding = SCG.structures.get(iAnswer-1);
-					int iNewWorkers =_ioman.intIn(_scsdm.getDisplayText("HOW_MANY_WORKERS"));
-					System.out.println("You Assigned " +iNewWorkers + " Workers"); 
-					if(iNewWorkers>0){
-						if(bWorkingBuilding instanceof ProductionBuilding){
-							ProductionBuilding bTempo = (ProductionBuilding) bWorkingBuilding;
-							if(bTempo.sPosibleRecipes.size() == 1){
-								bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(0)));
-							}else{
-								String[][] sRecipePick = new String[bTempo.sPosibleRecipes.size()+1][3];
-								sRecipePick[0][0] = _scsdm.getDisplayText("RECIPE");
-								sRecipePick[0][1] = _scsdm.getDisplayText("MAN_HOURS");
-								sRecipePick[0][2] = _scsdm.getDisplayText("MATERIALS");
-								
-								for(int i = 0; i <bTempo.sPosibleRecipes.size(); i++){
-									sRecipePick[i+1][0] = _scsdm.getDisplayText(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)).TEXT_CODE);
-									sRecipePick[i+1][1] = Integer.toString(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)).MAN_HOURS);
-									sRecipePick[i+1][2] = getRecipeDisplay(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)));
-								}
-								
-								int recipResponse = 0;
-								while(recipResponse<=0||recipResponse>bTempo.sPosibleRecipes.size()){
-									 recipResponse = selectScreen(_scsdm.getDisplayText("WHICH_RECIPE"), _scsdm.getDisplayText("WHICH_RECIPE"), sRecipePick);
-								}
-								bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(recipResponse-1)));
-							}
-						}else{
-							bWorkingBuilding.setWork(SCG.pop, iNewWorkers);
-						}
-						
-					}else{
-						if(bWorkingBuilding instanceof ProductionBuilding){
-							ProductionBuilding bTempo = (ProductionBuilding) bWorkingBuilding;
-							bTempo.setWork(SCG.pop, 0, null);
-						}else{
-							
-							bWorkingBuilding.setWork(SCG.pop, 0);
-						}
-					}
-				}else{
-						break;
-				}	
-			}		
+			viewAndSetProduction();
+			_ioman.lineOut("");
+			
+			currentEvent.performEvent(SCG, _ioman, _scsdm);
+			SCG.iTurnCount++;
 		}
 	}
 
@@ -374,20 +288,110 @@ public class SpaceColonyEngine implements ISCSError{
 			}
 			_ioman.lineOut(sOut);
 		}
-		iAnswer = _ioman.intIn(question);
-		/*
+		//iAnswer = _ioman.intIn(question);
+		
 		while(true){
 			iAnswer = _ioman.intIn(question);
-			if(iAnswer>=1&&iAnswer<=(text.length-1)){
+			if(iAnswer>=0&&iAnswer<=(text.length-2)){
 				break;
 			}else{
-				_scsdm.getDisplayText("INVALID");
+				_ioman.lineOut(_scsdm.getDisplayText("INVALID"));
 			}
 		}
-		*/
+		
 		
 		
 		return iAnswer;
+	}
+	
+	public void viewAndSetProduction(){
+		while(true){
+			String[][] structReport = new String[SCG.structures.size()+2][3];
+			structReport[0][0] = _scsdm.getDisplayText("BUILDING");
+			structReport[0][1] = _scsdm.getDisplayText("WORKERS");
+			structReport[0][2] = _scsdm.getDisplayText("RECIPE");
+				for(int i = 1;i<=SCG.structures.size(); i++){
+				
+					if(i<10){
+						structReport[i][0] =" "+i+"- " + _scsdm.getDisplayText(SCG.structures.get(i-1).TEXT_CODE);
+						//System.out.println(SCG.structures.get(i-1).toString());
+					}else{
+						structReport[i][0] =i+"- " + _scsdm.getDisplayText(SCG.structures.get(i-1).TEXT_CODE);
+						//System.out.println(SCG.structures.get(i-1).toString());
+					}
+				
+					
+					if(SCG.structures.get(i-1).MAX_WORKERS!=0){
+					structReport[i][1] = Integer.toString( SCG.structures.get(i-1).iWorkers);
+					//System.out.println(SCG.structures.get(i-1).toString());
+					}else{
+						structReport[i][1] = "-------";
+					}
+					
+					if(SCG.structures.get(i-1) instanceof ProductionBuilding){
+						ProductionBuilding tempPBSlot = (ProductionBuilding) SCG.structures.get(i-1);
+						//System.out.println(SCG.structures.get(i-1));
+					
+						//System.out.println(tempPBSlot.toString());
+						if(tempPBSlot.currentRecipe!=null){
+							structReport[i][2] = tempPBSlot.currentRecipe.NAME;
+						}else{
+							structReport[i][2] = "-------";
+						}
+						//System.out.println(SCG.structures.get(i-1).toString());
+					}else{
+							structReport[i][2] = "-------";
+					}
+				}
+			structReport[SCG.structures.size()+1][0] = _scsdm.getDisplayText("IDLE_WORKERS");
+			structReport[SCG.structures.size()+1][1] = Integer.toString(SCG.pop.howManyUnassigned());
+			structReport[SCG.structures.size()+1][2] = "-------";
+			Structure bWorkingBuilding;
+			int iAnswer = selectScreen(_scsdm.getDisplayText("SELECT_CURRENT_ASSIGNMENT"), _scsdm.getDisplayText("WHICH_TO_CHANGE" ), structReport);
+			if(iAnswer>0&&iAnswer <SCG.structures.size()+1){
+				bWorkingBuilding = SCG.structures.get(iAnswer-1);
+				int iNewWorkers =_ioman.intIn(_scsdm.getDisplayText("HOW_MANY_WORKERS"));
+				System.out.println("You Assigned " +iNewWorkers + " Workers"); 
+				if(iNewWorkers>0){
+					if(bWorkingBuilding instanceof ProductionBuilding){
+						ProductionBuilding bTempo = (ProductionBuilding) bWorkingBuilding;
+						if(bTempo.sPosibleRecipes.size() == 1){
+							bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(0)));
+						}else{
+							String[][] sRecipePick = new String[bTempo.sPosibleRecipes.size()+1][3];
+							sRecipePick[0][0] = _scsdm.getDisplayText("RECIPE");
+							sRecipePick[0][1] = _scsdm.getDisplayText("MAN_HOURS");
+							sRecipePick[0][2] = _scsdm.getDisplayText("MATERIALS");
+							
+							for(int i = 0; i <bTempo.sPosibleRecipes.size(); i++){
+								sRecipePick[i+1][0] = _scsdm.getDisplayText(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)).TEXT_CODE);
+								sRecipePick[i+1][1] = Integer.toString(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)).MAN_HOURS);
+								sRecipePick[i+1][2] = getRecipeDisplay(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)));
+							}
+							
+							int recipResponse = 0;
+							while(recipResponse<=0||recipResponse>bTempo.sPosibleRecipes.size()){
+								 recipResponse = selectScreen(_scsdm.getDisplayText("WHICH_RECIPE"), _scsdm.getDisplayText("WHICH_RECIPE"), sRecipePick);
+							}
+							bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(recipResponse-1)));
+						}
+					}else{
+						bWorkingBuilding.setWork(SCG.pop, iNewWorkers);
+					}
+					
+				}else{
+					if(bWorkingBuilding instanceof ProductionBuilding){
+						ProductionBuilding bTempo = (ProductionBuilding) bWorkingBuilding;
+						bTempo.setWork(SCG.pop, 0, null);
+					}else{
+						
+						bWorkingBuilding.setWork(SCG.pop, 0);
+					}
+				}
+			}else{
+				break;
+			}	
+		}
 	}
 	
 	public String getSpacer(int iSize){

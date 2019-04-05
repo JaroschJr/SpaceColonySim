@@ -34,6 +34,10 @@ public class ProductionBuilding extends Structure{
 			currentRecipe = r;
 		}
 		
+		if(iWorkers == 0){
+			currentRecipe = null;
+		}
+		
 	}
 	
 	public void produce(){
