@@ -40,8 +40,32 @@ public class ProductionBuilding extends Structure{
 		
 	}
 	
-	public void produce(){
+	@Override
+	public void doProduction(SpaceColonyGame scg){
+		if(currentRecipe !=null){
+			for(int i =0; i < (iWorkers/currentRecipe.MAN_HOURS); i++ ){
+				execRecipe(scg);
+			}
+		}
 		
+	}
+	
+	public void execRecipe(SpaceColonyGame scg){
+		boolean enoughMats = true;
+		Good goodBeingCompared;
+		for(int i = 0; i<currentRecipe.size(); i++){
+			goodBeingCompared = scg.iInv.getGoodByName(currentRecipe.get(i).sName);
+			enoughMats = (enoughMats &&(goodBeingCompared.iQuant >= currentRecipe.get(i).iQuant));
+		}
+		
+		if(enoughMats){
+			goodBeingCompared = scg.iInv.getGoodByName(currentRecipe.NAME);
+			goodBeingCompared.iQuant++;
+			for(int i = 0; i<currentRecipe.size(); i++){
+				goodBeingCompared = scg.iInv.getGoodByName(currentRecipe.get(i).sName);
+				goodBeingCompared.iQuant -= currentRecipe.get(i).iQuant;
+			}
+		}	
 	}
 
 

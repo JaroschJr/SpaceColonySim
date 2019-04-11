@@ -216,12 +216,14 @@ public class SpaceColonyEngine implements ISCSError{
 			SCG.bIsOngoing = false;//truncate it so it does one and only one iteration. Its looping infinitely caused issues during testing to complex to understand here.
 			}
 			*/
-			_ioman.lineOut("Enter to continue");
-			String SINN = _ioman.stringIn("");
 			
+			_ioman.lineOut("");
 			viewAndSetProduction();
 			_ioman.lineOut("");
 			
+			_ioman.lineOut("Enter to continue");
+			String SINN = _ioman.stringIn("");
+			produce();
 			currentEvent.performEvent(SCG, _ioman, _scsdm);
 			SCG.iTurnCount++;
 		}
@@ -280,7 +282,7 @@ public class SpaceColonyEngine implements ISCSError{
 	public int selectScreen(String prelude, String question, String[][] text){
 		int iAnswer = 0;
 		_ioman.lineOut(prelude);
-		for(int i = 0; i<text.length-1; i++){
+		for(int i = 0; i<text.length; i++){
 			String sOut = "";
 			for(int j = 0; j<text[i].length; j++){
 				//System.out.println("line " + i + " column " +j);
@@ -322,7 +324,7 @@ public class SpaceColonyEngine implements ISCSError{
 				
 					
 					if(SCG.structures.get(i-1).MAX_WORKERS!=0){
-					structReport[i][1] = Integer.toString( SCG.structures.get(i-1).iWorkers);
+					structReport[i][1] = Integer.toString( SCG.structures.get(i-1).iWorkers) + " / " + Integer.toString(SCG.structures.get(i-1).MAX_WORKERS);
 					//System.out.println(SCG.structures.get(i-1).toString());
 					}else{
 						structReport[i][1] = "-------";
@@ -350,8 +352,7 @@ public class SpaceColonyEngine implements ISCSError{
 			int iAnswer = selectScreen(_scsdm.getDisplayText("SELECT_CURRENT_ASSIGNMENT"), _scsdm.getDisplayText("WHICH_TO_CHANGE" ), structReport);
 			if(iAnswer>0&&iAnswer <SCG.structures.size()+1){
 				bWorkingBuilding = SCG.structures.get(iAnswer-1);
-				int iNewWorkers =_ioman.intIn(_scsdm.getDisplayText("HOW_MANY_WORKERS"));
-				System.out.println("You Assigned " +iNewWorkers + " Workers"); 
+				int iNewWorkers =_ioman.intIn(_scsdm.getDisplayText("HOW_MANY_WORKERS")); 
 				if(iNewWorkers>0){
 					if(bWorkingBuilding instanceof ProductionBuilding){
 						ProductionBuilding bTempo = (ProductionBuilding) bWorkingBuilding;
@@ -409,5 +410,11 @@ public class SpaceColonyEngine implements ISCSError{
 		}
 		
 		return sOut;
+	}
+	
+	public void produce(){
+		for(int i = 0; i<SCG.structures.size(); i++){
+			SCG.structures.get(i).doProduction(SCG);
+		}
 	}
 }

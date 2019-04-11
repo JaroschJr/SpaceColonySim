@@ -65,6 +65,10 @@ public class Structure{
 		
 	}
 	
+	public void doProduction(SpaceColonyGame scg){
+		
+	}
+	
 	public void cloneStructure(Structure s){
 		s.ID = ID;
 		s.NAME = NAME;
