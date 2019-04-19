@@ -282,8 +282,12 @@ public class SpaceColonyEngine implements ISCSError{
 	public int selectScreen(String prelude, String question, String[][] text){
 		int iAnswer = 0;
 		_ioman.lineOut(prelude);
+		
 		for(int i = 0; i<text.length; i++){
 			String sOut = "";
+			if(i==1){
+				_ioman.lineOut(" 0-" + getSpacer(20-" 0-".length()) + _scsdm.getDisplayText("CANCEL"));
+			}
 			for(int j = 0; j<text[i].length; j++){
 				//System.out.println("line " + i + " column " +j);
 				sOut += text[i][j]+ getSpacer(20-text[i][j].length());
@@ -294,7 +298,7 @@ public class SpaceColonyEngine implements ISCSError{
 		
 		while(true){
 			iAnswer = _ioman.intIn(question);
-			if(iAnswer>=0&&iAnswer<=(text.length-2)){
+			if(iAnswer>=0&&iAnswer<=(text.length-1)){
 				break;
 			}else{
 				_ioman.lineOut(_scsdm.getDisplayText("INVALID"));
@@ -308,7 +312,7 @@ public class SpaceColonyEngine implements ISCSError{
 	
 	public void viewAndSetProduction(){
 		while(true){
-			String[][] structReport = new String[SCG.structures.size()+2][3];
+			String[][] structReport = new String[SCG.structures.size()+1][3];
 			structReport[0][0] = _scsdm.getDisplayText("BUILDING");
 			structReport[0][1] = _scsdm.getDisplayText("WORKERS");
 			structReport[0][2] = _scsdm.getDisplayText("RECIPE");
@@ -345,14 +349,30 @@ public class SpaceColonyEngine implements ISCSError{
 							structReport[i][2] = "-------";
 					}
 				}
-			structReport[SCG.structures.size()+1][0] = _scsdm.getDisplayText("IDLE_WORKERS");
-			structReport[SCG.structures.size()+1][1] = Integer.toString(SCG.pop.howManyUnassigned());
-			structReport[SCG.structures.size()+1][2] = "-------";
+			//structReport[SCG.structures.size()+1][0] = _scsdm.getDisplayText("IDLE_WORKERS");
+			//structReport[SCG.structures.size()+1][1] = Integer.toString(SCG.pop.howManyUnassigned());
+			//structReport[SCG.structures.size()+1][2] = "-------";
 			Structure bWorkingBuilding;
-			int iAnswer = selectScreen(_scsdm.getDisplayText("SELECT_CURRENT_ASSIGNMENT"), _scsdm.getDisplayText("WHICH_TO_CHANGE" ), structReport);
+			int iAnswer = selectScreen(_scsdm.getDisplayText("SELECT_CURRENT_ASSIGNMENT"), _scsdm.getDisplayText("WHICH_TO_CHANGE" ) + ". "+ SCG.pop.howManyUnassigned() + " " + _scsdm.getDisplayText("IDLE_WORKERS"), structReport);
 			if(iAnswer>0&&iAnswer <SCG.structures.size()+1){
 				bWorkingBuilding = SCG.structures.get(iAnswer-1);
-				int iNewWorkers =_ioman.intIn(_scsdm.getDisplayText("HOW_MANY_WORKERS")); 
+				String[][] sQuantAsk = new String[bWorkingBuilding.MAX_WORKERS+1][2];
+				sQuantAsk[0][0] = "   ";
+				sQuantAsk[0][1] = "   ";
+				
+				for(int i = 1; i<=bWorkingBuilding.MAX_WORKERS; i++){
+					if(i<10){
+						sQuantAsk[i][0] =" "+i+"- ";
+					}else{
+						sQuantAsk[i][0] =i+"- ";
+					}
+					sQuantAsk[i][1] = Integer.toString( i);
+				}
+				
+				
+				int iNewWorkers = selectScreen(" ", _scsdm.getDisplayText("HOW_MANY_WORKERS"), sQuantAsk);
+				
+				//int iNewWorkers =_ioman.intIn(_scsdm.getDisplayText("HOW_MANY_WORKERS")); 
 				if(iNewWorkers>0){
 					if(bWorkingBuilding instanceof ProductionBuilding){
 						ProductionBuilding bTempo = (ProductionBuilding) bWorkingBuilding;
