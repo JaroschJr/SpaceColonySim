@@ -4,12 +4,19 @@ public class Good{
 	public static final String FIELD_NAME = "NAME";
 	public static final String FIELD_TEXT_CODE = "TEXT_CODE";
 	public static final String FIELD_PUBLISHED = "PUBLISHED";
+	public static final String FIELD_MERCHANT_CARRY = "MERCHANT_CARRY";
+	public static final String FIELD_MERCHANT_FREQ = "MERCHANT_FREQ";
+	public static final String FIELD_BASE_PRICE = "BASE_PRICE";
 	
 	String sName;
 	String sTextCode;
 	String sGuid;
 	int iQuant = 0;
 	boolean bPublish;
+	int MERCHANT_CARRY;
+	int MERCHANT_FREQ;
+	int BASE_PRICE;
+	int iPrice = 0;
 	/*
 	public void readFromDB(ResultSet resultSet)throws SQLException{
 		sName = resultSet.getString(Good.FIELD_NAME);
@@ -21,6 +28,21 @@ public class Good{
 	 
 	 @Override
 	 public String toString(){
-		 return sName +" "+ sTextCode +" "+ sGuid +" "+ iQuant;
+		 return sName +" "+ sTextCode +" "+ sGuid +" "+ iQuant+ " MERCH_CARRY " + MERCHANT_CARRY + " MERCH_FREQ " + MERCHANT_FREQ + " BASE_PRICE " + BASE_PRICE + " iPrice " + iPrice;
 	 }
+	 
+	 public Good clone(){
+		 Good gOut = new Good();
+		 gOut.sName = sName;
+		 gOut.sTextCode = sTextCode;
+		 gOut.sGuid = sGuid;
+		 gOut.iQuant = iQuant;
+		 gOut.bPublish = bPublish;
+		 gOut.MERCHANT_CARRY = MERCHANT_CARRY;
+		 gOut.MERCHANT_FREQ = MERCHANT_FREQ;
+		 gOut.BASE_PRICE = BASE_PRICE;
+		 gOut.iPrice = iPrice;
+		 return gOut;
+	 }
+
 }

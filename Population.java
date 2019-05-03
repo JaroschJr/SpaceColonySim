@@ -23,6 +23,7 @@ public class Population extends ArrayList<People>{
 			loss=size();
 		}
 		for(int i = 0; i<loss; i++){
+			get(size()-1).assigned = false;
 			remove(size()-1);
 		}
 	}

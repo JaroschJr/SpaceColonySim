@@ -69,6 +69,17 @@ public class Structure{
 		
 	}
 	
+	public void assignValidate(){
+		//System.out.println("Pre Validation: "+pWorkers.toString());
+		for(int i = pWorkers.size() -1; i>=0; i--){
+			if(pWorkers.get(i).assigned == false){
+				pWorkers.remove(i);
+			}
+		}
+		iWorkers = pWorkers.size();
+		//System.out.println("post Validation: "+pWorkers.toString());
+	}
+	
 	public void cloneStructure(Structure s){
 		s.ID = ID;
 		s.NAME = NAME;

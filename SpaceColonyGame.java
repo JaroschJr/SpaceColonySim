@@ -6,7 +6,7 @@
  */
 public class SpaceColonyGame{
 	public boolean bIsOngoing;
-	Inventory iInv;
+	public Inventory iInv;
 	
 	public int iTurnCount = 1;
 	

@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Random;
 public class InventoryFactory{
 	
 	private SCSDataModule _data;
@@ -98,9 +99,19 @@ public class InventoryFactory{
 		gOut.sTextCode = resultSet.getString(Good.FIELD_TEXT_CODE);
 		gOut.sGuid = resultSet.getString(Good.FIELD_ID);
 		gOut.bPublish = SCSDataModule.getBoolean(resultSet, Good.FIELD_PUBLISHED);
+		gOut.MERCHANT_CARRY = resultSet.getInt(Good.FIELD_MERCHANT_CARRY);
+		gOut.MERCHANT_FREQ = resultSet.getInt(Good.FIELD_MERCHANT_FREQ);
+		gOut.BASE_PRICE = resultSet.getInt(Good.FIELD_BASE_PRICE);
 		return gOut;
 		
 	}
+	/*
+	public TraderList getTraderList(){
+		TraderList tListOut = new TraderList();
+		
+		
+	}
+	*/
 	
 	private Good altGetGood(ResultSet resultSet)throws SQLException{
 		Good gOut = new Good();

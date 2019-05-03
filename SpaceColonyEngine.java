@@ -223,8 +223,12 @@ public class SpaceColonyEngine implements ISCSError{
 			
 			_ioman.lineOut("Enter to continue");
 			String SINN = _ioman.stringIn("");
+			merchantThings();
+			_ioman.lineOut("Enter to continue");
+			SINN = _ioman.stringIn("");
 			produce();
 			currentEvent.performEvent(SCG, _ioman, _scsdm);
+			validateStructures();
 			SCG.iTurnCount++;
 		}
 	}
@@ -234,6 +238,12 @@ public class SpaceColonyEngine implements ISCSError{
 			return true;
 		}else{
 			return false;
+		}
+	}
+	
+	public void validateStructures(){
+		for(int i = 0; i<SCG.structures.size(); i++){
+			SCG.structures.get(i).assignValidate();
 		}
 	}
 	
@@ -421,6 +431,73 @@ public class SpaceColonyEngine implements ISCSError{
 			returnString+=" ";
 		}
 		return returnString;
+	}
+	
+	public void merchantThings(){
+		TraderList tBList = makeBuyList();
+		Inventory tSList = makeSellList(tBList);
+		System.out.println("merchant toString " + tBList.toString());
+		System.out.println("inventory toString " +tSList.toString());
+		
+	}
+	
+	public TraderList makeBuyList(){
+		TraderList tOut = new TraderList();
+		
+		while(true){//getting in all the goods
+			Good gTemp;
+			int iCount = 0;
+			int targ = rand.nextInt(SCG.iInv.merchFreqSum());
+			while(true){//randomly selecting a given good
+				if(targ<=SCG.iInv.get(iCount).MERCHANT_FREQ){
+					gTemp = SCG.iInv.get(iCount).clone();
+					break;
+				}else{
+					targ -= SCG.iInv.get(iCount).MERCHANT_FREQ;
+					iCount++;
+				}
+					
+			}
+				
+			if((tOut.getGoodByName(gTemp.sName)!= null)&&gTemp.MERCHANT_CARRY!=0){
+				gTemp.iQuant = 10*(1+ rand.nextInt(gTemp.MERCHANT_CARRY-1));
+				if(((gTemp.iQuant+tOut.getTotalQuant())>=tOut.MaxSpace)){
+					break;
+				}else{
+					gTemp.iPrice = gTemp.BASE_PRICE+rand.nextInt(2*gTemp.BASE_PRICE);
+					tOut.add(gTemp);
+				}
+				
+			}
+			
+			if(tOut.size()<SCG.iInv.size()){
+
+			}else{
+				break;
+			}
+				
+		}
+		return tOut;
+	}
+	
+	public Inventory makeSellList(TraderList tBuy){
+		Inventory iOut = new Inventory();
+		Good gTemp;
+		for(int i = 0; i< SCG.iInv.size(); i++){
+			//System.out.println("Making Sell List Iteration" + i);
+			//System.out.println(SCG.iInv.get(i).MERCHANT_CARRY+"!="+0+"&&"+SCG.iInv.get(i).iQuant+"!="+0);
+			if(SCG.iInv.get(i).MERCHANT_CARRY!=0&&SCG.iInv.get(i).iQuant!=0){
+				gTemp = SCG.iInv.get(i).clone();
+				if(tBuy.getGoodByName(gTemp.sName)!=null){
+					gTemp.iPrice = tBuy.getGoodByName(gTemp.sName).iPrice/2;
+				}else{
+					gTemp.iPrice = gTemp.BASE_PRICE+rand.nextInt(gTemp.BASE_PRICE); 
+				}
+				iOut.add(gTemp);
+			}
+			
+		}
+		return iOut;
 	}
 	
 	public String getRecipeDisplay(Recipe r){

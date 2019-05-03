@@ -50,6 +50,14 @@ public class ProductionBuilding extends Structure{
 		
 	}
 	
+	@Override
+	public void assignValidate(){
+		super.assignValidate();
+		if(iWorkers == 0){
+			currentRecipe = null;
+		}
+	}
+	
 	public void execRecipe(SpaceColonyGame scg){
 		boolean enoughMats = true;
 		Good goodBeingCompared;

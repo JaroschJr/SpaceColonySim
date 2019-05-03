@@ -22,5 +22,33 @@ public class Inventory extends ArrayList<Good>{
 				gCheck.iQuant = value;
 			}
 		}		
-	}	
+	}
+	
+	public int getTotalQuant(){
+		int iSum = 0;
+		for(int i = 0; i <size(); i++){
+			iSum += get(i).iQuant;
+		}
+		return iSum;
+	}
+	
+	public int merchFreqSum(){
+		int iSum = 0;
+		for(int i = 0; i <size(); i++){
+			if(get(i).MERCHANT_CARRY >0){
+				iSum += get(i).MERCHANT_FREQ;
+			}
+		}
+		return iSum;
+	}
+	
+	@Override
+	public String toString(){
+		String sOut = "Total Quantity " +getTotalQuant();
+		for(int i = 0; i< size(); i++){
+			sOut += " Good " +i+ ": " + get(i).toString() + "\n";
+		}
+		return sOut;
+	}
+	
 }
