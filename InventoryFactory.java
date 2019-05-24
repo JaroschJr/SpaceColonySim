@@ -99,7 +99,8 @@ public class InventoryFactory{
 		gOut.sTextCode = resultSet.getString(Good.FIELD_TEXT_CODE);
 		gOut.sGuid = resultSet.getString(Good.FIELD_ID);
 		gOut.bPublish = SCSDataModule.getBoolean(resultSet, Good.FIELD_PUBLISHED);
-		gOut.MERCHANT_CARRY = resultSet.getInt(Good.FIELD_MERCHANT_CARRY);
+		gOut.MERCHANT_MIN_CARRY = resultSet.getInt(Good.FIELD_MERCHANT_MIN_CARRY);
+		 gOut.MERCHANT_MAX_CARRY = resultSet.getInt(Good.FIELD_MERCHANT_MAX_CARRY);
 		gOut.MERCHANT_FREQ = resultSet.getInt(Good.FIELD_MERCHANT_FREQ);
 		gOut.BASE_PRICE = resultSet.getInt(Good.FIELD_BASE_PRICE);
 		return gOut;

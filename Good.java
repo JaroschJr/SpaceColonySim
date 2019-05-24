@@ -4,7 +4,8 @@ public class Good{
 	public static final String FIELD_NAME = "NAME";
 	public static final String FIELD_TEXT_CODE = "TEXT_CODE";
 	public static final String FIELD_PUBLISHED = "PUBLISHED";
-	public static final String FIELD_MERCHANT_CARRY = "MERCHANT_CARRY";
+	public static final String FIELD_MERCHANT_MIN_CARRY = "MERCHANT_MIN_CARRY";
+	public static final String FIELD_MERCHANT_MAX_CARRY = "MERCHANT_MAX_CARRY";
 	public static final String FIELD_MERCHANT_FREQ = "MERCHANT_FREQ";
 	public static final String FIELD_BASE_PRICE = "BASE_PRICE";
 	
@@ -13,7 +14,8 @@ public class Good{
 	String sGuid;
 	int iQuant = 0;
 	boolean bPublish;
-	int MERCHANT_CARRY;
+	int MERCHANT_MIN_CARRY;
+	int MERCHANT_MAX_CARRY;
 	int MERCHANT_FREQ;
 	int BASE_PRICE;
 	int iPrice = 0;
@@ -28,7 +30,7 @@ public class Good{
 	 
 	 @Override
 	 public String toString(){
-		 return sName +" "+ sTextCode +" "+ sGuid +" "+ iQuant+ " MERCH_CARRY " + MERCHANT_CARRY + " MERCH_FREQ " + MERCHANT_FREQ + " BASE_PRICE " + BASE_PRICE + " iPrice " + iPrice;
+		 return sName +" "+ sTextCode +" "+ sGuid +" "+ iQuant+ " MERCHANT_MIN_CARRY " + MERCHANT_MAX_CARRY + " MERCHANT_MAX_CARRY " + MERCHANT_MIN_CARRY + " MERCH_FREQ " + MERCHANT_FREQ + " BASE_PRICE " + BASE_PRICE + " iPrice " + iPrice;
 	 }
 	 
 	 public Good clone(){
@@ -38,7 +40,8 @@ public class Good{
 		 gOut.sGuid = sGuid;
 		 gOut.iQuant = iQuant;
 		 gOut.bPublish = bPublish;
-		 gOut.MERCHANT_CARRY = MERCHANT_CARRY;
+		 gOut.MERCHANT_MIN_CARRY = MERCHANT_MIN_CARRY;
+		 gOut.MERCHANT_MAX_CARRY = MERCHANT_MAX_CARRY;
 		 gOut.MERCHANT_FREQ = MERCHANT_FREQ;
 		 gOut.BASE_PRICE = BASE_PRICE;
 		 gOut.iPrice = iPrice;

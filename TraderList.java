@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 public class TraderList extends Inventory{
-	int MaxSpace = 300;
+	int MaxSpace = 100;
 	
 	@Override
 	public String toString(){

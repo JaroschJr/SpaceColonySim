@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 public class Inventory extends ArrayList<Good>{
+	
 	public Good getGoodByName(String name){
 		Good gOut = new Good();
 		for(int i = 0; i <size(); i++){
@@ -12,6 +13,24 @@ public class Inventory extends ArrayList<Good>{
 			}
 		}
 		return gOut;
+		
+		
+		
+	}
+	
+	public boolean hasGoodByName(String name){
+		boolean b = false;
+		for(int i = 0; i <size(); i++){
+			//gOut = get(i);
+			if(get(i).sName.equals(name.toString())){
+				//System.out.println(get(i).sName.toString()+" = "+  name.toString());
+				b = true;
+				break;
+			}else{
+				
+			}
+		}
+		return b;
 	}
 	
 	public void setGoodQuantByName(String name, int value){
@@ -35,7 +54,7 @@ public class Inventory extends ArrayList<Good>{
 	public int merchFreqSum(){
 		int iSum = 0;
 		for(int i = 0; i <size(); i++){
-			if(get(i).MERCHANT_CARRY >0){
+			if(get(i).MERCHANT_MAX_CARRY >0){
 				iSum += get(i).MERCHANT_FREQ;
 			}
 		}
