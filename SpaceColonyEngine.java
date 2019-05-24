@@ -537,7 +537,7 @@ public class SpaceColonyEngine implements ISCSError{
 	}
 	
 	public void buyFromMerchant(TraderList tList, Inventory iList){
-		System.out.println("As of the current build, the transaction selected is not actually carried out. This is just a test of the listmaking and text system.");
+		
 		String[][] aCatalogue = new String[tList.size()+2][4];
 		aCatalogue[0][0] = " ";
 		aCatalogue[0][1] = _scsdm.getDisplayText("GOOD");
@@ -591,7 +591,7 @@ public class SpaceColonyEngine implements ISCSError{
 	}
 	
 	public void sellToMerchant(TraderList tList, Inventory iList){
-		System.out.println("As of the current build, the transaction selected is not actually carried out. This is just a test of the listmaking and text system.");
+		
 		String[][] aCatalogue = new String[iList.size()+2][4];
 		aCatalogue[0][0] = " ";
 		aCatalogue[0][1] = _scsdm.getDisplayText("GOOD");
