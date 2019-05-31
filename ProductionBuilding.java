@@ -41,9 +41,18 @@ public class ProductionBuilding extends Structure{
 	}
 	
 	@Override
-	public void doProduction(SpaceColonyGame scg){
+	public void doProduction(SpaceColonyGame scg, RandomEvent cEvent){
 		if(currentRecipe !=null){
-			for(int i =0; i < (iWorkers/currentRecipe.MAN_HOURS); i++ ){
+			int times = 0;
+			if(cEvent instanceof ProductionMultiplyingEvent){
+				ProductionMultiplyingEvent tEvent = (ProductionMultiplyingEvent) cEvent;
+				if(currentRecipe.TEXT_CODE.equals( tEvent.sTargetProduction)){
+					times = (int) Math.round((iWorkers/currentRecipe.MAN_HOURS)*tEvent.dProdMultFactor);
+				}
+			}else{
+				times = (int) (iWorkers/currentRecipe.MAN_HOURS);
+			}
+			for(int i =0; i < times; i++ ){
 				execRecipe(scg);
 			}
 		}

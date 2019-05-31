@@ -65,7 +65,7 @@ public class Structure{
 		
 	}
 	
-	public void doProduction(SpaceColonyGame scg){
+	public void doProduction(SpaceColonyGame scg, RandomEvent cEvent){
 		
 	}
 	

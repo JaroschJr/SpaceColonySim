@@ -576,8 +576,9 @@ public class SpaceColonyEngine implements ISCSError{
 				}
 			}
 			Good gTempGood = tList.get(bResponse-1);
-			if(iList.getGoodByName(gTempGood.sName) != null){
-				iList.getGoodByName(gTempGood.sName).iQuant+=iBuyAmount;
+			if(iList.hasGoodByName(gTempGood.sName)){
+				Good gOtherTempGood = iList.getGoodByName(gTempGood.sName);
+				gOtherTempGood.iQuant +=iBuyAmount;
 			}else{
 				Good gOtherTemp = gTempGood.clone();
 				gOtherTemp.iQuant = iBuyAmount;
@@ -630,7 +631,7 @@ public class SpaceColonyEngine implements ISCSError{
 				}
 			}
 			Good gTempGood = iList.get(bResponse-1);
-			if(tList.getGoodByName(gTempGood.sName) != null){
+			if(tList.hasGoodByName(gTempGood.sName)){
 				tList.getGoodByName(gTempGood.sName).iQuant+=iSellAmount;
 			}else{
 				Good gOtherTemp = gTempGood.clone();
@@ -657,7 +658,7 @@ public class SpaceColonyEngine implements ISCSError{
 	
 	public void produce(){
 		for(int i = 0; i<SCG.structures.size(); i++){
-			SCG.structures.get(i).doProduction(SCG);
+			SCG.structures.get(i).doProduction(SCG, currentEvent);
 		}
 	}
 }

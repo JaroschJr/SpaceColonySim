@@ -2,7 +2,7 @@ import java.sql.*;
 import java.util.Formatter;
 public class ProductionMultiplyingEvent extends RandomEvent{
 	double dProdMultFactor;//database: PROD_VALUE
-	SCSEnum.eProductionModded eTargetProduction;//database: PROD_TYPE
+	String sTargetProduction;//database: PROD_TYPE //This is actually the text code, so prepair accordingly.
 	
 	public static final String FIELD_PROD_VALUE = "PROD_VALUE";
 	public static final String FIELD_PROD_TYPE = "PROD_TYPE";
@@ -19,7 +19,7 @@ public class ProductionMultiplyingEvent extends RandomEvent{
 		
 		String sType = resultSet.getString(FIELD_PROD_TYPE);
 		if(sType != null){
-			eTargetProduction = SCSEnum.eProductionModded.valueOf(sType);
+			sTargetProduction = sType;
 		}//end if
 	}
 	
@@ -27,7 +27,7 @@ public class ProductionMultiplyingEvent extends RandomEvent{
 	public boolean performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){
 		//it will multiply the production by a certain amount. currently this is not posible. come back to this once the rest of it is finished.
 		String sToPrint = dbm.getDisplayText(sFluffAccess); 
-		sToPrint = String.format(sToPrint,eTargetProduction.name(), dProdMultFactor);
+		sToPrint = String.format(sToPrint,sTargetProduction, dProdMultFactor);
 		ioman.lineOut(sToPrint);
 		return true;
 	
@@ -35,7 +35,7 @@ public class ProductionMultiplyingEvent extends RandomEvent{
 	
 	@Override
 	public String toString(){
-		String rReturnString = super.toString() + ", Production Multiplying Event. Multiplies" + eTargetProduction.name() + " By " + dProdMultFactor;
+		String rReturnString = super.toString() + ", Production Multiplying Event. Multiplies" + sTargetProduction + " By " + dProdMultFactor;
 		return rReturnString;
 	}
 
