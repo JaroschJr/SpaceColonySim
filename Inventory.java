@@ -33,6 +33,16 @@ public class Inventory extends ArrayList<Good>{
 		return b;
 	}
 	
+	public boolean hasUnreported(){
+		boolean bOut = false;
+		for(int i = 0; i<size(); i++){
+			if(get(i).bPublish==false && get(i).iQuant !=0){
+				bOut = true;
+			}
+		}
+		return bOut;
+	}
+	
 	public void setGoodQuantByName(String name, int value){
 		Good gCheck;
 		for(int i = 0; i <size(); i++){
