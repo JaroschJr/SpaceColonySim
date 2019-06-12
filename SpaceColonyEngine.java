@@ -312,14 +312,12 @@ public class SpaceColonyEngine implements ISCSError{
 				Good gPrint = SCG.iInv.get(i);
 				sOut = _scsdm.getDisplayText(gPrint.sTextCode);
 				String sPlaceHolder = getSpacer(20-sOut.length()-Integer.toString(gPrint.iQuant).length());	
-				//System.out.println(20-sOut.length()-Integer.toString(gPrint.iQuant).length());
 				sOut += sPlaceHolder + gPrint.iQuant;
 				//Second
 				sOut+= getSpacer(10);
 				gPrint = SCG.iInv.get(i+1);
 				sOut += _scsdm.getDisplayText(gPrint.sTextCode);
 				sPlaceHolder = getSpacer(20-_scsdm.getDisplayText(gPrint.sTextCode).length()-Integer.toString(gPrint.iQuant).length());
-				//System.out.println(20-_scsdm.getDisplayText(gPrint.sTextCode).length()-Integer.toString(gPrint.iQuant).length());
 				sOut += sPlaceHolder + gPrint.iQuant;
 				_ioman.lineOut(sOut);
 			}
@@ -330,14 +328,12 @@ public class SpaceColonyEngine implements ISCSError{
 				Good gPrint = SCG.iInv.get(i);
 				sOut = _scsdm.getDisplayText(gPrint.sTextCode);
 				String sPlaceHolder = getSpacer(20-sOut.length()-Integer.toString(gPrint.iQuant).length());	
-				//System.out.println(20-sOut.length()-Integer.toString(gPrint.iQuant).length());
 				sOut += sPlaceHolder + gPrint.iQuant;
 				//Second
 				sOut+= getSpacer(10);
 				gPrint = SCG.iInv.get(i+1);
 				sOut += _scsdm.getDisplayText(gPrint.sTextCode);
 				sPlaceHolder = getSpacer(20-_scsdm.getDisplayText(gPrint.sTextCode).length()-Integer.toString(gPrint.iQuant).length());	
-				//System.out.println(20-_scsdm.getDisplayText(gPrint.sTextCode).length()-Integer.toString(gPrint.iQuant).length());
 				sOut += sPlaceHolder + gPrint.iQuant;
 				_ioman.lineOut(sOut);
 			}
