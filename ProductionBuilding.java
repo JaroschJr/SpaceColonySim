@@ -48,7 +48,10 @@ public class ProductionBuilding extends Structure{
 				ProductionMultiplyingEvent tEvent = (ProductionMultiplyingEvent) cEvent;
 				if(currentRecipe.TEXT_CODE.equals( tEvent.sTargetProduction)){
 					times = (int) Math.round((iWorkers/currentRecipe.MAN_HOURS)*tEvent.dProdMultFactor);
+				}else{
+					times = (int) (iWorkers/currentRecipe.MAN_HOURS);
 				}
+				
 			}else{
 				times = (int) (iWorkers/currentRecipe.MAN_HOURS);
 			}

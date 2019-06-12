@@ -304,14 +304,53 @@ public class SpaceColonyEngine implements ISCSError{
 	}
 	
 	private void fullItemReport(){
-		for(int i = 0; i<SCG.iInv.size(); i++){
-			String sOut = "";
-			Good gPrint = SCG.iInv.get(i);
-			sOut = _scsdm.getDisplayText(gPrint.sTextCode);
-			String sPlaceHolder = getSpacer(20-sOut.length()-(int)Math.log10(gPrint.iQuant+1));			
+		
+		if(SCG.iInv.size()%2==0){
+			for(int i = 0; i<SCG.iInv.size()-1; i+=2){
+				String sOut = "";
+				//First
+				Good gPrint = SCG.iInv.get(i);
+				sOut = _scsdm.getDisplayText(gPrint.sTextCode);
+				String sPlaceHolder = getSpacer(20-sOut.length()-Integer.toString(gPrint.iQuant).length());	
+				//System.out.println(20-sOut.length()-Integer.toString(gPrint.iQuant).length());
+				sOut += sPlaceHolder + gPrint.iQuant;
+				//Second
+				sOut+= getSpacer(10);
+				gPrint = SCG.iInv.get(i+1);
+				sOut += _scsdm.getDisplayText(gPrint.sTextCode);
+				sPlaceHolder = getSpacer(20-_scsdm.getDisplayText(gPrint.sTextCode).length()-Integer.toString(gPrint.iQuant).length());
+				//System.out.println(20-_scsdm.getDisplayText(gPrint.sTextCode).length()-Integer.toString(gPrint.iQuant).length());
+				sOut += sPlaceHolder + gPrint.iQuant;
+				_ioman.lineOut(sOut);
+			}
+		}else{
+			for(int i = 0; i<SCG.iInv.size()-1; i+=2){
+				String sOut = "";
+				//First
+				Good gPrint = SCG.iInv.get(i);
+				sOut = _scsdm.getDisplayText(gPrint.sTextCode);
+				String sPlaceHolder = getSpacer(20-sOut.length()-Integer.toString(gPrint.iQuant).length());	
+				//System.out.println(20-sOut.length()-Integer.toString(gPrint.iQuant).length());
+				sOut += sPlaceHolder + gPrint.iQuant;
+				//Second
+				sOut+= getSpacer(10);
+				gPrint = SCG.iInv.get(i+1);
+				sOut += _scsdm.getDisplayText(gPrint.sTextCode);
+				sPlaceHolder = getSpacer(20-_scsdm.getDisplayText(gPrint.sTextCode).length()-Integer.toString(gPrint.iQuant).length());	
+				//System.out.println(20-_scsdm.getDisplayText(gPrint.sTextCode).length()-Integer.toString(gPrint.iQuant).length());
+				sOut += sPlaceHolder + gPrint.iQuant;
+				_ioman.lineOut(sOut);
+			}
+			
+			Good gPrint = SCG.iInv.get(SCG.iInv.size()-1);
+			String sOut = _scsdm.getDisplayText(gPrint.sTextCode);
+			String sPlaceHolder = getSpacer(20-sOut.length()-Integer.toString(gPrint.iQuant).length());			
 			sOut += sPlaceHolder + gPrint.iQuant;
 			_ioman.lineOut(sOut);
 		}
+			
+			
+			
 		_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
 		String SINN = _ioman.stringIn("");
 	}
