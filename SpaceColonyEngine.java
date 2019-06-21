@@ -79,11 +79,13 @@ public class SpaceColonyEngine implements ISCSError{
 		//check if the database connection has been
 		//established, if not then display an error
 		//message and close the application
+		
 		if(!_scsdm.isConnected()){
 			_ioman.lineOut("The database could not be connected to. Exiting game");
 			//System.out.println("The data base could not be connected to. Exiting game");
 			System.exit(1);
 		}//end if
+		
 		rEventFactory = new RandomEventFactory(_scsdm);
 		events = rEventFactory.getList();
 	}
@@ -99,6 +101,7 @@ public class SpaceColonyEngine implements ISCSError{
 		InvFact = new InventoryFactory(_scsdm);
 		SCG.iInv = InvFact.getList();
 		listOfRecipes = InvFact.getRecipeList();
+		
 		StructFact = new StructureFactory(_scsdm);
 		StructList = StructFact.getStructureList();
 		//get copies of starting structures.
@@ -106,11 +109,12 @@ public class SpaceColonyEngine implements ISCSError{
 		sList.add(StructList.getStructureByName("oreMine").clone());
 		sList.add(StructList.getStructureByName("farm").clone());
 		sList.add(StructList.getStructureByName("farm").clone());
-		sList.add(StructList.getStructureByName("farm").clone());
+		sList.add(StructList.getStructureByName("goodFactory").clone());
 		
 		SCG.structures = sList;
 		SCG.pop = new Population();
 		SCG.pop.gainPop(10);
+		
 		//System.out.println(SCG.pop.toString());
 		//sList.getStructureByName("farm").setWork(SCG.pop, 5, listOfRecipes.getRecipeByName("food"));
 		//ProductionBuilding pbTest = (ProductionBuilding) sList.getStructureByName("farm");
@@ -450,26 +454,38 @@ public class SpaceColonyEngine implements ISCSError{
 				if(iNewWorkers>0){
 					if(bWorkingBuilding instanceof ProductionBuilding){
 						ProductionBuilding bTempo = (ProductionBuilding) bWorkingBuilding;
+						
 						if(bTempo.sPosibleRecipes.size() == 1){
 							bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(0)));
 						}else{
-							String[][] sRecipePick = new String[bTempo.sPosibleRecipes.size()+1][3];
-							sRecipePick[0][0] = _scsdm.getDisplayText("RECIPE");
-							sRecipePick[0][1] = _scsdm.getDisplayText("MAN_HOURS");
-							sRecipePick[0][2] = _scsdm.getDisplayText("MATERIALS");
+							String[][] sRecipePick = new String[bTempo.sPosibleRecipes.size()+1][4];
+							sRecipePick[0][0] = "";
+							sRecipePick[0][1] = _scsdm.getDisplayText("RECIPE");
+							sRecipePick[0][2] = _scsdm.getDisplayText("MAN_HOURS");
+							sRecipePick[0][3] = _scsdm.getDisplayText("MATERIALS");
 							
 							for(int i = 0; i <bTempo.sPosibleRecipes.size(); i++){
-								sRecipePick[i+1][0] = _scsdm.getDisplayText(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)).TEXT_CODE);
-								sRecipePick[i+1][1] = Integer.toString(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)).MAN_HOURS);
-								sRecipePick[i+1][2] = getRecipeDisplay(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)));
+								sRecipePick[i+1][0]=" " + (i+1) +"-";
+								sRecipePick[i+1][1] = _scsdm.getDisplayText(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)).TEXT_CODE);
+								sRecipePick[i+1][2] = Integer.toString(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)).MAN_HOURS);
+								sRecipePick[i+1][3] = getRecipeDisplay(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)));
 							}
 							
 							int recipResponse = 0;
 							while(recipResponse<=0||recipResponse>bTempo.sPosibleRecipes.size()){
-								 recipResponse = selectScreen(_scsdm.getDisplayText("WHICH_RECIPE"), _scsdm.getDisplayText("WHICH_RECIPE"), sRecipePick);
+								recipResponse = selectScreen(_scsdm.getDisplayText("WHICH_RECIPE"), _scsdm.getDisplayText("WHICH_RECIPE"), sRecipePick);
+								if(recipResponse == 0){
+									break;
+								}
 							}
-							bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(recipResponse-1)));
+							
+							if(recipResponse == 0){
+								bTempo.setWork(SCG.pop, 0, null);
+							}else{
+								bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(recipResponse-1)));
+							}
 						}
+						
 					}else{
 						bWorkingBuilding.setWork(SCG.pop, iNewWorkers);
 					}
@@ -605,7 +621,8 @@ public class SpaceColonyEngine implements ISCSError{
 	public String getRecipeDisplay(Recipe r){
 		String sOut = "";
 		for(int i = 0; i <r.size(); i++){
-			sOut += r.get(i).iQuant + " " + _scsdm.getDisplayText(r.get(i).sTextCode) + " ,";
+			sOut += r.get(i).iQuant + " " + _scsdm.getDisplayText(SCG.iInv.getGoodByName(r.get(i).sName).sTextCode) + " ,";
+			//sOut += r.get(i).iQuant + " " + _scsdm.getDisplayText(r.get(i).sTextCode) + " ,";
 		}
 		
 		return sOut;
@@ -742,4 +759,6 @@ public class SpaceColonyEngine implements ISCSError{
 			SCG.structures.get(i).doProduction(SCG, currentEvent);
 		}
 	}
+	
+
 }

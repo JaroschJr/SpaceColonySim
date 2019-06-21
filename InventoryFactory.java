@@ -61,10 +61,15 @@ public class InventoryFactory{
 	
 	private Recipe getRecipe(ResultSet resultSet) throws SQLException{
 		Recipe outRecipe = new Recipe();
+		//System.out.println("Reading in recipe.");
 		outRecipe.ID = resultSet.getString(Recipe.FIELD_ID);
+		//System.out.println("ID is " + outRecipe.ID); 
 		outRecipe.NAME = resultSet.getString(Recipe.FIELD_NAME);
+		//System.out.println("ID is " + outRecipe.ID);
 		outRecipe.TEXT_CODE = resultSet.getString(Recipe.FIELD_TEXT_CODE);
+		//System.out.println("ID is " + outRecipe.ID);
 		outRecipe.MAN_HOURS = resultSet.getInt(Recipe.FIELD_MAN_HOURS);
+		//System.out.println("ID is " + outRecipe.ID);
 		
 		//An exemplary SQL Query is 
 		/*
@@ -100,12 +105,13 @@ public class InventoryFactory{
 		gOut.sGuid = resultSet.getString(Good.FIELD_ID);
 		gOut.bPublish = SCSDataModule.getBoolean(resultSet, Good.FIELD_PUBLISHED);
 		gOut.MERCHANT_MIN_CARRY = resultSet.getInt(Good.FIELD_MERCHANT_MIN_CARRY);
-		 gOut.MERCHANT_MAX_CARRY = resultSet.getInt(Good.FIELD_MERCHANT_MAX_CARRY);
+		gOut.MERCHANT_MAX_CARRY = resultSet.getInt(Good.FIELD_MERCHANT_MAX_CARRY);
 		gOut.MERCHANT_FREQ = resultSet.getInt(Good.FIELD_MERCHANT_FREQ);
 		gOut.BASE_PRICE = resultSet.getInt(Good.FIELD_BASE_PRICE);
 		return gOut;
 		
 	}
+	
 	/*
 	public TraderList getTraderList(){
 		TraderList tListOut = new TraderList();
