@@ -360,7 +360,7 @@ public class SpaceColonyEngine implements ISCSError{
 	public int selectScreen(String prelude, String question, String[][] text){
 		int iAnswer = 0;
 		_ioman.lineOut(prelude);
-		
+		//System.out.println("Text Length " + text.length);
 		for(int i = 0; i<text.length; i++){
 			String sOut = "";
 			if(i==1){
@@ -542,9 +542,17 @@ public class SpaceColonyEngine implements ISCSError{
 	
 	public TraderList makeBuyList(){
 		TraderList tOut = new TraderList();
-		
-		while(true){//getting in all the goods
+		for(int i = 0; i<SCG.iInv.size(); i++){
+			if(SCG.iInv.get(i).MERCHANT_MAX_CARRY!=0){
+				Good gThing = SCG.iInv.get(i).clone();
+				gThing.iQuant = 0;
+				gThing.iPrice = gThing.BASE_PRICE+rand.nextInt(2*gThing.BASE_PRICE);
+				tOut.add(gThing);
+			}
+		}
 
+		int iInfLoopCheck = 0;
+		while(true){//getting in all the goods
 			Good gTemp;
 			int iCount = 0;
 			int targ = rand.nextInt(SCG.iInv.merchFreqSum());
@@ -565,35 +573,31 @@ public class SpaceColonyEngine implements ISCSError{
 			}
 			*/
 			
-			
-			if(gTemp.MERCHANT_MAX_CARRY!=0&&!tOut.hasGoodByName(gTemp.sName)){
+			if(gTemp.MERCHANT_MAX_CARRY!=0&&tOut.getGoodByName(gTemp.sName).iQuant == 0){
 				gTemp.iQuant = (gTemp.MERCHANT_MIN_CARRY + rand.nextInt(gTemp.MERCHANT_MAX_CARRY-gTemp.MERCHANT_MIN_CARRY));
+				//gTemp.iPrice = gTemp.BASE_PRICE+rand.nextInt(2*gTemp.BASE_PRICE);
+				//tOut.getGoodByName(gTemp.sName).iPrice = gTemp.iPrice;
 				if(((gTemp.iQuant+tOut.getTotalQuant())>=tOut.MaxSpace)){
 					break;
 				}else{
-					gTemp.iPrice = gTemp.BASE_PRICE+rand.nextInt(2*gTemp.BASE_PRICE);
-					tOut.add(gTemp);
+					tOut.getGoodByName(gTemp.sName).iQuant = gTemp.iQuant;
 				}
 				
 			}
 			boolean bHasAll = true;
 			for(int i = 0; i<SCG.iInv.size(); i ++){
-				//System.out.println("Checking against entry " + i);
-				//System.out.println("Name " + SCG.iInv.get(i).sName);
-				
-				if(SCG.iInv.get(i).MERCHANT_MAX_CARRY!=0){
-					//System.out.println("Does the tOut list have it?");
-					//System.out.println(tOut.toString());
-					if(!tOut.hasGoodByName(SCG.iInv.get(i).sName)){
-						bHasAll = false;
-					}
+				if(SCG.iInv.get(i).MERCHANT_MAX_CARRY!=0&&SCG.iInv.get(i).iQuant==0){
+					//System.out.println(SCG.iInv.get(i).toString());
+					bHasAll = false;
 				}
 			}
 			
 			if(bHasAll){
 				break;
+			}else if(iInfLoopCheck >=50){
+				break;
 			}
-			
+			iInfLoopCheck ++;
 			
 				
 		}
@@ -604,12 +608,11 @@ public class SpaceColonyEngine implements ISCSError{
 		Inventory iOut = new Inventory();
 		Good gTemp;
 		for(int i = 0; i< SCG.iInv.size(); i++){
-			if(SCG.iInv.get(i).MERCHANT_MAX_CARRY!=0&&SCG.iInv.get(i).iQuant!=0){
+			if(SCG.iInv.get(i).MERCHANT_MAX_CARRY!=0){
 				gTemp = SCG.iInv.get(i).clone();
-				if(tBuy.getGoodByName(gTemp.sName)!=null){
-					gTemp.iPrice = 1 + tBuy.getGoodByName(gTemp.sName).iPrice/2;
-				}else{
-					gTemp.iPrice = 1 + gTemp.BASE_PRICE+rand.nextInt(gTemp.BASE_PRICE); 
+				gTemp.iPrice = tBuy.getGoodByName(gTemp.sName).iPrice/2;
+				if(gTemp.iPrice == 0){
+					gTemp.iPrice = 1;
 				}
 				iOut.add(gTemp);
 			}
@@ -629,55 +632,88 @@ public class SpaceColonyEngine implements ISCSError{
 	}
 	
 	public void buyFromMerchant(TraderList tList, Inventory iList){
+		
+		
 		while(true){
-			String[][] aCatalogue = new String[tList.size()+2][4];
+			int iEntriesToPrint = 0;
+			for(int i = 0; i<tList.size(); i++){
+				if(tList.get(i).iQuant!=0 && tList.get(i).MERCHANT_MAX_CARRY!=0){
+					iEntriesToPrint++;
+				}
+			}
+			String[][] aCatalogue = new String[iEntriesToPrint+1][4];
+			//System.out.println(iEntriesToPrint + ",");
 			aCatalogue[0][0] = " ";
 			aCatalogue[0][1] = _scsdm.getDisplayText("GOOD");
 			aCatalogue[0][2] = _scsdm.getDisplayText("PRICE");
 			aCatalogue[0][3] = _scsdm.getDisplayText("AMMOUNT");
+			int k = 0;
+			//System.out.println(aCatalogue.length +".");
 			for(int i = 0; i<tList.size(); i++){
-				if(i<10){
-					aCatalogue[i+1][0] = " "+(i+1)+"-";
-				}else{
-					aCatalogue[i+1][0] = (i+1)+"-";
+				if(k>=(aCatalogue.length-1)){
+					break;
 				}
-				aCatalogue[i+1][1] = _scsdm.getDisplayText(tList.get(i).sTextCode);
-				aCatalogue[i+1][2] = Integer.toString(tList.get(i).iPrice);
-				aCatalogue[i+1][3] = Integer.toString(tList.get(i).iQuant);
+				if(k<10){
+					//System.out.println(k);
+					aCatalogue[k+1][0] = " "+(k+1)+"-";
+				}else{
+					aCatalogue[k+1][0] = (k+1)+"-";
+				}
+				if(tList.get(i).iQuant!=0 && tList.get(i).MERCHANT_MAX_CARRY!=0){
+					aCatalogue[k+1][1] = _scsdm.getDisplayText(tList.get(i).sTextCode);
+					aCatalogue[k+1][2] = Integer.toString(tList.get(i).iPrice);
+					aCatalogue[k+1][3] = Integer.toString(tList.get(i).iQuant);
+					k++;
+				}
 			}
-			aCatalogue[tList.size()+1][0] = _scsdm.getDisplayText("MONEY");
-			aCatalogue[tList.size()+1][1] = Integer.toString(SCG.iInv.getGoodByName("Money").iQuant);
-			aCatalogue[tList.size()+1][2] = "";
-			aCatalogue[tList.size()+1][3] = "";
-			int bResponse = selectScreen(_scsdm.getDisplayText("OPTIONS"),_scsdm.getDisplayText("BUY_WHAT"), aCatalogue);
+			/*
+			aCatalogue[iEntriesToPrint+1][0] = _scsdm.getDisplayText("MONEY");
+			aCatalogue[iEntriesToPrint+1][1] = Integer.toString(SCG.iInv.getGoodByName("Money").iQuant);
+			aCatalogue[iEntriesToPrint+1][2] = "";
+			aCatalogue[iEntriesToPrint+1][3] = "";
+			*/
+			int bResponse = selectScreen(_scsdm.getDisplayText("BUY_WHAT"),_scsdm.getDisplayText("MONEY") + ": " +SCG.iInv.getGoodByName("Money").iQuant, aCatalogue);
 			if(bResponse != 0){
 				int iBuyAmount;
+				String sWorking  = aCatalogue[bResponse][1];
+				Good gAGood = null;
+				for(int i =0; i<tList.size(); i++){
+					if(sWorking.equals(_scsdm.getDisplayText(tList.get(i).sTextCode))){
+						gAGood = tList.get(i);
+					}
+					
+				}
+				
 				while(true){
 					iBuyAmount = _ioman.intIn(_scsdm.getDisplayText("HOW_MANY"));
 					if(iBuyAmount <=0){
 						break;
 					}
-					if(iBuyAmount >tList.get(bResponse-1).iQuant){
-						iBuyAmount = tList.get(bResponse-1).iQuant;
+					if(iBuyAmount >gAGood.iQuant){
+						iBuyAmount = gAGood.iQuant;
 					}
 					
-					if(SCG.iInv.getGoodByName("Money").iQuant < iBuyAmount* tList.get(bResponse-1).iPrice){
+					if(SCG.iInv.getGoodByName("Money").iQuant < iBuyAmount* gAGood.iPrice){
 						_ioman.lineOut(_scsdm.getDisplayText("CANT_AFFORD"));
 					}else{
 						break;
 					}
 				}
-				Good gTempGood = tList.get(bResponse-1);
-				if(iList.hasGoodByName(gTempGood.sName)){
-					Good gOtherTempGood = iList.getGoodByName(gTempGood.sName);
-					gOtherTempGood.iQuant +=iBuyAmount;
-				}else{
-					Good gOtherTemp = gTempGood.clone();
-					gOtherTemp.iQuant = iBuyAmount;
-					iList.add(gOtherTemp);
-				}
-				gTempGood.iQuant -= iBuyAmount;
-				SCG.iInv.getGoodByName("Money").iQuant -= iBuyAmount*gTempGood.iPrice;
+				
+				
+				//System.out.println("You had " + iList.getGoodByName(gAGood.sName).iQuant);
+				//System.out.println("It should increase by " + iBuyAmount);
+				//System.out.println("It should now have " + (iBuyAmount + iList.getGoodByName(gAGood.sName).iQuant));
+				iList.getGoodByName(gAGood.sName).iQuant += iBuyAmount;
+				//System.out.println(iList.getGoodByName(gAGood.sName).toString());
+				//System.out.println("You now have " + iList.getGoodByName(gAGood.sName).iQuant );
+				//System.out.println("The merchant had " + gAGood.iQuant );
+				gAGood.iQuant -= iBuyAmount;
+				//System.out.println("The merchant now has " + gAGood.iQuant );
+				SCG.iInv.getGoodByName("Money").iQuant -= iBuyAmount*gAGood.iPrice;
+				//you need to create a good and add it if it does not already have it.
+				
+				
 				
 			}else if(bResponse ==0){
 				break;
@@ -687,36 +723,66 @@ public class SpaceColonyEngine implements ISCSError{
 	}
 	
 	public void sellToMerchant(TraderList tList, Inventory iList){
+		
+		
 		while(true){
-			String[][] aCatalogue = new String[iList.size()+2][4];
+			int iEntriesToPrint = 0;
+			for(int i = 0; i<iList.size(); i++){
+				if(iList.get(i).iQuant!=0 && iList.get(i).MERCHANT_MAX_CARRY!=0){
+					iEntriesToPrint++;
+				}
+			}
+			//System.out.println(iEntriesToPrint + ",");
+			String[][] aCatalogue = new String[iEntriesToPrint+1][4];
 			aCatalogue[0][0] = " ";
 			aCatalogue[0][1] = _scsdm.getDisplayText("GOOD");
 			aCatalogue[0][2] = _scsdm.getDisplayText("PRICE");
 			aCatalogue[0][3] = _scsdm.getDisplayText("AMMOUNT");
+			int k = 0;
+			//System.out.println(aCatalogue.length +".");
 			for(int i = 0; i<iList.size(); i++){
-				if(i<10){
-					aCatalogue[i+1][0] = " "+(i+1)+"-";
-				}else{
-					aCatalogue[i+1][0] = (i+1)+"-";
+				if(k>=(aCatalogue.length-1)){
+					break;
 				}
-				aCatalogue[i+1][1] = _scsdm.getDisplayText(iList.get(i).sTextCode);
-				aCatalogue[i+1][2] = Integer.toString(iList.get(i).iPrice);
-				aCatalogue[i+1][3] = Integer.toString(iList.get(i).iQuant);
+				
+				if(k<10){
+					
+					//System.out.println(k);
+					aCatalogue[k+1][0] = " "+(k+1)+"-";
+				}else{
+					aCatalogue[k+1][0] = (k+1)+"-";
+				}
+				
+				if(iList.get(i).iQuant!=0 && iList.get(i).MERCHANT_MAX_CARRY!=0){
+					aCatalogue[k+1][1] = _scsdm.getDisplayText(iList.get(i).sTextCode);
+					aCatalogue[k+1][2] = Integer.toString(iList.get(i).iPrice);
+					aCatalogue[k+1][3] = Integer.toString(iList.get(i).iQuant);
+					k++;
+				}
+				
 			}
-			aCatalogue[iList.size()+1][0] = _scsdm.getDisplayText("ROOM");
-			aCatalogue[iList.size()+1][1] = Integer.toString(tList.MaxSpace-tList.getTotalQuant());
-			aCatalogue[iList.size()+1][2] = "";
-			aCatalogue[iList.size()+1][3] = "";
-			int bResponse = selectScreen(_scsdm.getDisplayText("OPTIONS"),_scsdm.getDisplayText("SELL_WHAT"), aCatalogue);
+			
+			int bResponse = selectScreen(_scsdm.getDisplayText("SELL_WHAT"),_scsdm.getDisplayText("ROOM") + ": " + Integer.toString(tList.MaxSpace-tList.getTotalQuant()), aCatalogue);
 			if(bResponse != 0){
 				int iSellAmount;
+				String sWorking  = aCatalogue[bResponse][1];
+				Good gAGood = null;
+				for(int i =0; i<iList.size(); i++){
+					if(sWorking.equals(_scsdm.getDisplayText(iList.get(i).sTextCode))){
+						//System.out.println("it is");
+						gAGood = iList.get(i);
+						break;
+					}
+					
+				}
+				
 				while(true){
 					iSellAmount = _ioman.intIn(_scsdm.getDisplayText("HOW_MANY"));
 					if(iSellAmount <=0){
 						break;
 					}
-					if(iSellAmount >iList.get(bResponse-1).iQuant){
-						iSellAmount = iList.get(bResponse-1).iQuant;
+					if(iSellAmount >gAGood.iQuant){
+						iSellAmount = gAGood.iQuant;
 					}
 					
 					if(iSellAmount > tList.MaxSpace-tList.getTotalQuant()){
@@ -725,16 +791,14 @@ public class SpaceColonyEngine implements ISCSError{
 						break;
 					}
 				}
-				Good gTempGood = iList.get(bResponse-1);
-				if(tList.hasGoodByName(gTempGood.sName)){
-					tList.getGoodByName(gTempGood.sName).iQuant+=iSellAmount;
-				}else{
-					Good gOtherTemp = gTempGood.clone();
-					gOtherTemp.iQuant = iSellAmount;
-					tList.add(gOtherTemp);
-				}
-				gTempGood.iQuant -= iSellAmount;
-				SCG.iInv.getGoodByName("Money").iQuant += iSellAmount*gTempGood.iPrice;
+				//System.out.println("You have " +gAGood.iQuant);
+				gAGood.iQuant -= iSellAmount;
+				//System.out.println("You have " +gAGood.iQuant);
+				//System.out.println("Merchant had " + tList.getGoodByName(gAGood.sName).iQuant);
+				tList.getGoodByName(gAGood.sName).iQuant += iSellAmount;
+				//System.out.println("Merchant now has " + tList.getGoodByName(gAGood.sName).iQuant);
+				
+				SCG.iInv.getGoodByName("Money").iQuant += iSellAmount*gAGood.iPrice;
 				
 			}else if(bResponse == 0){
 				break;

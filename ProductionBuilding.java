@@ -46,11 +46,22 @@ public class ProductionBuilding extends Structure{
 			int times = 0;
 			if(cEvent instanceof ProductionMultiplyingEvent){
 				ProductionMultiplyingEvent tEvent = (ProductionMultiplyingEvent) cEvent;
+				
+				
 				if(currentRecipe.TEXT_CODE.equals( tEvent.sTargetProduction)){
+					//System.out.println("Before the event bPrint was " + tEvent.bPrint);
+					tEvent.bPrint = true;
+					//System.out.println("And then it was " + tEvent.bPrint);
+					
 					times = (int) Math.round((iWorkers/currentRecipe.MAN_HOURS)*tEvent.dProdMultFactor);
 				}else{
+					//System.out.println("Before the evennt bPrint was " + tEvent.bPrint);
+					//tEvent.bPrint = false;
+					//System.out.println("And thenn it was " + tEvent.bPrint);
 					times = (int) (iWorkers/currentRecipe.MAN_HOURS);
 				}
+				//System.out.println("The event is " + cEvent.toString());
+				
 				
 			}else{
 				times = (int) (iWorkers/currentRecipe.MAN_HOURS);

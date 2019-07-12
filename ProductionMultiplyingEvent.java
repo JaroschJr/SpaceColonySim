@@ -3,6 +3,7 @@ import java.util.Formatter;
 public class ProductionMultiplyingEvent extends RandomEvent{
 	double dProdMultFactor;//database: PROD_VALUE
 	String sTargetProduction;//database: PROD_TYPE //This is actually the text code, so prepair accordingly.
+	public boolean bPrint = false;
 	
 	public static final String FIELD_PROD_VALUE = "PROD_VALUE";
 	public static final String FIELD_PROD_TYPE = "PROD_TYPE";
@@ -28,14 +29,17 @@ public class ProductionMultiplyingEvent extends RandomEvent{
 		//it will multiply the production by a certain amount. currently this is not posible. come back to this once the rest of it is finished.
 		String sToPrint = dbm.getDisplayText(sFluffAccess); 
 		sToPrint = String.format(sToPrint,sTargetProduction, dProdMultFactor);
-		ioman.lineOut(sToPrint);
+		if(bPrint){
+			ioman.lineOut(sToPrint);
+		}
+		bPrint = false;
 		return true;
 	
 	}
 	
 	@Override
 	public String toString(){
-		String rReturnString = super.toString() + ", Production Multiplying Event. Multiplies" + sTargetProduction + " By " + dProdMultFactor;
+		String rReturnString = super.toString() + ", Production Multiplying Event. Multiplies" + sTargetProduction + " By " + dProdMultFactor + ", bPrint " +bPrint;
 		return rReturnString;
 	}
 
