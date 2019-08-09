@@ -3,6 +3,8 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.ResultSet;
+import java.util.UUID;
+import java.util.ArrayList;
 
 /**
  * Class responsible for facilitating communication
@@ -178,4 +180,98 @@ public class SCSDataModule{
 
 		return _langs;
 	}
+	
+	public String getGuid(){
+		String sOut;
+		UUID uuid = UUID.randomUUID();
+		sOut = uuid.toString();
+		return sOut;
+	}
+	
+	public void saveGame(SpaceColonyGame scg, String sName){
+		
+		try{
+			//System.out.println("Gets to 1");
+			String sGameGuid = getGuid();
+			Statement sStatement = _conn.createStatement();
+			//System.out.println("Gets to 2");
+				//Eliminate existing save.
+			//System.out.println("SELECT GUID FROM SCS_SAVE_GAMES WHERE SAVE_NAME IS '"+sName+"'");
+			ResultSet rOtherGuid = getResultSet("SELECT GUID FROM SCS_SAVE_GAMES WHERE SAVE_NAME IS '"+sName+"'");
+			//System.out.println("Gets to 3");
+			while(rOtherGuid.next()){
+				
+				String oldGuid = rOtherGuid.getString("GUID");
+				//System.out.println("DELETE FROM SCS_SAVE_GAMES WHERE GUID IS '"+oldGuid+"'");
+				//System.out.println("DELETE FROM SCS_SAVE_ITEMS WHERE SAVE_GUID IS '"+oldGuid+"'");
+				//System.out.println("DELETE FROM SCS_SAVE_STRUCTURES WHERE SAVE_GUID IS '"+oldGuid+"'");
+				
+				
+				
+				sStatement.execute("DELETE FROM SCS_SAVE_GAMES WHERE GUID IS '"+oldGuid+"'");
+				sStatement.execute("DELETE FROM SCS_SAVE_ITEMS WHERE SAVE_GUID IS '"+oldGuid+"'");
+				sStatement.execute("DELETE FROM SCS_SAVE_STRUCTURES WHERE SAVE_GUID IS '"+oldGuid+"'");
+			}
+			//System.out.println("Gets to 4");
+			//Sample SQL:
+			//For the Save
+			//System.out.println("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT) VALUES (" + sGameGuid +", "+sName+", " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+")");
+			sStatement.execute("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT) VALUES ('" + sGameGuid +"', '"+sName+"', " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+")");
+			for(int i = 0; i<scg.structures.size(); i++){
+				//System.out.println("getting entry " + i +" of "+scg.structures.size());
+				//System.out.println(scg.structures.get(i).toString());
+				
+				if(scg.structures.get(i) instanceof ProductionBuilding){
+					ProductionBuilding temp = (ProductionBuilding) scg.structures.get(i);
+					if(temp.currentRecipe!=null){
+						
+						sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE) VALUES('"+getGuid()+"', '"+sGameGuid+"', '" + temp.NAME+"', "+temp.iWorkers+", '"+ temp.currentRecipe.NAME+"')");
+					}else{
+						
+						sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE) VALUES('"+getGuid()+"', '"+sGameGuid+"', '" + temp.NAME+"', "+temp.iWorkers+", '-')");
+
+					}
+				}else{
+					sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS) VALUES('"+getGuid()+"', '"+sGameGuid+"', " + scg.structures.get(i).NAME+"', "+scg.structures.get(i).iWorkers+", )");
+				}
+			}
+			
+			
+			for(int i = 0; i<scg.iInv.size(); i++){
+				//System.out.println("INSERT INTO SCS_SAVE_ITEMS(GUID, SAVE_GUID, QUANTITY, ITEM) VALUES('"+getGuid()+"', '"+sGameGuid+"',"+scg.iInv.get(i).iQuant+",'"+scg.iInv.get(i).sName+"')");
+				sStatement.execute("INSERT INTO SCS_SAVE_ITEMS(GUID, SAVE_GUID, QUANTITY, ITEM) VALUES('"+getGuid()+"', '"+sGameGuid+"',"+scg.iInv.get(i).iQuant+",'"+scg.iInv.get(i).sName+"')");
+			}
+			
+			
+			
+		}catch(SQLException sqle){
+			errorHandler.handleException(sqle);
+			System.out.println(sqle.getMessage());
+		}
+		
+	}
+	
+	public ArrayList<String> getSaveNames(){
+		ArrayList<String> outArray = new ArrayList<String>();
+		try{	
+			ResultSet rSet = getResultSet("select SAVE_NAME FROM SCS_SAVE_GAMES");
+			
+			while(rSet.next()){
+				//System.out.println(rSet.getString("SAVE_NAME"));
+				outArray.add(rSet.getString("SAVE_NAME"));
+			}
+		}catch(SQLException sqle){
+			errorHandler.handleException(sqle);
+			System.out.println(sqle.getMessage());
+		}
+		return outArray;
+		
+	}
+	
+	
+	/*
+	public SpaceColonyGame loadGame(String sName){
+		
+	}
+	*/
 }

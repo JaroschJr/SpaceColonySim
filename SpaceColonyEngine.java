@@ -114,6 +114,7 @@ public class SpaceColonyEngine implements ISCSError{
 		SCG.structures = sList;
 		SCG.pop = new Population();
 		SCG.pop.gainPop(10);
+		//System.out.println("Sample Guid " + _scsdm.getGuid());
 		
 		//System.out.println(SCG.pop.toString());
 		//sList.getStructureByName("farm").setWork(SCG.pop, 5, listOfRecipes.getRecipeByName("food"));
@@ -234,6 +235,7 @@ public class SpaceColonyEngine implements ISCSError{
 			produce();
 			currentEvent.performEvent(SCG, _ioman, _scsdm);
 			validateStructures();
+			saveCurrentGame();
 			SCG.iTurnCount++;
 		}
 	}
@@ -822,6 +824,49 @@ public class SpaceColonyEngine implements ISCSError{
 		for(int i = 0; i<SCG.structures.size(); i++){
 			SCG.structures.get(i).doProduction(SCG, currentEvent);
 		}
+	}
+	
+	public void saveCurrentGame(){
+		
+		
+		ArrayList<String> sSaveNames = _scsdm.getSaveNames();
+		String[][] sSaves = new String[sSaveNames.size()+2][2];
+		sSaves[0][0] = " ";
+		sSaves[0][1] = _scsdm.getDisplayText("SAVE");
+		for(int i = 0; i<sSaveNames.size(); i++){
+			if(i<10){
+				sSaves[i+1][0] =  " "+(i+1)+"-";
+			}else{
+				sSaves[i+1][0] = (i+1)+"-";
+			}
+			
+			sSaves[i+1][1] = sSaveNames.get(i);
+		}
+		
+		if(sSaveNames.size()<10){
+			sSaves[sSaveNames.size()+1][0] =  " "+(sSaveNames.size()+1)+"-";
+		}else{
+			sSaves[sSaveNames.size()+1][0] = (sSaveNames.size()+1)+"-";
+		}
+		
+		sSaves[sSaveNames.size()+1][1] = _scsdm.getDisplayText("NEW_SAVE");
+		int iAns = selectScreen(_scsdm.getDisplayText("SELECT_SAVE"), " ", sSaves);
+		if(iAns ==0){
+			
+		}else if(iAns<=sSaveNames.size()){
+			_scsdm.saveGame(SCG, sSaveNames.get(iAns));
+		}else if(iAns==sSaveNames.size()+1){
+			System.out.println(_scsdm.getDisplayText("NEW_SAVE_NAME"));
+			String newName = _ioman.stringIn(_scsdm.getDisplayText("NEW_SAVE_NAME"));
+			if(newName.equals("")){
+				
+			}else{
+				_scsdm.saveGame(SCG, newName);
+			}
+		}
+		
+		//_scsdm.saveGame(SCG, "DEFAULT");
+		//System.out.println("Autosaving...");
 	}
 	
 

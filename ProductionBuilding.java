@@ -13,7 +13,11 @@ public class ProductionBuilding extends Structure{
 			sOut += " -  Possible Recipe no." + i + " " + sPosibleRecipes.get(i).toString() ;
 		}
 		
-		sOut += " Current Recipe " + currentRecipe.toString();
+		if(currentRecipe != null){
+			sOut += " Current Recipe " + currentRecipe.toString();
+		}else{
+			sOut += "_";
+		}
 		
 		return sOut;
 	}
