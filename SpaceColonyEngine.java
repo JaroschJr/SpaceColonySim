@@ -158,7 +158,9 @@ public class SpaceColonyEngine implements ISCSError{
 					break;
 
 				case "L":
-					System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
+					loadSave();
+					done = true;
+					//System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
 					break;
 				default:
 					System.out.println("Invalid Input. Try Again.");
@@ -854,7 +856,7 @@ public class SpaceColonyEngine implements ISCSError{
 		if(iAns ==0){
 			
 		}else if(iAns<=sSaveNames.size()){
-			_scsdm.saveGame(SCG, sSaveNames.get(iAns));
+			_scsdm.saveGame(SCG, sSaveNames.get(iAns-1));
 		}else if(iAns==sSaveNames.size()+1){
 			System.out.println(_scsdm.getDisplayText("NEW_SAVE_NAME"));
 			String newName = _ioman.stringIn(_scsdm.getDisplayText("NEW_SAVE_NAME"));
@@ -869,5 +871,36 @@ public class SpaceColonyEngine implements ISCSError{
 		//System.out.println("Autosaving...");
 	}
 	
+	public void loadSave(){
+		ArrayList<String> sSaveNames = _scsdm.getSaveNames();
+		String[][] sSaves = new String[sSaveNames.size()+1][2];
+		sSaves[0][0] = " ";
+		sSaves[0][1] = _scsdm.getDisplayText("SAVE");
+		for(int i = 0; i<sSaveNames.size(); i++){
+			System.out.println("THIS");
+			if(i<10){
+				sSaves[i+1][0] =  " "+(i+1)+"-";
+			}else{
+				sSaves[i+1][0] = (i+1)+"-";
+			}
+			
+			sSaves[i+1][1] = sSaveNames.get(i);
+		}
+		/*
+		if(sSaveNames.size()<10){
+			sSaves[sSaveNames.size()][0] =  " "+(sSaveNames.size()+1)+"-";
+		}else{
+			sSaves[sSaveNames.size()][0] = (sSaveNames.size()+1)+"-";
+		}
+		*/
+		//sSaves[sSaveNames.size()+1][1] = _scsdm.getDisplayText("NEW_SAVE");
+		int iAns = selectScreen(_scsdm.getDisplayText("SELECT_LOAD"), " ", sSaves);
+		if(iAns<=sSaveNames.size()){
+			//System.out.println(sSaveNames.get(iAns-1));
+			_scsdm.loadGameByName(sSaveNames.get(iAns-1), SCG);
+			
+		}
+		
+	}
 
 }

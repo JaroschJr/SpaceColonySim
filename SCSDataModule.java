@@ -192,7 +192,13 @@ public class SCSDataModule{
 		
 		try{
 			//System.out.println("Gets to 1");
-			String sGameGuid = getGuid();
+			boolean bNew = true;
+			if(scg.sGuid == null){
+				bNew = true;
+				scg.sGuid = getGuid();
+			}else{
+				bNew = false;
+			}
 			Statement sStatement = _conn.createStatement();
 			//System.out.println("Gets to 2");
 				//Eliminate existing save.
@@ -215,8 +221,8 @@ public class SCSDataModule{
 			//System.out.println("Gets to 4");
 			//Sample SQL:
 			//For the Save
-			//System.out.println("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT) VALUES (" + sGameGuid +", "+sName+", " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+")");
-			sStatement.execute("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT) VALUES ('" + sGameGuid +"', '"+sName+"', " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+")");
+			//System.out.println("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT) VALUES (" + scg.sGuid +", "+sName+", " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+")");
+			sStatement.execute("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT) VALUES ('" + scg.sGuid +"', '"+sName+"', " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+")");
 			for(int i = 0; i<scg.structures.size(); i++){
 				//System.out.println("getting entry " + i +" of "+scg.structures.size());
 				//System.out.println(scg.structures.get(i).toString());
@@ -225,21 +231,21 @@ public class SCSDataModule{
 					ProductionBuilding temp = (ProductionBuilding) scg.structures.get(i);
 					if(temp.currentRecipe!=null){
 						
-						sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE) VALUES('"+getGuid()+"', '"+sGameGuid+"', '" + temp.NAME+"', "+temp.iWorkers+", '"+ temp.currentRecipe.NAME+"')");
+						sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE) VALUES('"+getGuid()+"', '"+scg.sGuid+"', '" + temp.NAME+"', "+temp.iWorkers+", '"+ temp.currentRecipe.NAME+"')");
 					}else{
 						
-						sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE) VALUES('"+getGuid()+"', '"+sGameGuid+"', '" + temp.NAME+"', "+temp.iWorkers+", '-')");
+						sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE) VALUES('"+getGuid()+"', '"+scg.sGuid+"', '" + temp.NAME+"', "+temp.iWorkers+", '-')");
 
 					}
 				}else{
-					sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS) VALUES('"+getGuid()+"', '"+sGameGuid+"', " + scg.structures.get(i).NAME+"', "+scg.structures.get(i).iWorkers+", )");
+					sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS) VALUES('"+getGuid()+"', '"+scg.sGuid+"', " + scg.structures.get(i).NAME+"', "+scg.structures.get(i).iWorkers+", )");
 				}
 			}
 			
 			
 			for(int i = 0; i<scg.iInv.size(); i++){
-				//System.out.println("INSERT INTO SCS_SAVE_ITEMS(GUID, SAVE_GUID, QUANTITY, ITEM) VALUES('"+getGuid()+"', '"+sGameGuid+"',"+scg.iInv.get(i).iQuant+",'"+scg.iInv.get(i).sName+"')");
-				sStatement.execute("INSERT INTO SCS_SAVE_ITEMS(GUID, SAVE_GUID, QUANTITY, ITEM) VALUES('"+getGuid()+"', '"+sGameGuid+"',"+scg.iInv.get(i).iQuant+",'"+scg.iInv.get(i).sName+"')");
+				//System.out.println("INSERT INTO SCS_SAVE_ITEMS(GUID, SAVE_GUID, QUANTITY, ITEM) VALUES('"+getGuid()+"', '"+scg.sGuid+"',"+scg.iInv.get(i).iQuant+",'"+scg.iInv.get(i).sName+"')");
+				sStatement.execute("INSERT INTO SCS_SAVE_ITEMS(GUID, SAVE_GUID, QUANTITY, ITEM) VALUES('"+getGuid()+"', '"+scg.sGuid+"',"+scg.iInv.get(i).iQuant+",'"+scg.iInv.get(i).sName+"')");
 			}
 			
 			
@@ -269,9 +275,56 @@ public class SCSDataModule{
 	}
 	
 	
-	/*
-	public SpaceColonyGame loadGame(String sName){
-		
+	
+	public void loadGameByName(String sName, SpaceColonyGame scg){
+		try{
+			InventoryFactory invfact = new InventoryFactory(this);
+			StructureFactory structFact = new StructureFactory(this);
+			ResultSet rTargSave = getResultSet("SELECT * FROM SCS_SAVE_GAMES WHERE SAVE_NAME IS '"+sName+"'");
+			String sTargGuid = rTargSave.getString("GUID");
+			scg.bIsOngoing = true;
+			scg.sGuid = sTargGuid;
+			scg.iTurnCount = rTargSave.getInt("TURN");
+			scg.iMerchantCountDown = rTargSave.getInt("MERCH_COUNT");
+			int iNewPop = rTargSave.getInt("POP");
+			scg.pop = new Population();
+			scg.pop.gainPop(iNewPop);
+			ResultSet rInvent = getResultSet("SELECT * FROM SCS_SAVE_ITEMS WHERE SAVE_GUID IS '"+sTargGuid+"'");
+			
+			while(rInvent.next()){ 
+				Good currentGood = scg.iInv.getGoodByName(rInvent.getString("ITEM"));
+				currentGood.iQuant = rInvent.getInt("QUANTITY");
+				
+			}
+			
+			ResultSet rStructures = getResultSet("SELECT * FROM SCS_SAVE_STRUCTURES WHERE SAVE_GUID IS '"+sTargGuid+"'");
+			StructureList masterStructList = structFact.getStructureList();
+			RecipeList rList = invfact.getRecipeList();
+			scg.structures = new StructureList();
+			while(rStructures.next()){
+				Structure sIn;
+				String sname = rStructures.getString("FACTORY");
+				sIn = masterStructList.getStructureByName(sname).clone();
+				if((sIn instanceof ProductionBuilding)&& (rStructures.getInt("WORKERS")!=0)){
+					ProductionBuilding bTempo = (ProductionBuilding) sIn;
+					bTempo.setWork(scg.pop, rStructures.getInt("WORKERS"), rList.getRecipeByName(rStructures.getString("RECIPE")));
+					scg.structures.add(bTempo);
+				}else if(rStructures.getInt("WORKERS")!=0){
+					sIn.setWork(scg.pop, rStructures.getInt("WORKERS"));
+					scg.structures.add(sIn);
+				}else{
+					scg.structures.add(sIn);
+				}
+				
+				
+			}
+			
+			
+		}catch(SQLException sqle){
+			errorHandler.handleException(sqle);
+			System.out.println(sqle.getMessage());
+		}
+			
 	}
-	*/
+	
 }
