@@ -20,7 +20,7 @@ public class SpaceColonyEngine implements ISCSError{
 	private RandomEvent currentEvent;
 	//to test to see if Structure and descendat classed were made correctly.
 	private Structure testStructure;
-	private RecipeList listOfRecipes;//For Testing.
+	private RecipeList listOfRecipes;
 	private InventoryFactory InvFact;
 	private StructureFactory StructFact;
 	private StructureList StructList;
@@ -105,11 +105,12 @@ public class SpaceColonyEngine implements ISCSError{
 		StructFact = new StructureFactory(_scsdm);
 		StructList = StructFact.getStructureList();
 		//get copies of starting structures.
-		StructureList sList = new StructureList();
+		StructureList sList = new StructureList(); 
 		sList.add(StructList.getStructureByName("oreMine").clone());
 		sList.add(StructList.getStructureByName("farm").clone());
 		sList.add(StructList.getStructureByName("farm").clone());
 		sList.add(StructList.getStructureByName("goodFactory").clone());
+		System.out.println("Starting Structure Finished Test");
 		
 		SCG.structures = sList;
 		SCG.pop = new Population();
@@ -234,10 +235,11 @@ public class SpaceColonyEngine implements ISCSError{
 			merchantThings();
 			_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
 			SINN = _ioman.stringIn("");
+			saveCurrentGame();
 			produce();
 			currentEvent.performEvent(SCG, _ioman, _scsdm);
 			validateStructures();
-			saveCurrentGame();
+			
 			SCG.iTurnCount++;
 		}
 	}
@@ -368,11 +370,11 @@ public class SpaceColonyEngine implements ISCSError{
 		for(int i = 0; i<text.length; i++){
 			String sOut = "";
 			if(i==1){
-				_ioman.lineOut(" 0-" + getSpacer(15-" 0-".length()) + _scsdm.getDisplayText("CANCEL"));
+				_ioman.lineOut(" 0-" + getSpacer(16-" 0-".length()) + _scsdm.getDisplayText("CANCEL"));
 			}
 			for(int j = 0; j<text[i].length; j++){
 				//System.out.println("line " + i + " column " +j);
-				sOut += text[i][j]+ getSpacer(15-text[i][j].length());
+				sOut += text[i][j]+ getSpacer(16-text[i][j].length());
 			}
 			_ioman.lineOut(sOut);
 		}
@@ -394,7 +396,7 @@ public class SpaceColonyEngine implements ISCSError{
 	
 	public void viewAndSetProduction(){
 		while(true){
-			String[][] structReport = new String[SCG.structures.size()+1][3];
+			String[][] structReport = new String[SCG.structures.size()+2][3];
 			structReport[0][0] = _scsdm.getDisplayText("BUILDING");
 			structReport[0][1] = _scsdm.getDisplayText("WORKERS");
 			structReport[0][2] = _scsdm.getDisplayText("RECIPE");
@@ -416,7 +418,9 @@ public class SpaceColonyEngine implements ISCSError{
 						structReport[i][1] = "-------";
 					}
 					
-					if(SCG.structures.get(i-1) instanceof ProductionBuilding){
+					if(SCG.structures.get(i-1).bComplete == false){
+						structReport[i][2] = _scsdm.getDisplayText("SELF")+ " (" + SCG.structures.get(i-1).howDone() + ")";
+					}else if(SCG.structures.get(i-1) instanceof ProductionBuilding){
 						ProductionBuilding tempPBSlot = (ProductionBuilding) SCG.structures.get(i-1);
 						//System.out.println(SCG.structures.get(i-1));
 					
@@ -434,9 +438,18 @@ public class SpaceColonyEngine implements ISCSError{
 			//structReport[SCG.structures.size()+1][0] = _scsdm.getDisplayText("IDLE_WORKERS");
 			//structReport[SCG.structures.size()+1][1] = Integer.toString(SCG.pop.howManyUnassigned());
 			//structReport[SCG.structures.size()+1][2] = "-------";
+			if(SCG.structures.size()<10){
+				structReport[SCG.structures.size()+1][0] = " "+(SCG.structures.size()+1)+"-" + _scsdm.getDisplayText("NEW_BUILDING");
+			}else{
+				structReport[SCG.structures.size()+1][0] = ""+(SCG.structures.size()+1)+"-" + _scsdm.getDisplayText("NEW_BUILDING");
+			}
+			structReport[SCG.structures.size()+1][1] = "";
+			structReport[SCG.structures.size()+1][2] = "";
+			
+			
 			Structure bWorkingBuilding;
 			int iAnswer = selectScreen(_scsdm.getDisplayText("SELECT_CURRENT_ASSIGNMENT"), _scsdm.getDisplayText("WHICH_TO_CHANGE" ) + ". "+ SCG.pop.howManyUnassigned() + " " + _scsdm.getDisplayText("IDLE_WORKERS"), structReport);
-			if(iAnswer>0&&iAnswer <SCG.structures.size()+1){
+			if(iAnswer>0&&iAnswer <=SCG.structures.size()){
 				bWorkingBuilding = SCG.structures.get(iAnswer-1);
 				String[][] sQuantAsk = new String[bWorkingBuilding.MAX_WORKERS+1][2];
 				sQuantAsk[0][0] = "   ";
@@ -456,7 +469,15 @@ public class SpaceColonyEngine implements ISCSError{
 				
 				//int iNewWorkers =_ioman.intIn(_scsdm.getDisplayText("HOW_MANY_WORKERS")); 
 				if(iNewWorkers>0){
-					if(bWorkingBuilding instanceof ProductionBuilding){
+					if(bWorkingBuilding.bComplete == false){
+						System.out.println(" " +bWorkingBuilding.bComplete);
+						System.out.println("Reaches B");
+						bWorkingBuilding.setWork(SCG.pop, iNewWorkers);
+						if(bWorkingBuilding.iWorkers>0){
+							bWorkingBuilding.bBuildingSelf = true;
+						}
+						
+					}else if(bWorkingBuilding instanceof ProductionBuilding){
 						ProductionBuilding bTempo = (ProductionBuilding) bWorkingBuilding;
 						
 						if(bTempo.sPosibleRecipes.size() == 1){
@@ -503,6 +524,8 @@ public class SpaceColonyEngine implements ISCSError{
 						bWorkingBuilding.setWork(SCG.pop, 0);
 					}
 				}
+			}else if(iAnswer == (SCG.structures.size()+1)){
+				buildNewStructure();
 			}else{
 				break;
 			}	
@@ -877,7 +900,6 @@ public class SpaceColonyEngine implements ISCSError{
 		sSaves[0][0] = " ";
 		sSaves[0][1] = _scsdm.getDisplayText("SAVE");
 		for(int i = 0; i<sSaveNames.size(); i++){
-			System.out.println("THIS");
 			if(i<10){
 				sSaves[i+1][0] =  " "+(i+1)+"-";
 			}else{
@@ -902,5 +924,86 @@ public class SpaceColonyEngine implements ISCSError{
 		}
 		
 	}
+	
+	public void buildNewStructure(){
+		RecipeList possibleStructureRecipes = new RecipeList();
+		for(int i = 0; i < StructList.size(); i++){
+			//System.out.println(StructList.get(i).NAME + "XXX");
+			possibleStructureRecipes.add(listOfRecipes.getRecipeByName(StructList.get(i).NAME));
+		}
+		//getRecipeDisplay();
+		String[][] sDisplayText = new String[possibleStructureRecipes.size()+1][4];
+		sDisplayText[0][0] = "";
+		sDisplayText[0][1] = _scsdm.getDisplayText("BUILDING");
+		sDisplayText[0][2] = _scsdm.getDisplayText("MAN_HOURS");
+		sDisplayText[0][3] = _scsdm.getDisplayText("MATERIALS");
+			
+		for(int i = 0 ; i<possibleStructureRecipes.size(); i++){
+			if(i<10){
+				sDisplayText[i+1][0] =  " "+(i+1)+"-";
+			}else{
+				sDisplayText[i+1][0] = (i+1)+"-";
+			}
+		}
+		
+		for(int i = 0 ; i<possibleStructureRecipes.size(); i++){
+			//System.out.println(possibleStructureRecipes.get(i).NAME + "XXXX");
+			sDisplayText[i+1][1] = _scsdm.getDisplayText(StructList.getStructureByName(possibleStructureRecipes.get(i).NAME).TEXT_CODE);
+		}
+		
+		for(int i = 0 ; i<possibleStructureRecipes.size(); i++){
+			sDisplayText[i+1][2] = possibleStructureRecipes.get(i).MAN_HOURS + " ";
+		}
+		
+		for(int i = 0 ; i<possibleStructureRecipes.size(); i++){
+			sDisplayText[i+1][3] = getRecipeDisplay(possibleStructureRecipes.get(i));
+		}
+		
+		
+		//TESTING
+		/*
+		for(int i = 0; i<sDisplayText.length; i++){
+			System.out.println(" "+i+" "+sDisplayText[i][1]);
+		}
+		*/
+		//END TESTING
+		int iAns = selectScreen(_scsdm.getDisplayText("NEW_BUILDING"),_scsdm.getDisplayText("SELECT_NEW_BUILDING"),sDisplayText);
+		
+		if(iAns == 0){
+			
+		}else{
+			Recipe recip = possibleStructureRecipes.get(iAns-1);
+			
+			Structure bNewBuilding = StructList.getStructureByName(recip.NAME).clone();
+			bNewBuilding.iCompleteness = 0;
+			bNewBuilding.bComplete = false;
+			boolean hasEnoughMats = checkHasGoods(possibleStructureRecipes.get(iAns-1));
+			if(hasEnoughMats){
+				SCG.structures.add(bNewBuilding);
+				for(int i = 0; i<recip.size(); i++){
+					Good gChange = SCG.iInv.getGoodByName(recip.get(i).sName);
+					gChange.iQuant -= recip.get(i).iQuant;
+				}
+				
+				
+			}else{
+				_ioman.lineOut(_scsdm.getDisplayText("INSUFFICIENT_MATERIALS"));
+			}
+		}
+		
+	}
+	
+	public boolean checkHasGoods(Recipe recip){
+		boolean b = true;
+		
+		for(int i = 0; i<recip.size(); i++){
+			Good gCheck = SCG.iInv.getGoodByName(recip.get(i).sName);
+			b = (b&&gCheck.iQuant>=recip.get(i).iQuant);
+		}
+		return b;
+		
+	}
+	
+	
 
 }

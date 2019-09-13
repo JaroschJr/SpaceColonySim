@@ -45,6 +45,9 @@ public class StructureFactory{
 		outPB.BENEFIT = SCSEnum.eBenefit.valueOf(resultSet.getString(Structure.FIELD_BENEFIT));
 		outPB.NEED_WORKERS = SCSDataModule.getBoolean(resultSet, Structure.FIELD_NEED_WORKERS);
 		outPB.MAX_WORKERS= resultSet.getInt(Structure.FIELD_MAX_WORKERS);
+		outPB.HOURS_TO_BUILD = resultSet.getInt(Structure.FIELD_HOURS_TO_BUILD);
+		outPB.iCompleteness = outPB.HOURS_TO_BUILD;
+		outPB.bComplete = true;
 		return outPB;
 	 }
 	 
@@ -55,6 +58,9 @@ public class StructureFactory{
 		outPB.NAME = resultSet.getString(Structure.FIELD_NAME);
 		outPB.TEXT_CODE = resultSet.getString(Structure.FIELD_TEXT_CODE);
 		outPB.MAX_WORKERS= resultSet.getInt(Structure.FIELD_MAX_WORKERS);
+		outPB.HOURS_TO_BUILD = resultSet.getInt(Structure.FIELD_HOURS_TO_BUILD);
+		outPB.iCompleteness = outPB.HOURS_TO_BUILD;
+		outPB.bComplete = true;
 		
 		ResultSet rResultSet = _data.getResultSet("select a.NAME as RECIPE from SCS_RECIPES a, SCS_STRUCTURES b, SCS_STRUCTURE_RECIPIES c where c.RECIPE = a.ID and c.STRUCTURE_USING = b.ID and b.NAME = '" + outPB.NAME +"'");
 		

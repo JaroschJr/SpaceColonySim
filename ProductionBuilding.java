@@ -34,19 +34,28 @@ public class ProductionBuilding extends Structure{
 	//@Override
 	public void setWork(Population pop, int workers, Recipe r){
 		setWork(pop, workers);
+		System.out.println("It Gets Here");
 		if(iWorkers != 0){
+			System.out.println("New Recipe " +r.NAME);
 			currentRecipe = r;
 		}
 		
 		if(iWorkers == 0){
 			currentRecipe = null;
 		}
+		bBuildingSelf = false;
 		
 	}
 	
 	@Override
 	public void doProduction(SpaceColonyGame scg, RandomEvent cEvent){
-		if(currentRecipe !=null){
+		//super.doProduction();
+		if(bBuildingSelf){
+			buildSelf();
+			if(bComplete == true){
+				setWork(scg.pop, 0, null);
+			}
+		}else if(currentRecipe !=null){
 			int times = 0;
 			if(cEvent instanceof ProductionMultiplyingEvent){
 				ProductionMultiplyingEvent tEvent = (ProductionMultiplyingEvent) cEvent;

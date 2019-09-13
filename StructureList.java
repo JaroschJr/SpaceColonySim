@@ -15,6 +15,21 @@ public class StructureList extends ArrayList<Structure>{
 		return sOut;
 		
 	}
+	/*
+	public Structure placeNewStructureByName(){
+		Structure sOut = new Structure();
+		for(int i = 0; i<size(); i++){
+			if(get(i).NAME.equals(name.toString())){
+					//System.out.println(get(i).sName.toString()+" = "+  name.toString());
+					sOut = get(i).clone();
+					sOut.iCompleteness = 0;
+			}else{
+				
+			}
+		}
+		return sOut;
+	}
+	*/
 	
 	@Override
 	public String toString(){

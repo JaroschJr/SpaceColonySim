@@ -7,12 +7,18 @@ public class Structure{
 	public static final String FIELD_NEED_WORKERS="NEED_WORKERS";
 	public static final String FIELD_MAX_WORKERS = "MAX_WORKERS";
 	public static final String FIELD_BENEFIT = "BENEFIT";
+	public static final String FIELD_HOURS_TO_BUILD = "HOURS_TO_BUILD";
 
 	String ID;
 	String NAME;
 	String TEXT_CODE;
+	boolean bComplete;
+	boolean bBuildingSelf;
 	int iWorkers;
 	int MAX_WORKERS;
+	int HOURS_TO_BUILD;
+	int iCompleteness;
+	
 	ArrayList<People> pWorkers = new ArrayList<People>();
 	
 	
@@ -39,6 +45,7 @@ public class Structure{
 	}
 	
 	public void setWork(Population pop, int workers){
+		System.out.println("It gets to 1");
 		for(int i = pWorkers.size() -1; i>=0; i--){
 			pWorkers.get(i).assigned = false;
 			pWorkers.remove(i);
@@ -65,6 +72,17 @@ public class Structure{
 		
 	}
 	
+	public void buildSelf(){
+		if(bComplete !=true){
+			iCompleteness+=iWorkers;
+			if(iCompleteness >=HOURS_TO_BUILD){
+				iCompleteness = HOURS_TO_BUILD;
+				bComplete = true;
+				bBuildingSelf = false;
+			}
+		}
+	}
+	
 	public void doProduction(SpaceColonyGame scg, RandomEvent cEvent){
 		
 	}
@@ -85,7 +103,17 @@ public class Structure{
 		s.NAME = NAME;
 		s.TEXT_CODE = TEXT_CODE;
 		s.MAX_WORKERS = MAX_WORKERS;
+		s.HOURS_TO_BUILD = HOURS_TO_BUILD;
+		s.iCompleteness = HOURS_TO_BUILD;
+		s.bComplete = true;
 	}
 	
+	public String howDone(){
+		double dPercent = (double) iCompleteness / (double) HOURS_TO_BUILD;
+		dPercent *= 100;
+		int iRoundedPercent = (int) dPercent;
+		String sOut = iRoundedPercent + "%";
+		return sOut;
+	}
 	
 }

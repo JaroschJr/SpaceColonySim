@@ -231,14 +231,14 @@ public class SCSDataModule{
 					ProductionBuilding temp = (ProductionBuilding) scg.structures.get(i);
 					if(temp.currentRecipe!=null){
 						
-						sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE) VALUES('"+getGuid()+"', '"+scg.sGuid+"', '" + temp.NAME+"', "+temp.iWorkers+", '"+ temp.currentRecipe.NAME+"')");
+						sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE, COMPLETENESS) VALUES('"+getGuid()+"', '"+scg.sGuid+"', '" + temp.NAME+"', "+temp.iWorkers+", '"+ temp.currentRecipe.NAME+"', '"+ temp.iCompleteness+ "')");
 					}else{
 						
-						sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE) VALUES('"+getGuid()+"', '"+scg.sGuid+"', '" + temp.NAME+"', "+temp.iWorkers+", '-')");
+						sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE, COMPLETENESS) VALUES('"+getGuid()+"', '"+scg.sGuid+"', '" + temp.NAME+"', "+temp.iWorkers+", '-'"+", '"+ temp.iCompleteness+ "')");
 
 					}
 				}else{
-					sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS) VALUES('"+getGuid()+"', '"+scg.sGuid+"', " + scg.structures.get(i).NAME+"', "+scg.structures.get(i).iWorkers+", )");
+					sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, COMPLETENESS) VALUES('"+getGuid()+"', '"+scg.sGuid+"', " + scg.structures.get(i).NAME+"', "+scg.structures.get(i).iWorkers+"', '"+ scg.structures.get(i).iCompleteness+ "')");
 				}
 			}
 			
@@ -305,6 +305,10 @@ public class SCSDataModule{
 				Structure sIn;
 				String sname = rStructures.getString("FACTORY");
 				sIn = masterStructList.getStructureByName(sname).clone();
+				sIn.iCompleteness = rStructures.getInt("COMPLETENESS");
+				if(sIn.iCompleteness<sIn.HOURS_TO_BUILD){
+					sIn.bComplete = false;
+				}
 				if((sIn instanceof ProductionBuilding)&& (rStructures.getInt("WORKERS")!=0)){
 					ProductionBuilding bTempo = (ProductionBuilding) sIn;
 					bTempo.setWork(scg.pop, rStructures.getInt("WORKERS"), rList.getRecipeByName(rStructures.getString("RECIPE")));
