@@ -34,7 +34,6 @@ public class ProductionBuilding extends Structure{
 	//@Override
 	public void setWork(Population pop, int workers, Recipe r){
 		setWork(pop, workers);
-		System.out.println("It Gets Here");
 		if(iWorkers != 0){
 			System.out.println("New Recipe " +r.NAME);
 			currentRecipe = r;
