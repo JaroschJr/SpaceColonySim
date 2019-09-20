@@ -11,8 +11,10 @@ public class SpaceColonyEngine implements ISCSError{
 	//for Joey, compile with: Call "C:\Program Files (x86)\Java\jdk1.8.0_91\bin\javac.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim" SpaceColonyEngine.java
 	//and run with Call "C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim;C:\Joey's coding stuf\SpaceColonySim\sqlite-jdbc-3.18.0.jar" SpaceColonyEngine
 	//For joey CONSTR woudl be jdbc:sqlite:C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim\\SCSDataBase.db
-	private static String CONSTR = "";     //For Sean D:\\Dev\\JavaJoe\\SCS, for joey C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim;
+	private static String CONSTR = "";
+	private static String SAVECONSTR = "";
 	private SCSDataModule _scsdm;
+	private SCSDataModule _savedm;
 	private SpaceColonyGame SCG;
 	private ISCSIO _ioman;
 	private RandomEventFactory rEventFactory;
@@ -44,6 +46,7 @@ public class SpaceColonyEngine implements ISCSError{
 	 */
 	public static void main(String[] args){
 		CONSTR = args[0];
+		SAVECONSTR = args[1];
 		//Random rand = new Random();
 		SpaceColonyEngine engine = new SpaceColonyEngine();
 		engine.initialize();
@@ -73,6 +76,11 @@ public class SpaceColonyEngine implements ISCSError{
 		_scsdm.errorHandler = this;
 		_scsdm.setConnectionString(CONSTR);
 		_scsdm.connect();
+		
+		_savedm = new SCSDataModule();
+		_savedm.errorHandler = this;
+		_savedm.setConnectionString(SAVECONSTR);
+		_savedm.connect();
 
 		_ioman = new SCSConsoleIO();
 
@@ -83,6 +91,11 @@ public class SpaceColonyEngine implements ISCSError{
 		if(!_scsdm.isConnected()){
 			_ioman.lineOut("The database could not be connected to. Exiting game");
 			//System.out.println("The data base could not be connected to. Exiting game");
+			System.exit(1);
+		}
+		
+		if(!_savedm.isConnected()){
+			_ioman.lineOut("No save data base detected. Exiting game");
 			System.exit(1);
 		}//end if
 		
@@ -110,7 +123,7 @@ public class SpaceColonyEngine implements ISCSError{
 		sList.add(StructList.getStructureByName("farm").clone());
 		sList.add(StructList.getStructureByName("farm").clone());
 		sList.add(StructList.getStructureByName("goodFactory").clone());
-		System.out.println("Starting Structure Finished Test");
+		//System.out.println("Starting Structure Finished Test");
 		
 		SCG.structures = sList;
 		SCG.pop = new Population();
@@ -146,8 +159,8 @@ public class SpaceColonyEngine implements ISCSError{
 	 */
 	public void loadOrNew(){
 		boolean done = false;
-					//load or save.
-			while(done == false){
+					//load or new.
+		while(done == false){
 			System.out.println(_scsdm.getDisplayText("NEW_OR_LOAD"));
 			String sInput = System.console().readLine();
 			sInput = sInput.toUpperCase();
@@ -159,8 +172,12 @@ public class SpaceColonyEngine implements ISCSError{
 					break;
 
 				case "L":
-					loadSave();
-					done = true;
+					if(_savedm.getSaveNames().size()>0){
+						loadSave();
+						done = true;
+					}else{
+						_ioman.lineOut(_scsdm.getDisplayText("NO_SAVE"));
+					}
 					//System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
 					break;
 				default:
@@ -239,9 +256,18 @@ public class SpaceColonyEngine implements ISCSError{
 			produce();
 			currentEvent.performEvent(SCG, _ioman, _scsdm);
 			validateStructures();
+			popEat();
 			
 			SCG.iTurnCount++;
 		}
+	}
+	
+	private void popEat(){
+		SCG.iInv.getGoodByName("Food").iQuant-=(SCG.pop.size()/5);
+			if(SCG.iInv.getGoodByName("Food").iQuant<0){
+				
+				SCG.iInv.getGoodByName("Food").iQuant = 0;
+			}
 	}
 
 	private boolean traderAriveOrNot(){
@@ -543,6 +569,8 @@ public class SpaceColonyEngine implements ISCSError{
 	public void merchantThings(){
 		TraderList tBList = makeBuyList();
 		Inventory tSList = makeSellList(tBList);
+		tBList.recruits = 1+rand.nextInt(3);
+		tBList.recruitPrice = 10+rand.nextInt(20);
 		//System.out.println("merchant toString " + tBList.toString());
 		//System.out.println("inventory toString " +tSList.toString());
 		while(true){
@@ -660,7 +688,6 @@ public class SpaceColonyEngine implements ISCSError{
 	
 	public void buyFromMerchant(TraderList tList, Inventory iList){
 		
-		
 		while(true){
 			int iEntriesToPrint = 0;
 			for(int i = 0; i<tList.size(); i++){
@@ -668,7 +695,7 @@ public class SpaceColonyEngine implements ISCSError{
 					iEntriesToPrint++;
 				}
 			}
-			String[][] aCatalogue = new String[iEntriesToPrint+1][4];
+			String[][] aCatalogue = new String[iEntriesToPrint+2][4];
 			//System.out.println(iEntriesToPrint + ",");
 			aCatalogue[0][0] = " ";
 			aCatalogue[0][1] = _scsdm.getDisplayText("GOOD");
@@ -693,14 +720,31 @@ public class SpaceColonyEngine implements ISCSError{
 					k++;
 				}
 			}
-			/*
-			aCatalogue[iEntriesToPrint+1][0] = _scsdm.getDisplayText("MONEY");
-			aCatalogue[iEntriesToPrint+1][1] = Integer.toString(SCG.iInv.getGoodByName("Money").iQuant);
-			aCatalogue[iEntriesToPrint+1][2] = "";
-			aCatalogue[iEntriesToPrint+1][3] = "";
-			*/
+			
+			if(iEntriesToPrint<10){
+				aCatalogue[iEntriesToPrint+1][0] = " "+(iEntriesToPrint+1)+"-";
+			}else{
+				aCatalogue[iEntriesToPrint+1][0] = (iEntriesToPrint+1)+"-";
+			}
+			
+			aCatalogue[iEntriesToPrint+1][1] = _scsdm.getDisplayText("RECRUIT");
+			aCatalogue[iEntriesToPrint+1][2] = Integer.toString(tList.recruitPrice);
+			aCatalogue[iEntriesToPrint+1][3] = Integer.toString(tList.recruits);
+			
 			int bResponse = selectScreen(_scsdm.getDisplayText("BUY_WHAT"),_scsdm.getDisplayText("MONEY") + ": " +SCG.iInv.getGoodByName("Money").iQuant, aCatalogue);
-			if(bResponse != 0){
+			if(bResponse == (iEntriesToPrint+1)){
+				int hires = _ioman.intIn(_scsdm.getDisplayText("HOW_MANY"));
+				if(hires>=tList.recruits){
+					hires=tList.recruits;
+				}
+				if((hires*tList.recruitPrice)>SCG.iInv.getGoodByName("Money").iQuant){
+					_ioman.lineOut(_scsdm.getDisplayText("CANT_AFFORD"));
+				}else{
+					SCG.pop.gainPop(hires);
+					tList.recruits-=hires;
+				}
+				
+			}else if(bResponse != 0){
 				int iBuyAmount;
 				String sWorking  = aCatalogue[bResponse][1];
 				Good gAGood = null;
@@ -854,7 +898,7 @@ public class SpaceColonyEngine implements ISCSError{
 	public void saveCurrentGame(){
 		
 		
-		ArrayList<String> sSaveNames = _scsdm.getSaveNames();
+		ArrayList<String> sSaveNames = _savedm.getSaveNames();
 		String[][] sSaves = new String[sSaveNames.size()+2][2];
 		sSaves[0][0] = " ";
 		sSaves[0][1] = _scsdm.getDisplayText("SAVE");
@@ -879,14 +923,14 @@ public class SpaceColonyEngine implements ISCSError{
 		if(iAns ==0){
 			
 		}else if(iAns<=sSaveNames.size()){
-			_scsdm.saveGame(SCG, sSaveNames.get(iAns-1));
+			_savedm.saveGame(SCG, sSaveNames.get(iAns-1));
 		}else if(iAns==sSaveNames.size()+1){
 			System.out.println(_scsdm.getDisplayText("NEW_SAVE_NAME"));
 			String newName = _ioman.stringIn(_scsdm.getDisplayText("NEW_SAVE_NAME"));
 			if(newName.equals("")){
 				
 			}else{
-				_scsdm.saveGame(SCG, newName);
+				_savedm.saveGame(SCG, newName);
 			}
 		}
 		
@@ -895,7 +939,7 @@ public class SpaceColonyEngine implements ISCSError{
 	}
 	
 	public void loadSave(){
-		ArrayList<String> sSaveNames = _scsdm.getSaveNames();
+		ArrayList<String> sSaveNames = _savedm.getSaveNames();
 		String[][] sSaves = new String[sSaveNames.size()+1][2];
 		sSaves[0][0] = " ";
 		sSaves[0][1] = _scsdm.getDisplayText("SAVE");
@@ -919,7 +963,7 @@ public class SpaceColonyEngine implements ISCSError{
 		int iAns = selectScreen(_scsdm.getDisplayText("SELECT_LOAD"), " ", sSaves);
 		if(iAns<=sSaveNames.size()){
 			//System.out.println(sSaveNames.get(iAns-1));
-			_scsdm.loadGameByName(sSaveNames.get(iAns-1), SCG);
+			_savedm.loadGameByName(sSaveNames.get(iAns-1), SCG, _scsdm);
 			
 		}
 		

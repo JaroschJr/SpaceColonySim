@@ -276,10 +276,10 @@ public class SCSDataModule{
 	
 	
 	
-	public void loadGameByName(String sName, SpaceColonyGame scg){
+	public void loadGameByName(String sName, SpaceColonyGame scg, SCSDataModule masterDB){
 		try{
-			InventoryFactory invfact = new InventoryFactory(this);
-			StructureFactory structFact = new StructureFactory(this);
+			InventoryFactory invfact = new InventoryFactory(masterDB);
+			StructureFactory structFact = new StructureFactory(masterDB);
 			ResultSet rTargSave = getResultSet("SELECT * FROM SCS_SAVE_GAMES WHERE SAVE_NAME IS '"+sName+"'");
 			String sTargGuid = rTargSave.getString("GUID");
 			scg.bIsOngoing = true;

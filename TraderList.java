@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 public class TraderList extends Inventory{
 	int MaxSpace = 100;
+	int recruits;
+	int recruitPrice;
 	
 	@Override
 	public String toString(){
