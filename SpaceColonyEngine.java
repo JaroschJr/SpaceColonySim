@@ -742,7 +742,7 @@ public class SpaceColonyEngine implements ISCSError{
 				}else{
 					SCG.pop.gainPop(hires);
 					tList.recruits-=hires;
-					SCG.iInv.getGoodByName.("Money").iQuant-=hires*tList.recruitPrice;
+					SCG.iInv.getGoodByName("Money").iQuant-=hires*tList.recruitPrice;
 				}
 				
 			}else if(bResponse != 0){
