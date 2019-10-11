@@ -121,8 +121,8 @@ public class SpaceColonyEngine implements ISCSError{
 		StructureList sList = new StructureList(); 
 		sList.add(StructList.getStructureByName("oreMine").clone());
 		sList.add(StructList.getStructureByName("farm").clone());
-		sList.add(StructList.getStructureByName("farm").clone());
-		sList.add(StructList.getStructureByName("goodFactory").clone());
+		//sList.add(StructList.getStructureByName("farm").clone());
+		//sList.add(StructList.getStructureByName("goodFactory").clone());
 		//System.out.println("Starting Structure Finished Test");
 		
 		SCG.structures = sList;
@@ -247,18 +247,26 @@ public class SpaceColonyEngine implements ISCSError{
 			viewAndSetProduction();
 			_ioman.lineOut("");
 			
+			
+			if(traderAriveOrNot()){
 			_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
 			SINN = _ioman.stringIn("");
-			merchantThings();
+				merchantThings();
+				SCG.iMerchantCountDown = rand.nextInt(5);
+			}else{
+				SCG.iMerchantCountDown--;
+			}
+			
 			_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
 			SINN = _ioman.stringIn("");
-			saveCurrentGame();
+			
 			produce();
 			currentEvent.performEvent(SCG, _ioman, _scsdm);
 			validateStructures();
 			popEat();
 			
 			SCG.iTurnCount++;
+			saveCurrentGame();
 		}
 	}
 	
@@ -271,11 +279,13 @@ public class SpaceColonyEngine implements ISCSError{
 	}
 
 	private boolean traderAriveOrNot(){
-		if (SCG.iMerchantCountDown == 0){
-			return true;
+		boolean bArive;
+		if (SCG.iMerchantCountDown <= 0){
+			bArive = true;
 		}else{
-			return false;
+			bArive = false;
 		}
+		return bArive;
 	}
 	
 	public void validateStructures(){
@@ -496,8 +506,8 @@ public class SpaceColonyEngine implements ISCSError{
 				//int iNewWorkers =_ioman.intIn(_scsdm.getDisplayText("HOW_MANY_WORKERS")); 
 				if(iNewWorkers>0){
 					if(bWorkingBuilding.bComplete == false){
-						System.out.println(" " +bWorkingBuilding.bComplete);
-						System.out.println("Reaches B");
+						//System.out.println(" " +bWorkingBuilding.bComplete);
+						//System.out.println("Reaches B");
 						bWorkingBuilding.setWork(SCG.pop, iNewWorkers);
 						if(bWorkingBuilding.iWorkers>0){
 							bWorkingBuilding.bBuildingSelf = true;
@@ -632,7 +642,7 @@ public class SpaceColonyEngine implements ISCSError{
 				gTemp.iQuant = (gTemp.MERCHANT_MIN_CARRY + rand.nextInt(gTemp.MERCHANT_MAX_CARRY-gTemp.MERCHANT_MIN_CARRY));
 				//gTemp.iPrice = gTemp.BASE_PRICE+rand.nextInt(2*gTemp.BASE_PRICE);
 				//tOut.getGoodByName(gTemp.sName).iPrice = gTemp.iPrice;
-				if(((gTemp.iQuant+tOut.getTotalQuant())>=tOut.MaxSpace)){
+				if(((gTemp.iQuant+tOut.getTotalQuant())>=(tOut.MaxSpace-10))){
 					break;
 				}else{
 					tOut.getGoodByName(gTemp.sName).iQuant = gTemp.iQuant;

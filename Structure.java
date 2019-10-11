@@ -45,7 +45,7 @@ public class Structure{
 	}
 	
 	public void setWork(Population pop, int workers){
-		System.out.println("It gets to 1");
+		//System.out.println("It gets to 1");
 		for(int i = pWorkers.size() -1; i>=0; i--){
 			pWorkers.get(i).assigned = false;
 			pWorkers.remove(i);
