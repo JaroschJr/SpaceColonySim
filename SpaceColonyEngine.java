@@ -642,7 +642,7 @@ public class SpaceColonyEngine implements ISCSError{
 				gTemp.iQuant = (gTemp.MERCHANT_MIN_CARRY + rand.nextInt(gTemp.MERCHANT_MAX_CARRY-gTemp.MERCHANT_MIN_CARRY));
 				//gTemp.iPrice = gTemp.BASE_PRICE+rand.nextInt(2*gTemp.BASE_PRICE);
 				//tOut.getGoodByName(gTemp.sName).iPrice = gTemp.iPrice;
-				if(((gTemp.iQuant+tOut.getTotalQuant())>=(tOut.MaxSpace-10))){
+				if(((gTemp.iQuant+tOut.getTotalQuant())>=(tOut.MaxSpace-15))){
 					break;
 				}else{
 					tOut.getGoodByName(gTemp.sName).iQuant = gTemp.iQuant;
