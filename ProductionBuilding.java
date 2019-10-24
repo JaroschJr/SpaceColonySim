@@ -35,7 +35,7 @@ public class ProductionBuilding extends Structure{
 	public void setWork(Population pop, int workers, Recipe r){
 		setWork(pop, workers);
 		if(iWorkers != 0){
-			System.out.println("New Recipe " +r.NAME);
+			//System.out.println("New Recipe " +r.NAME);
 			currentRecipe = r;
 		}
 		
@@ -59,7 +59,7 @@ public class ProductionBuilding extends Structure{
 			if(cEvent instanceof ProductionMultiplyingEvent){
 				ProductionMultiplyingEvent tEvent = (ProductionMultiplyingEvent) cEvent;
 				
-				
+				//System.out.println(currentRecipe.toString());
 				if(currentRecipe.TEXT_CODE.equals( tEvent.sTargetProduction)){
 					//System.out.println("Before the event bPrint was " + tEvent.bPrint);
 					tEvent.bPrint = true;
@@ -76,6 +76,9 @@ public class ProductionBuilding extends Structure{
 				
 				
 			}else{
+				//System.out.println("Building Self "+bBuildingSelf);
+				//System.out.println(currentRecipe.toString());
+				//System.out.println(currentRecipe.MAN_HOURS);
 				times = (int) (iWorkers/currentRecipe.MAN_HOURS);
 			}
 			for(int i =0; i < times; i++ ){

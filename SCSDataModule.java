@@ -306,10 +306,16 @@ public class SCSDataModule{
 				String sname = rStructures.getString("FACTORY");
 				sIn = masterStructList.getStructureByName(sname).clone();
 				sIn.iCompleteness = rStructures.getInt("COMPLETENESS");
+				//System.out.println("Loading" + sIn.NAME);
+				//System.out.println("Completeness "+sIn.iCompleteness+"<"+sIn.HOURS_TO_BUILD+" Needed");
 				if(sIn.iCompleteness<sIn.HOURS_TO_BUILD){
 					sIn.bComplete = false;
-				}
-				if((sIn instanceof ProductionBuilding)&& (rStructures.getInt("WORKERS")!=0)){
+					//System.out.println("false = " +sIn.bComplete);
+					sIn.bBuildingSelf = true;
+					//System.out.println("true = " +sIn.bBuildingSelf);
+					sIn.setWork(scg.pop, rStructures.getInt("WORKERS"));
+					scg.structures.add(sIn);
+				}else if((sIn instanceof ProductionBuilding)&& (rStructures.getInt("WORKERS")!=0)){
 					ProductionBuilding bTempo = (ProductionBuilding) sIn;
 					bTempo.setWork(scg.pop, rStructures.getInt("WORKERS"), rList.getRecipeByName(rStructures.getString("RECIPE")));
 					scg.structures.add(bTempo);
