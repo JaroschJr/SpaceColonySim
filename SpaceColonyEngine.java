@@ -113,6 +113,7 @@ public class SpaceColonyEngine implements ISCSError{
 		
 		InvFact = new InventoryFactory(_scsdm);
 		SCG.iInv = InvFact.getList();
+		SCG.iInv.setGoodQuantByName("Water", 20);
 		listOfRecipes = InvFact.getRecipeList();
 		
 		StructFact = new StructureFactory(_scsdm);
@@ -168,7 +169,7 @@ public class SpaceColonyEngine implements ISCSError{
 				case "N":
 					done = true;
 					SCG.gameReset();
-					SCG.iMerchantCountDown = rand.nextInt(5);
+					SCG.iMerchantCountDown = 2+rand.nextInt(3);
 					break;
 
 				case "L":
@@ -252,7 +253,7 @@ public class SpaceColonyEngine implements ISCSError{
 			_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
 			SINN = _ioman.stringIn("");
 				merchantThings();
-				SCG.iMerchantCountDown = rand.nextInt(5);
+				SCG.iMerchantCountDown = 3+rand.nextInt(6);
 			}else{
 				SCG.iMerchantCountDown--;
 			}
@@ -271,11 +272,18 @@ public class SpaceColonyEngine implements ISCSError{
 	}
 	
 	private void popEat(){
-		SCG.iInv.getGoodByName("Food").iQuant-=(SCG.pop.size()/5);
+		SCG.iInv.getGoodByName("Food").iQuant-=(SCG.pop.size()/6);
 			if(SCG.iInv.getGoodByName("Food").iQuant<0){
 				
 				SCG.iInv.getGoodByName("Food").iQuant = 0;
 			}
+			
+			SCG.iInv.getGoodByName("Water").iQuant-=(SCG.pop.size()/6);
+			if(SCG.iInv.getGoodByName("Water").iQuant<0){
+				
+				SCG.iInv.getGoodByName("Water").iQuant = 0;
+			}
+			
 	}
 
 	private boolean traderAriveOrNot(){
@@ -642,7 +650,7 @@ public class SpaceColonyEngine implements ISCSError{
 				gTemp.iQuant = (gTemp.MERCHANT_MIN_CARRY + rand.nextInt(gTemp.MERCHANT_MAX_CARRY-gTemp.MERCHANT_MIN_CARRY));
 				//gTemp.iPrice = gTemp.BASE_PRICE+rand.nextInt(2*gTemp.BASE_PRICE);
 				//tOut.getGoodByName(gTemp.sName).iPrice = gTemp.iPrice;
-				if(((gTemp.iQuant+tOut.getTotalQuant())>=(tOut.MaxSpace-15))){
+				if(((gTemp.iQuant+tOut.getTotalQuant())>=(tOut.MaxSpace-30))){
 					break;
 				}else{
 					tOut.getGoodByName(gTemp.sName).iQuant = gTemp.iQuant;
