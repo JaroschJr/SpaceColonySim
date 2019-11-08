@@ -46,6 +46,7 @@ public class StatModifierEvent extends RandomEvent{
 	@Override
 	public boolean performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){
 		boolean bOut = false;
+		boolean bNeg = false;
 		if(super.performEvent(scg, ioman, dbm)){
 			bOut = true;
 			//the creation of the random number.
@@ -60,8 +61,12 @@ public class StatModifierEvent extends RandomEvent{
 				
 			}
 			//made it increase or decrease.
+			//System.out.println(eThisSign.toString());
+			//System.out.println(SCSEnum.eSign.NEGATIVE.toString());
 			if(eThisSign == SCSEnum.eSign.NEGATIVE){
+				//System.out.println("IT COMES HERE");
 				iOutcome = iOutcome * -1;
+				bNeg = true;
 			}
 			//multiply or add?
 			
@@ -104,7 +109,7 @@ public class StatModifierEvent extends RandomEvent{
 			sToPrint = dbm.getDisplayText(sFluffAccess);
 			
 				
-			if(doesItPrint(StatToMod, iOutcome)){
+			if(doesItPrint(StatToMod, iOutcome, iHolder, bNeg)){
 				
 				if(iOutcome<0){
 				iOutcome *= -1;
@@ -138,11 +143,16 @@ public class StatModifierEvent extends RandomEvent{
 		return bValid;
 	}
 	
-	public boolean doesItPrint(String sStat, int iMod){
+	public boolean doesItPrint(String sStat, int iMod, int iHold, boolean bReduce){
 		boolean bOut = true;
+		//System.out.println("DOES IT PRINT");
+		//System.out.println("iHold "+iHold);
+		//System.out.println("Reduce " + bReduce);
 		if(sStat.equals("TurnCount")){
 			bOut = false;
 		}else if(iMod == 0){
+			bOut = false;
+		}else if(iHold==0&&bReduce){
 			bOut = false;
 		}
 		return bOut;

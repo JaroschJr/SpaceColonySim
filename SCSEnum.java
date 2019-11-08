@@ -26,7 +26,7 @@ public class SCSEnum{
 	}
 	
 	public enum eBenefit{
-		DockRig
+		DockRig, Morale
 	}
 	
 	

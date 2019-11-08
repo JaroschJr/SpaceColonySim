@@ -334,7 +334,23 @@ public class SCSDataModule{
 			errorHandler.handleException(sqle);
 			System.out.println(sqle.getMessage());
 		}
+		
 			
+	}
+	
+	public void deleteGameByName(String sName){
+		try{
+			ResultSet rTargSave = getResultSet("SELECT GUID FROM SCS_SAVE_GAMES WHERE SAVE_NAME IS '"+sName+"'");
+			String sTargGuid = rTargSave.getString("GUID");
+			Statement sStatement = _conn.createStatement();
+			
+			sStatement.execute("DELETE FROM SCS_SAVE_GAMES WHERE GUID IS '"+sTargGuid+"'");
+			sStatement.execute("DELETE FROM SCS_SAVE_ITEMS WHERE SAVE_GUID IS '"+sTargGuid+"'");
+			sStatement.execute("DELETE FROM SCS_SAVE_STRUCTURES WHERE SAVE_GUID IS '"+sTargGuid+"'");
+		}catch(SQLException sqle){
+			errorHandler.handleException(sqle);
+			System.out.println(sqle.getMessage());
+		}
 	}
 	
 }

@@ -181,6 +181,15 @@ public class SpaceColonyEngine implements ISCSError{
 					}
 					//System.out.println(_scsdm.getDisplayText("INCOMPLETE"));
 					break;
+				case "D":
+					if(_savedm.getSaveNames().size()>0){
+						delSave();
+					}else{
+						_ioman.lineOut(_scsdm.getDisplayText("NO_SAVE"));
+					}
+				
+					break;
+					
 				default:
 					System.out.println("Invalid Input. Try Again.");
 					break;
@@ -414,11 +423,11 @@ public class SpaceColonyEngine implements ISCSError{
 		for(int i = 0; i<text.length; i++){
 			String sOut = "";
 			if(i==1){
-				_ioman.lineOut(" 0-" + getSpacer(16-" 0-".length()) + _scsdm.getDisplayText("CANCEL"));
+				_ioman.lineOut(" 0-" + getSpacer(18-" 0-".length()) + _scsdm.getDisplayText("CANCEL"));
 			}
 			for(int j = 0; j<text[i].length; j++){
 				//System.out.println("line " + i + " column " +j);
-				sOut += text[i][j]+ getSpacer(16-text[i][j].length());
+				sOut += text[i][j]+ getSpacer(18-text[i][j].length());
 			}
 			_ioman.lineOut(sOut);
 		}
@@ -955,6 +964,36 @@ public class SpaceColonyEngine implements ISCSError{
 		
 		//_scsdm.saveGame(SCG, "DEFAULT");
 		//System.out.println("Autosaving...");
+	}
+	
+	public void delSave(){
+		ArrayList<String> sSaveNames = _savedm.getSaveNames();
+		String[][] sSaves = new String[sSaveNames.size()+1][2];
+		sSaves[0][0] = " ";
+		sSaves[0][1] = _scsdm.getDisplayText("SAVE");
+		for(int i = 0; i<sSaveNames.size(); i++){
+			if(i<10){
+				sSaves[i+1][0] =  " "+(i+1)+"-";
+			}else{
+				sSaves[i+1][0] = (i+1)+"-";
+			}
+			
+			sSaves[i+1][1] = sSaveNames.get(i);
+		}
+		/*
+		if(sSaveNames.size()<10){
+			sSaves[sSaveNames.size()][0] =  " "+(sSaveNames.size()+1)+"-";
+		}else{
+			sSaves[sSaveNames.size()][0] = (sSaveNames.size()+1)+"-";
+		}
+		*/
+		//sSaves[sSaveNames.size()+1][1] = _scsdm.getDisplayText("NEW_SAVE");
+		int iAns = selectScreen(_scsdm.getDisplayText("SELECT_LOAD"), " ", sSaves);
+		if(iAns<=sSaveNames.size()){
+			//System.out.println(sSaveNames.get(iAns-1));
+			_savedm.deleteGameByName(sSaveNames.get(iAns-1));
+			
+		}
 	}
 	
 	public void loadSave(){
