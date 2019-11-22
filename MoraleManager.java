@@ -32,7 +32,7 @@ public class MoraleManager{
 			morale +=(20-scg.subMorale);
 		}
 		
-		System.out.println("Objective Morale " + morale);
+		//System.out.println("Objective Morale " + morale);
 		return morale;
 	}
 	
