@@ -222,7 +222,7 @@ public class SCSDataModule{
 			//Sample SQL:
 			//For the Save
 			//System.out.println("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT) VALUES (" + scg.sGuid +", "+sName+", " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+")");
-			sStatement.execute("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT) VALUES ('" + scg.sGuid +"', '"+sName+"', " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+")");
+			sStatement.execute("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT, MORALE) VALUES ('" + scg.sGuid +"', '"+sName+"', " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+", "+ scg.subMorale+")");
 			for(int i = 0; i<scg.structures.size(); i++){
 				//System.out.println("getting entry " + i +" of "+scg.structures.size());
 				//System.out.println(scg.structures.get(i).toString());
@@ -286,6 +286,7 @@ public class SCSDataModule{
 			scg.sGuid = sTargGuid;
 			scg.iTurnCount = rTargSave.getInt("TURN");
 			scg.iMerchantCountDown = rTargSave.getInt("MERCH_COUNT");
+			scg.subMorale = rTargSave.getInt("MORALE");
 			int iNewPop = rTargSave.getInt("POP");
 			scg.pop = new Population();
 			scg.pop.gainPop(iNewPop);

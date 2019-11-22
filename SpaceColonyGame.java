@@ -9,6 +9,9 @@ public class SpaceColonyGame{
 	public String sGuid;
 	public Inventory iInv;
 	
+	public int obMorale;
+	public int subMorale;
+	
 	public int iTurnCount = 1;
 	
 	public int iMerchantCountDown = 0;
@@ -21,6 +24,8 @@ public class SpaceColonyGame{
 		bIsOngoing = true;
 		iTurnCount = 1;
 		iMerchantCountDown = 0;
+		obMorale = 0;
+		subMorale = 50;
 
 	}
 

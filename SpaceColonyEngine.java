@@ -26,7 +26,7 @@ public class SpaceColonyEngine implements ISCSError{
 	private InventoryFactory InvFact;
 	private StructureFactory StructFact;
 	private StructureList StructList;
-	
+	private MoraleManager mManager;
 	
 	/*
 	//Begining of example random events, to check for bugs.
@@ -83,6 +83,7 @@ public class SpaceColonyEngine implements ISCSError{
 		_savedm.connect();
 
 		_ioman = new SCSConsoleIO();
+		mManager = new MoraleManager();
 
 		//check if the database connection has been
 		//established, if not then display an error
@@ -273,12 +274,15 @@ public class SpaceColonyEngine implements ISCSError{
 			produce();
 			currentEvent.performEvent(SCG, _ioman, _scsdm);
 			validateStructures();
+			SCG.obMorale = mManager.calcObjectiveMorale(SCG);
+			SCG.subMorale = mManager.calcSubjectiveMorale(SCG);
 			popEat();
 			
 			SCG.iTurnCount++;
 			saveCurrentGame();
 		}
 	}
+	
 	
 	private void popEat(){
 		SCG.iInv.getGoodByName("Food").iQuant-=(SCG.pop.size()/6);
@@ -315,6 +319,7 @@ public class SpaceColonyEngine implements ISCSError{
 		int answer = 0;
 		_ioman.lineOut(_scsdm.getDisplayText("TURN_REPORT_TURN") +getSpacer((20-_scsdm.getDisplayText("TURN_REPORT_TURN").length())- Integer.toString(SCG.iTurnCount).length()) + SCG.iTurnCount);
 		_ioman.lineOut(_scsdm.getDisplayText("TURN_REPORT_POPULATION") +getSpacer((20-_scsdm.getDisplayText("TURN_REPORT_POPULATION").length())- Integer.toString(SCG.pop.size()).length()) + SCG.pop.size());
+		_ioman.lineOut(_scsdm.getDisplayText("MORALE") +getSpacer((20-_scsdm.getDisplayText("MORALE").length())- Integer.toString(SCG.pop.size()).length()) + SCG.subMorale);
 
 		for(int i = 0; i<SCG.iInv.size(); i++){
 			String sOut = "";
