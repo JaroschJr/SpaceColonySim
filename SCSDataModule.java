@@ -119,6 +119,24 @@ public class SCSDataModule{
 
 		return _rs;
 	}
+	
+	/**
+	 * Retrieves the save version of the database.
+	 */
+	public String getSaveVersion() {
+		ResultSet rs = null;
+		String result = null;
+		try {
+			Statement st = _conn.createStatement();
+			rs = st.executeQuery("SELECT SAVE_VERSION FROM SCS_VERSIONS LIMIT 1");
+			result = rs.getString("SAVE_VERSION");
+		}//end try
+		catch(SQLException sqle) {
+			result = sqle.getMessage();
+		}//end catch sqle
+		
+		return result;
+	}
 
 	/**
 	 * Retrieves text for display purposes from

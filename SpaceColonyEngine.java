@@ -7,6 +7,9 @@
  */
 import java.util.Random;
 import java.util.ArrayList;
+import java.io.File;
+import java.nio.file.*;
+
 public class SpaceColonyEngine implements ISCSError{
 	//for Joey, compile with: Call "C:\Program Files (x86)\Java\jdk1.8.0_91\bin\javac.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim" SpaceColonyEngine.java
 	//and run with Call "C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim;C:\Joey's coding stuf\SpaceColonySim\sqlite-jdbc-3.18.0.jar" SpaceColonyEngine
@@ -14,6 +17,7 @@ public class SpaceColonyEngine implements ISCSError{
 	private static final String SQLITE = "jdbc:sqlite";
 	private static final String GAME_DATABASE = "SCSDataBase.db";
 	private static final String SAVE_DATABASE = "SCSSaves.db";
+	private static final String MASTER_SAVE_DATABASE = "SCSSavesMaster.db";
 	
 	private static String FOLDER_PATH = "";
 	private static String CONSTR = "";
@@ -32,6 +36,8 @@ public class SpaceColonyEngine implements ISCSError{
 	private StructureFactory StructFact;
 	private StructureList StructList;
 	private MoraleManager mManager;
+	
+	private static final String SCS_SAVE_GAME_VERSION = "1.1";
 	
 	/*
 	//Begining of example random events, to check for bugs.
@@ -70,6 +76,61 @@ public class SpaceColonyEngine implements ISCSError{
 	public void handleException(Exception thisException){
 
 	}
+	
+	/**
+	 * Checks if the saved game database is up-to-date
+	 * and asks if the user wants to automatically upgrade
+	 * at the cost of losing all saved games.
+	 */
+	private void checkForUpgrade() {
+		//check the save database version to see if it
+		//is compatible with the game database
+		String saveVersion = _savedm.getSaveVersion();
+		if(!saveVersion.equals(SCS_SAVE_GAME_VERSION)) {
+			System.out.println("Invalid save version! Current version should be " + SCS_SAVE_GAME_VERSION);
+			System.out.println("Version found: " + saveVersion);
+			System.out.println();
+			System.out.println("The save database can be upgraded automatically.");
+			System.out.println("Please note: THIS WILL DELETE ALL EXISTING SAVED GAMES!");
+			System.out.println("Or, you may close the game and upgrade the save game");
+			System.out.println("database manually and then restart");
+			System.out.println();
+			System.out.println("Please type the word 'UPDATE' to perform the update.");
+			String answer = System.console().readLine();
+			
+			if(answer.equalsIgnoreCase("UPDATE")) {
+				System.out.println("Updating saved games database");
+				
+				//shut down the current save database
+				_savedm.disConnect();
+				_savedm = null;
+			
+				try {
+					//delete the SCSSaves.db file
+					File dbPath = new File(FOLDER_PATH + "\\" + SAVE_DATABASE);
+					File masterDbPath = new File(FOLDER_PATH + "\\" + MASTER_SAVE_DATABASE);
+					Files.deleteIfExists(dbPath.toPath());
+					
+					//copy over the blank master database SCSSavesMaster.db
+					Files.copy(masterDbPath.toPath(), dbPath.toPath());
+				}//end try
+				catch(Exception e) {
+					System.out.println("Could not copy the master save database, please upgrade manually.");
+					System.exit(3);
+				}//end catch e
+				
+				//recreate the save database
+				_savedm = new SCSDataModule();
+				_savedm.errorHandler = this;
+				_savedm.setConnectionString(SAVECONSTR);
+				_savedm.connect();
+			}//end if
+			else {
+				System.out.println("Exiting without update");
+				System.exit(3);
+			}//end else
+		}//end if
+	}
 
 	/**
 	 * Initializes the state of the game engine.
@@ -87,9 +148,12 @@ public class SpaceColonyEngine implements ISCSError{
 		_savedm.errorHandler = this;
 		_savedm.setConnectionString(SAVECONSTR);
 		_savedm.connect();
+		
+		checkForUpgrade();
 
 		_ioman = new SCSConsoleIO();
 		mManager = new MoraleManager();
+		
 
 		//check if the database connection has been
 		//established, if not then display an error
