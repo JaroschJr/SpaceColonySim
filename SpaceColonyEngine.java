@@ -11,6 +11,11 @@ public class SpaceColonyEngine implements ISCSError{
 	//for Joey, compile with: Call "C:\Program Files (x86)\Java\jdk1.8.0_91\bin\javac.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim" SpaceColonyEngine.java
 	//and run with Call "C:\Program Files (x86)\Java\jre1.8.0_91\bin\java.exe" -cp "C:\Joey's coding stuf\SpaceColonySim\SpaceColonySim;C:\Joey's coding stuf\SpaceColonySim\sqlite-jdbc-3.18.0.jar" SpaceColonyEngine
 	//For joey CONSTR woudl be jdbc:sqlite:C:\\Joey's coding stuf\\SpaceColonySim\\SpaceColonySim\\SCSDataBase.db
+	private static final String SQLITE = "jdbc:sqlite";
+	private static final String GAME_DATABASE = "SCSDataBase.db";
+	private static final String SAVE_DATABASE = "SCSSaves.db";
+	
+	private static String FOLDER_PATH = "";
 	private static String CONSTR = "";
 	private static String SAVECONSTR = "";
 	private SCSDataModule _scsdm;
@@ -45,8 +50,9 @@ public class SpaceColonyEngine implements ISCSError{
 	 *             line argument.
 	 */
 	public static void main(String[] args){
-		CONSTR = args[0];
-		SAVECONSTR = args[1];
+		FOLDER_PATH = args[0];
+		CONSTR = SQLITE + ":" + FOLDER_PATH + "\\" + GAME_DATABASE;
+		SAVECONSTR = SQLITE + ":" + FOLDER_PATH + "\\" + SAVE_DATABASE;
 		//Random rand = new Random();
 		SpaceColonyEngine engine = new SpaceColonyEngine();
 		engine.initialize();
