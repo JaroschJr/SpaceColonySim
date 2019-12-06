@@ -390,7 +390,7 @@ public class SpaceColonyEngine implements ISCSError{
 		_ioman.lineOut(_scsdm.getDisplayText("TURN_REPORT_TURN") +getSpacer((20-_scsdm.getDisplayText("TURN_REPORT_TURN").length())- Integer.toString(SCG.iTurnCount).length()) + SCG.iTurnCount);
 		_ioman.lineOut(_scsdm.getDisplayText("TURN_REPORT_POPULATION") +getSpacer((20-_scsdm.getDisplayText("TURN_REPORT_POPULATION").length())- Integer.toString(SCG.pop.size()).length()) + SCG.pop.size());
 		_ioman.lineOut(_scsdm.getDisplayText("MORALE") +getSpacer((20-_scsdm.getDisplayText("MORALE").length())- Integer.toString(SCG.pop.size()).length()) + SCG.subMorale);
-
+		_ioman.lineOut(mManager.moraleReport(SCG,_scsdm));
 		for(int i = 0; i<SCG.iInv.size(); i++){
 			String sOut = "";
 			Good gPrint = SCG.iInv.get(i);

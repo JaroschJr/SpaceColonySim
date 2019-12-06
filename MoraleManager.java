@@ -1,4 +1,5 @@
 //Morale Mannager
+import java.util.Random;
 public class MoraleManager{
 
 	public int calcObjectiveMorale(SpaceColonyGame scg){
@@ -62,5 +63,40 @@ public class MoraleManager{
 			iOut -=4;
 		}
 		return iOut;
+	}
+	
+	public String moraleReport(SpaceColonyGame scg, SCSDataModule _scsdm){
+		String sOut = new String();
+		//int morale = 0;
+		if(scg.iInv.getGoodByName("Food").iQuant>scg.pop.size()){
+			
+			sOut += _scsdm.getDisplayText("MORALE_REPORT_FOOD_STOCKPILE_GOOD")+ "\n";
+		}else{
+			sOut += _scsdm.getDisplayText("MORALE_REPORT_FOOD_STOCKPILE_BAD")+ "\n";
+		}
+		
+		if(scg.iInv.getGoodByName("Water").iQuant>scg.pop.size()){
+			sOut += _scsdm.getDisplayText("MORALE_REPORT_WATER_STOCKPILE_GOOD") + "\n";
+		}else{
+			sOut += _scsdm.getDisplayText("MORALE_REPORT_WATER_STOCKPILE_BAD") + "\n";
+		}
+		
+		for(int i = 0; i<scg.structures.size(); i++){
+			if(scg.structures.get(i).NAME.equals("entertainment")){
+				//morale +=2*scg.structures.get(i).iWorkers;
+			}
+		}
+		if(scg.pop.size()>2*scg.pop.howManyAssigned()){
+			sOut += _scsdm.getDisplayText("MORALE_REPORT_IDLE_WORKER_PENALTY") + "\n";
+		}
+		
+		if(scg.subMorale >=80){
+			sOut += _scsdm.getDisplayText("MORALE_REPORT_HIGH_MORALE_PENALTY") + "\n";
+		}
+		
+		if(scg.subMorale <=20){
+			sOut += _scsdm.getDisplayText("MORALE_REPORT_LOW_MORALE_BONUS") + "\n";
+		}
+		return sOut;
 	}
 }
