@@ -56,6 +56,8 @@ public class SpaceColonyEngine implements ISCSError{
 	 *             line argument.
 	 */
 	public static void main(String[] args){
+		
+		
 		FOLDER_PATH = args[0];
 		CONSTR = SQLITE + ":" + FOLDER_PATH + "\\" + GAME_DATABASE;
 		SAVECONSTR = SQLITE + ":" + FOLDER_PATH + "\\" + SAVE_DATABASE;
@@ -181,6 +183,8 @@ public class SpaceColonyEngine implements ISCSError{
 	 */
 	private void launchGame(){
 		SCG = new SpaceColonyGame();
+		//delete this later
+		
 		
 		InvFact = new InventoryFactory(_scsdm);
 		SCG.iInv = InvFact.getList();

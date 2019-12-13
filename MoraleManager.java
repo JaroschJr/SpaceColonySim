@@ -4,16 +4,29 @@ public class MoraleManager{
 
 	public int calcObjectiveMorale(SpaceColonyGame scg){
 		int morale = 0;
-		if(scg.iInv.getGoodByName("Food").iQuant>scg.pop.size()){
+		if(scg.iInv.getGoodByName("Food").iQuant>scg.pop.size()*2){
 			morale += 10;
-		}else{
+		}else if(scg.iInv.getGoodByName("Food").iQuant<scg.pop.size()){
 			morale -=10;
+		}else{
+			
 		}
 		
-		if(scg.iInv.getGoodByName("Water").iQuant>scg.pop.size()){
+		if(scg.iInv.getGoodByName("Food").iQuant<=0){
+			morale -=scg.pop.size();
+		}
+		
+		if(scg.iInv.getGoodByName("Water").iQuant>scg.pop.size()*2){
 			morale += 15;
-		}else{
+		}else if(scg.iInv.getGoodByName("Water").iQuant<scg.pop.size()){
 			morale -=15;
+		}else{
+			
+		}
+		
+		if(scg.iInv.getGoodByName("Water").iQuant<=0){
+			morale -=50;
+			morale -= scg.pop.size()*3;
 		}
 		
 		for(int i = 0; i<scg.structures.size(); i++){
@@ -38,29 +51,30 @@ public class MoraleManager{
 	}
 	
 	public int calcSubjectiveMorale(SpaceColonyGame scg){
+		Random rand = new Random();
 		int iOut = scg.subMorale;
 		if(scg.obMorale>=50){
-			iOut +=5;
+			iOut +=5+rand.nextInt(3)-1;
 		}else if(scg.obMorale>=40){
-			iOut +=4;
+			iOut +=4+rand.nextInt(3)-1;
 		}else if(scg.obMorale>=30){
-			iOut +=3;
+			iOut +=3+rand.nextInt(3)-1;
 		}else if(scg.obMorale>=20){
-			iOut +=2;
+			iOut +=2+rand.nextInt(3)-1;
 		}else if(scg.obMorale>=10){
-			iOut +=1;
+			iOut +=1+rand.nextInt(3)-1;
 		}else if(scg.obMorale>=-10){
-			iOut +=0;
+			iOut +=0+rand.nextInt(3)-1;
 		}else if(scg.obMorale>=-20){
-			iOut -=1;
+			iOut -=1+rand.nextInt(3)-1;
 		}else if(scg.obMorale>=-30){
-			iOut -=2;
+			iOut -=2+rand.nextInt(3)-1;
 		}else if(scg.obMorale>=-40){
-			iOut -=3;
+			iOut -=3+rand.nextInt(3)-1;
 		}else if(scg.obMorale>=-50){
-			iOut -=4;
+			iOut -=4+rand.nextInt(3)-1;
 		}else{
-			iOut -=4;
+			iOut -=5+rand.nextInt(3)-1;
 		}
 		return iOut;
 	}
@@ -68,16 +82,16 @@ public class MoraleManager{
 	public String moraleReport(SpaceColonyGame scg, SCSDataModule _scsdm){
 		String sOut = new String();
 		//int morale = 0;
-		if(scg.iInv.getGoodByName("Food").iQuant>scg.pop.size()){
+		if(scg.iInv.getGoodByName("Food").iQuant>scg.pop.size()*2){
 			
 			sOut += _scsdm.getDisplayText("MORALE_REPORT_FOOD_STOCKPILE_GOOD")+ "\n";
-		}else{
+		}else if(scg.iInv.getGoodByName("Food").iQuant<scg.pop.size()){
 			sOut += _scsdm.getDisplayText("MORALE_REPORT_FOOD_STOCKPILE_BAD")+ "\n";
 		}
 		
-		if(scg.iInv.getGoodByName("Water").iQuant>scg.pop.size()){
+		if(scg.iInv.getGoodByName("Water").iQuant>scg.pop.size()*2){
 			sOut += _scsdm.getDisplayText("MORALE_REPORT_WATER_STOCKPILE_GOOD") + "\n";
-		}else{
+		}else if(scg.iInv.getGoodByName("Water").iQuant<scg.pop.size()){
 			sOut += _scsdm.getDisplayText("MORALE_REPORT_WATER_STOCKPILE_BAD") + "\n";
 		}
 		
