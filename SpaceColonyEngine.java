@@ -75,8 +75,15 @@ public class SpaceColonyEngine implements ISCSError{
 	 * @param thisException The exception which
 	 *                      has occurred.
 	 */
-	public void handleException(Exception thisException){
-
+	public void handleException(Exception thisException, String sExtraInfo, boolean bFatal){
+		System.out.println(thisException.getMessage());
+		System.out.println(sExtraInfo);
+		
+		if(bFatal){
+			System.exit(0);
+		}else{
+			
+		}
 	}
 	
 	/**
@@ -1101,7 +1108,7 @@ public class SpaceColonyEngine implements ISCSError{
 		//sSaves[sSaveNames.size()+1][1] = _scsdm.getDisplayText("NEW_SAVE");
 		int iAns = selectScreen(_scsdm.getDisplayText("SELECT_LOAD"), " ", sSaves);
 		if(iAns<=sSaveNames.size()){
-			//System.out.println(sSaveNames.get(iAns-1));
+			System.out.println("Loading");
 			_savedm.loadGameByName(sSaveNames.get(iAns-1), SCG, _scsdm);
 			
 		}

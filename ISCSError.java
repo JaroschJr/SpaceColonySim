@@ -4,5 +4,5 @@
  * and exceptions which occur.
  */
 public interface ISCSError{
-	public void handleException(Exception thisException);
+	public void handleException(Exception thisException, String sExtraInfo, boolean bFatal);
 }

@@ -79,12 +79,22 @@ public class Structure{
 				iCompleteness = HOURS_TO_BUILD;
 				bComplete = true;
 				bBuildingSelf = false;
+				for(int i = pWorkers.size() -1; i>=0; i--){
+					pWorkers.get(i).assigned = false;
+					pWorkers.remove(i);
+				}
+				iWorkers = 0;
 			}
 		}
 	}
 	
 	public void doProduction(SpaceColonyGame scg, RandomEvent cEvent){
-		
+		if(bBuildingSelf){
+			buildSelf();
+			if(bComplete == true){
+				setWork(scg.pop, 0);
+			}
+		}
 	}
 	
 	public void assignValidate(){

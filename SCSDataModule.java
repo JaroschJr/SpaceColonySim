@@ -38,7 +38,7 @@ public class SCSDataModule{
 		  _conn = null;
 		}
 	}catch(SQLException ExcepVar){
-		errorHandler.handleException( ExcepVar );
+		errorHandler.handleException( ExcepVar, "", false );
 		}
 		_connectionStr = value;
 	}
@@ -70,7 +70,7 @@ public class SCSDataModule{
 		}//end try
 		catch(SQLException sqle){
 			_conn = null;
-			errorHandler.handleException( sqle);
+			errorHandler.handleException( sqle, _connectionStr, false);
 
 		}//end catch sqle
 
@@ -87,7 +87,7 @@ public class SCSDataModule{
 			_conn.close();
 			}
 		}catch(SQLException eException){
-			errorHandler.handleException( eException );
+			errorHandler.handleException( eException, "", false  );
 		}
 	}
 	
@@ -114,7 +114,7 @@ public class SCSDataModule{
 			_rs = _stat.executeQuery(sql);
 		}//end try
 		catch(SQLException sqle){
-			errorHandler.handleException(sqle);
+			errorHandler.handleException(sqle, "", false );
 		}//end catch sqle
 
 		return _rs;
@@ -155,7 +155,7 @@ public class SCSDataModule{
 			ResultSet _FlufText = sStatement.executeQuery(SQLQuery);
 			sProxy = _FlufText.getString("DISPLAY_TEXT");
 		}catch(SQLException EXCEPTIONVARIABLE){
-			errorHandler.handleException( EXCEPTIONVARIABLE );
+			errorHandler.handleException( EXCEPTIONVARIABLE, "", false  );
 		}
 		// finish this, trychatch stuf, the like, ect.
 		return sProxy;
@@ -193,7 +193,7 @@ public class SCSDataModule{
 			}//end while
 		}//end try
 		catch(SQLException sqle){
-			errorHandler.handleException(sqle);
+			errorHandler.handleException(sqle, "", false );
 		}//end catch)
 
 		return _langs;
@@ -207,7 +207,7 @@ public class SCSDataModule{
 	}
 	
 	public void saveGame(SpaceColonyGame scg, String sName){
-		
+		String lastSQLString=" ";
 		try{
 			//System.out.println("Gets to 1");
 			boolean bNew = true;
@@ -222,6 +222,7 @@ public class SCSDataModule{
 				//Eliminate existing save.
 			//System.out.println("SELECT GUID FROM SCS_SAVE_GAMES WHERE SAVE_NAME IS '"+sName+"'");
 			ResultSet rOtherGuid = getResultSet("SELECT GUID FROM SCS_SAVE_GAMES WHERE SAVE_NAME IS '"+sName+"'");
+			
 			//System.out.println("Gets to 3");
 			while(rOtherGuid.next()){
 				
@@ -240,37 +241,45 @@ public class SCSDataModule{
 			//Sample SQL:
 			//For the Save
 			//System.out.println("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT) VALUES (" + scg.sGuid +", "+sName+", " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+")");
-			sStatement.execute("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT, MORALE) VALUES ('" + scg.sGuid +"', '"+sName+"', " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+", "+ scg.subMorale+")");
+			String sGameSaveTemplate = "INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT, MORALE) VALUES ( '%1$s', '%2$s', %3$s , %4$s , %5$s , %6$s ) ";
+			String sSQLThing = String.format(sGameSaveTemplate, scg.sGuid, sName, scg.iTurnCount, scg.pop.size(), scg.iMerchantCountDown, scg.subMorale);
+			//sStatement.execute("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT, MORALE) VALUES ('" + scg.sGuid +"', '"+sName+"', " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+", "+ scg.subMorale+")");
+			sStatement.execute(sSQLThing);
 			for(int i = 0; i<scg.structures.size(); i++){
 				//System.out.println("getting entry " + i +" of "+scg.structures.size());
 				//System.out.println(scg.structures.get(i).toString());
-				
+				String sSQLStructSave = "INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE, COMPLETENESS) VALUES( '%1$s' , '%2$s', '%3$s' , %4$s , %5$s , %6$s )";
 				if(scg.structures.get(i) instanceof ProductionBuilding){
 					ProductionBuilding temp = (ProductionBuilding) scg.structures.get(i);
 					if(temp.currentRecipe!=null){
-						
-						sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE, COMPLETENESS) VALUES('"+getGuid()+"', '"+scg.sGuid+"', '" + temp.NAME+"', "+temp.iWorkers+", '"+ temp.currentRecipe.NAME+"', '"+ temp.iCompleteness+ "')");
+						String sEntry = String.format(sSQLStructSave,getGuid(),scg.sGuid, temp.NAME, temp.iWorkers, "'"+ temp.currentRecipe.NAME+"'",temp.iCompleteness );
+						//sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE, COMPLETENESS) VALUES('"+getGuid()+"', '"+scg.sGuid+"', '" + temp.NAME+"', "+temp.iWorkers+", '"+ temp.currentRecipe.NAME+"', '"+ temp.iCompleteness+ "')");
+						lastSQLString = sEntry;
+						sStatement.execute(sEntry);
 					}else{
-						
-						sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE, COMPLETENESS) VALUES('"+getGuid()+"', '"+scg.sGuid+"', '" + temp.NAME+"', "+temp.iWorkers+", '-'"+", '"+ temp.iCompleteness+ "')");
-
+						String sEntry = String.format(sSQLStructSave,getGuid(),scg.sGuid, temp.NAME, temp.iWorkers, "null" ,temp.iCompleteness );
+						lastSQLString = sEntry;
+						sStatement.execute(sEntry);
+//INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, RECIPE, COMPLETENESS) VALUES( 'd4b2358e-b134-43f9-9de4-0ff0f4cac1f6' , '9e0be399-fa8d-4e80-8792-7ab734e39034', 'oreMine' , 5 , 'Ore' , 10 )
 					}
 				}else{
-					sStatement.execute("INSERT INTO SCS_SAVE_STRUCTURES(GUID, SAVE_GUID, FACTORY, WORKERS, COMPLETENESS) VALUES('"+getGuid()+"', '"+scg.sGuid+"', " + scg.structures.get(i).NAME+"', "+scg.structures.get(i).iWorkers+"', '"+ scg.structures.get(i).iCompleteness+ "')");
+					String sEntry = String.format(sSQLStructSave,getGuid(),scg.sGuid, scg.structures.get(i).NAME, scg.structures.get(i).iWorkers, "null" ,scg.structures.get(i).iCompleteness );
+					lastSQLString = sEntry;
+					sStatement.execute(sEntry);
 				}
 			}
 			
 			
 			for(int i = 0; i<scg.iInv.size(); i++){
 				//System.out.println("INSERT INTO SCS_SAVE_ITEMS(GUID, SAVE_GUID, QUANTITY, ITEM) VALUES('"+getGuid()+"', '"+scg.sGuid+"',"+scg.iInv.get(i).iQuant+",'"+scg.iInv.get(i).sName+"')");
+				String sItemIn = "INSERT INTO SCS_SAVE_ITEMS(GUID, SAVE_GUID, QUANTITY, ITEM) VALUES('%1$s', '%2$s',%3$s,'%4$s')";
 				sStatement.execute("INSERT INTO SCS_SAVE_ITEMS(GUID, SAVE_GUID, QUANTITY, ITEM) VALUES('"+getGuid()+"', '"+scg.sGuid+"',"+scg.iInv.get(i).iQuant+",'"+scg.iInv.get(i).sName+"')");
 			}
 			
 			
 			
 		}catch(SQLException sqle){
-			errorHandler.handleException(sqle);
-			System.out.println(sqle.getMessage());
+			errorHandler.handleException(sqle, lastSQLString, true );
 		}
 		
 	}
@@ -285,8 +294,8 @@ public class SCSDataModule{
 				outArray.add(rSet.getString("SAVE_NAME"));
 			}
 		}catch(SQLException sqle){
-			errorHandler.handleException(sqle);
-			System.out.println(sqle.getMessage());
+			errorHandler.handleException(sqle, "", false );
+			//System.out.println(sqle.getMessage());
 		}
 		return outArray;
 		
@@ -350,9 +359,7 @@ public class SCSDataModule{
 			
 			
 		}catch(SQLException sqle){
-			errorHandler.handleException(sqle);
-			System.out.println(sqle.getMessage());
-		}
+			errorHandler.handleException(sqle, "", false );
 		
 			
 	}
@@ -367,8 +374,7 @@ public class SCSDataModule{
 			sStatement.execute("DELETE FROM SCS_SAVE_ITEMS WHERE SAVE_GUID IS '"+sTargGuid+"'");
 			sStatement.execute("DELETE FROM SCS_SAVE_STRUCTURES WHERE SAVE_GUID IS '"+sTargGuid+"'");
 		}catch(SQLException sqle){
-			errorHandler.handleException(sqle);
-			System.out.println(sqle.getMessage());
+			errorHandler.handleException(sqle , "", false );
 		}
 	}
 	
