@@ -362,6 +362,7 @@ public class SCSDataModule{
 			errorHandler.handleException(sqle, "", false );
 		
 			
+		}
 	}
 	
 	public void deleteGameByName(String sName){
