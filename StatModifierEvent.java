@@ -47,6 +47,9 @@ public class StatModifierEvent extends RandomEvent{
 	public boolean performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){
 		boolean bOut = false;
 		boolean bNeg = false;
+		//System.out.println("HERE");
+		//System.out.println(StatToMod);
+		//System.out.println("TO HERE");
 		if(super.performEvent(scg, ioman, dbm)){
 			bOut = true;
 			//the creation of the random number.
@@ -94,6 +97,12 @@ public class StatModifierEvent extends RandomEvent{
 					iHolder = scg.pop.size();
 					scg.pop.losePop(iOutcome*-1);
 				}
+			}else if(StatToMod.equals("Morale")){
+				//System.out.println("Morale was" + scg.subMorale);
+			//	System.out.println("And we gained " + iOutcome);
+				scg.subMorale +=iOutcome;
+			//	System.out.println("And now we have "+ scg.subMorale);
+				
 			}else{
 				if(checkIsValid(iOutcome, gGoodWorkedWith, scg) == false){
 					iHolder = gGoodWorkedWith.iQuant;
