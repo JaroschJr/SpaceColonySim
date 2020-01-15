@@ -361,6 +361,9 @@ public class SpaceColonyEngine implements ISCSError{
 			
 			SCG.iTurnCount++;
 			saveCurrentGame();
+			_ioman.lineOut("****************************************");
+			_ioman.lineOut(_scsdm.getDisplayText("TURN_END_BREAK"));
+			_ioman.lineOut("****************************************");
 		}
 	}
 	

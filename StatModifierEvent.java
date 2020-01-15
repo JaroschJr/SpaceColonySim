@@ -59,6 +59,8 @@ public class StatModifierEvent extends RandomEvent{
 			double dWorkingDouble2 = 0;
 			String sToPrint = null;
 			Good gGoodWorkedWith = scg.iInv.getGoodByName(StatToMod);
+			
+			//scg.subMorale+=iMoraleEffect;
 			for(int i = 0; i<iDiceCount; i++){
 				iOutcome += 1+rng.nextInt(iDiceSide);
 				
