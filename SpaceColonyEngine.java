@@ -355,7 +355,7 @@ public class SpaceColonyEngine implements ISCSError{
 			produce();
 			currentEvent.performEvent(SCG, _ioman, _scsdm);
 			validateStructures();
-			SCG.obMorale = mManager.calcObjectiveMorale(SCG);
+			SCG.obMorale = mManager.calcObjectiveMorale(SCG,currentEvent);
 			SCG.subMorale = mManager.calcSubjectiveMorale(SCG);
 			popEat();
 			

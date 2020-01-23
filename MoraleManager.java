@@ -2,7 +2,7 @@
 import java.util.Random;
 public class MoraleManager{
 
-	public int calcObjectiveMorale(SpaceColonyGame scg){
+	public int calcObjectiveMorale(SpaceColonyGame scg, RandomEvent rLastRand){
 		int morale = 0;
 		if(scg.iInv.getGoodByName("Food").iQuant>scg.pop.size()*2){
 			morale += 10;
@@ -45,7 +45,8 @@ public class MoraleManager{
 		if(scg.subMorale <=20){
 			morale +=(20-scg.subMorale);
 		}
-		
+		morale += rLastRand.iLastEffect;
+		//System.out.println("The Morale Effect of the Random Event is "+rLastRand.iLastEffect);
 		//System.out.println("Objective Morale " + morale);
 		return morale;
 	}

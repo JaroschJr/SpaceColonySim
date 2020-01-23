@@ -32,6 +32,7 @@ public class ProductionMultiplyingEvent extends RandomEvent{
 		if(bPrint){
 			ioman.lineOut(sToPrint);
 		}
+		//iLastEffect = dprodMultFactor*dMoraleEffect*5;
 		bPrint = false;
 		return true;
 	

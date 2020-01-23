@@ -131,6 +131,10 @@ public class StatModifierEvent extends RandomEvent{
 					ioman.lineOut(sToPrint);
 				}
 			}
+		//System.out.println("The Random Event has an effect of " + iOutcome);
+		//System.out.println("The Morale Factor is " + dMoraleEffect);
+		//System.out.println("The Logged Morale Effect is " + iLastEffect);
+		iLastEffect = (int) Math.round( iOutcome*dMoraleEffect);
 			
 		}//end if
 		return bOut;

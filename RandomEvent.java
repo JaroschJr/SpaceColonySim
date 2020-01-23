@@ -2,7 +2,8 @@ import java.sql.*;
 import java.util.Formatter;
 public class RandomEvent {
 	int iProbWeight;//database: OCCURANCE
-	int iMoraleEffect;
+	double dMoraleEffect;
+	int iLastEffect = 0;
 	String sGuid;//database: ID
 	String sFluffAccess;//database: TEXT_ID
 	 
@@ -26,8 +27,8 @@ public class RandomEvent {
 		boolean bRet;
 		if(checkIsValid(scg)){
 			bRet = true;
-			System.out.println("Look over here in RandomEvent");
-			scg.subMorale+=iMoraleEffect;
+			//System.out.println("Look over here in RandomEvent");
+			//scg.subMorale+=dMoraleEffect;
 		}//end if
 		else{
 			bRet = false;
@@ -41,7 +42,7 @@ public class RandomEvent {
 
 	public void readFromDB (ResultSet resultSet)throws SQLException{
 		iProbWeight = resultSet.getInt(RandomEvent.FIELD_OCCURANCE);
-		iMoraleEffect = resultSet.getInt(RandomEvent.FIELD_MORALE_FACTOR);
+		dMoraleEffect = resultSet.getDouble(RandomEvent.FIELD_MORALE_FACTOR);
 		sGuid = resultSet.getString(RandomEvent.FIELD_ID);
 		sFluffAccess = resultSet.getString(RandomEvent.FIELD_TEXT_ID);
 		
