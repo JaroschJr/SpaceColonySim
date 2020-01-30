@@ -4,6 +4,7 @@ public class MoraleManager{
 
 	public int calcObjectiveMorale(SpaceColonyGame scg, RandomEvent rLastRand){
 		int morale = 0;
+		//first factors related to materiel stockpiles.
 		if(scg.iInv.getGoodByName("Food").iQuant>scg.pop.size()*2){
 			morale += 10;
 		}else if(scg.iInv.getGoodByName("Food").iQuant<scg.pop.size()){
@@ -29,21 +30,46 @@ public class MoraleManager{
 			morale -= scg.pop.size()*3;
 		}
 		
-		for(int i = 0; i<scg.structures.size(); i++){
+		//now things that relate to structures directly.
+		int iFarmers = 0;
+		int iWaterPurifiers = 0;
+		for(int i = 0; i<scg.structures.size(); i++){//first count how many wokrers there are.
 			if(scg.structures.get(i).NAME.equals("entertainment")){
 				morale +=2*scg.structures.get(i).iWorkers;
 			}
+			
+			if(scg.structures.get(i).NAME.equals("farm")){
+				iFarmers += scg.structures.get(i).iWorkers;
+			}
+			
+			if(scg.structures.get(i).NAME.equals("waterPurifier")){
+				iWaterPurifiers += scg.structures.get(i).iWorkers;
+			}
 		}
+		//then applies the relavent things.
+		if(iFarmers == 0){
+			morale -= 10;
+		}
+		
+		if(iWaterPurifiers<scg.pop.size()/6){
+			morale -= 10;
+		}
+		
+		if(iWaterPurifiers ==0){
+			morale -=10;
+		}
+		
+		//and it checks if more than half of the population is idle.
 		if(scg.pop.size()>2*scg.pop.howManyAssigned()){
-			morale -= (scg.pop.size()-2*scg.pop.howManyAssigned())*2;
+			morale -= 2*(scg.pop.size()-2*scg.pop.howManyAssigned());
 		}
 		
 		if(scg.subMorale >=80){
-			morale -=(scg.subMorale-80);
+			morale -=(scg.subMorale-80);//so as go give the morale dimishing returns upon reaching a certain threshold
 		}
 		
 		if(scg.subMorale <=20){
-			morale +=(20-scg.subMorale);
+			morale +=(20-scg.subMorale);//Likewise in reverse
 		}
 		morale += rLastRand.iLastEffect;
 		//System.out.println("The Morale Effect of the Random Event is "+rLastRand.iLastEffect);
@@ -101,6 +127,28 @@ public class MoraleManager{
 				//morale +=2*scg.structures.get(i).iWorkers;
 			}
 		}
+		
+		//now things that relate to structures directly.
+		int iFarmers = 0;
+		int iWaterPurifiers = 0;
+		for(int i = 0; i<scg.structures.size(); i++){
+			
+			if(scg.structures.get(i).NAME.equals("farm")){
+				iFarmers += scg.structures.get(i).iWorkers;
+			}
+			
+			if(scg.structures.get(i).NAME.equals("waterPurifier")){
+				iWaterPurifiers += scg.structures.get(i).iWorkers;
+			}
+		}
+		if(iFarmers == 0){
+			sOut+= _scsdm.getDisplayText("MORALE_NOT_PORDUCING_FOOD") + "\n";
+		}
+		
+		if(iWaterPurifiers<scg.pop.size()/6){
+			sOut+= _scsdm.getDisplayText("MORALE_NOT_PORDUCING_WATER") + "\n";
+		}
+		
 		if(scg.pop.size()>2*scg.pop.howManyAssigned()){
 			sOut += _scsdm.getDisplayText("MORALE_REPORT_IDLE_WORKER_PENALTY") + "\n";
 		}
