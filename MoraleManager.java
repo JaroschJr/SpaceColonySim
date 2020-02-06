@@ -5,6 +5,8 @@ public class MoraleManager{
 	public int calcObjectiveMorale(SpaceColonyGame scg, RandomEvent rLastRand){
 		int morale = 0;
 		//first factors related to materiel stockpiles.
+		morale -= scg.pop.size();
+		
 		if(scg.iInv.getGoodByName("Food").iQuant>scg.pop.size()*2){
 			morale += 10;
 		}else if(scg.iInv.getGoodByName("Food").iQuant<scg.pop.size()){
