@@ -4,13 +4,23 @@ public class MoraleManager{
 
 	public int calcObjectiveMorale(SpaceColonyGame scg, RandomEvent rLastRand){
 		int morale = 0;
+		int enoughFoodBonus = 10;
+		int enoughWaterBonus = 15;
+		int outOfWaterPenalty = 50;
+		int outOfWaterPopMult = 3;
+		int happynessPerEntertainer = 2;
+		int notProducingPenalty = 10;
+		int perUnassigned = 2;
+		int minMorale = 20;
+		int maxMorale = 80;
+		int moraleBallancingForce = 1;
 		//first factors related to materiel stockpiles.
 		morale -= scg.pop.size();
 		
 		if(scg.iInv.getGoodByName("Food").iQuant>scg.pop.size()*2){
-			morale += 10;
+			morale += enoughFoodBonus;
 		}else if(scg.iInv.getGoodByName("Food").iQuant<scg.pop.size()){
-			morale -=10;
+			morale -=enoughFoodBonus;
 		}else{
 			
 		}
@@ -20,16 +30,16 @@ public class MoraleManager{
 		}
 		
 		if(scg.iInv.getGoodByName("Water").iQuant>scg.pop.size()*2){
-			morale += 15;
+			morale += enoughWaterBonus;
 		}else if(scg.iInv.getGoodByName("Water").iQuant<scg.pop.size()){
-			morale -=15;
+			morale -=enoughWaterBonus;
 		}else{
 			
 		}
 		
 		if(scg.iInv.getGoodByName("Water").iQuant<=0){
-			morale -=50;
-			morale -= scg.pop.size()*3;
+			morale -=outOfWaterPenalty;
+			morale -= scg.pop.size()*outOfWaterPopMult;
 		}
 		
 		//now things that relate to structures directly.
@@ -37,7 +47,7 @@ public class MoraleManager{
 		int iWaterPurifiers = 0;
 		for(int i = 0; i<scg.structures.size(); i++){//first count how many wokrers there are.
 			if(scg.structures.get(i).NAME.equals("entertainment")){
-				morale +=2*scg.structures.get(i).iWorkers;
+				morale +=happynessPerEntertainer*scg.structures.get(i).iWorkers;
 			}
 			
 			if(scg.structures.get(i).NAME.equals("farm")){
@@ -50,28 +60,28 @@ public class MoraleManager{
 		}
 		//then applies the relavent things.
 		if(iFarmers == 0){
-			morale -= 10;
+			morale -= notProducingPenalty;
 		}
 		
 		if(iWaterPurifiers<scg.pop.size()/6){
-			morale -= 10;
+			morale -= notProducingPenalty;
 		}
 		
 		if(iWaterPurifiers ==0){
-			morale -=10;
+			morale -=notProducingPenalty;
 		}
 		
 		//and it checks if more than half of the population is idle.
 		if(scg.pop.size()>2*scg.pop.howManyAssigned()){
-			morale -= 2*(scg.pop.size()-2*scg.pop.howManyAssigned());
+			morale -= perUnassigned*(scg.pop.size()-2*scg.pop.howManyAssigned());
 		}
 		
-		if(scg.subMorale >=80){
-			morale -=(scg.subMorale-80);//so as go give the morale dimishing returns upon reaching a certain threshold
+		if(scg.subMorale >=maxMorale){
+			morale -=moraleBallancingForce*(scg.subMorale-maxMorale);//so as go give the morale dimishing returns upon reaching a certain threshold
 		}
 		
-		if(scg.subMorale <=20){
-			morale +=(20-scg.subMorale);//Likewise in reverse
+		if(scg.subMorale <=minMorale){
+			morale +=moraleBallancingForce*(maxMorale-scg.subMorale);//Likewise in reverse
 		}
 		morale += rLastRand.iLastEffect;
 		//System.out.println("The Morale Effect of the Random Event is "+rLastRand.iLastEffect);
