@@ -13,6 +13,9 @@ public class MoraleManager{
 		int perUnassigned = 2;
 		int minMorale = 20;
 		int maxMorale = 80;
+		int artBounus = 1;
+		int artBonusCap = 5;
+		
 		int moraleBallancingForce = 1;
 		//first factors related to materiel stockpiles.
 		morale -= scg.pop.size();
@@ -34,6 +37,15 @@ public class MoraleManager{
 		}else if(scg.iInv.getGoodByName("Water").iQuant<scg.pop.size()){
 			morale -=enoughWaterBonus;
 		}else{
+			
+		}
+		
+		if(scg.iInv.getGoodByName("Art").iQuant>0){
+			if(scg.iInv.getGoodByName("Art").iQuant<=artBonusCap){
+				morale += scg.iInv.getGoodByName("Art").iQuant*artBounus;
+			}else{
+				morale = artBonusCap*artBounus;
+			}
 			
 		}
 		
@@ -133,6 +145,12 @@ public class MoraleManager{
 		}else if(scg.iInv.getGoodByName("Water").iQuant<scg.pop.size()){
 			sOut += _scsdm.getDisplayText("MORALE_REPORT_WATER_STOCKPILE_BAD") + "\n";
 		}
+		
+		if(scg.iInv.getGoodByName("Art").iQuant>0){
+			sOut += _scsdm.getDisplayText("ART_MORALE_REPORT") + "\n";;
+			
+		}
+		
 		
 		for(int i = 0; i<scg.structures.size(); i++){
 			if(scg.structures.get(i).NAME.equals("entertainment")){
