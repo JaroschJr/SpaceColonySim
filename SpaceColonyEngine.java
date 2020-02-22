@@ -37,7 +37,7 @@ public class SpaceColonyEngine implements ISCSError{
 	private StructureList StructList;
 	private MoraleManager mManager;
 	
-	private static final String SCS_SAVE_GAME_VERSION = "1.1";
+	private static final String SCS_SAVE_GAME_VERSION = "1.2";
 	
 	/*
 	//Begining of example random events, to check for bugs.
@@ -321,6 +321,10 @@ public class SpaceColonyEngine implements ISCSError{
 	}
 	
 	private void turns(){
+		if(SCG.iTurnCount == 1){
+			SCG.sGuid = _savedm.getGuid();
+			_savedm.saveGameTurnLog(SCG);
+		}//end if
 		
 		while(SCG.bIsOngoing == true){//Per the flowchart on the Cloud:
 			report();
@@ -364,6 +368,9 @@ public class SpaceColonyEngine implements ISCSError{
 			_ioman.lineOut("****************************************");
 			_ioman.lineOut(_scsdm.getDisplayText("TURN_END_BREAK"));
 			_ioman.lineOut("****************************************");
+			
+			//save some log information for testing purposes
+			_savedm.saveGameTurnLog(SCG);
 		}
 	}
 	
