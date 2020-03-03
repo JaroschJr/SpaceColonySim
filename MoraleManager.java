@@ -62,11 +62,11 @@ public class MoraleManager{
 				morale +=happynessPerEntertainer*scg.structures.get(i).iWorkers;
 			}
 			
-			if(scg.structures.get(i).NAME.equals("farm")){
+			if(scg.structures.get(i).NAME.equals("farm") && scg.structures.get(i).bComplete){
 				iFarmers += scg.structures.get(i).iWorkers;
 			}
 			
-			if(scg.structures.get(i).NAME.equals("waterPurifier")){
+			if(scg.structures.get(i).NAME.equals("waterPurifier") && scg.structures.get(i).bComplete){
 				iWaterPurifiers += scg.structures.get(i).iWorkers;
 			}
 		}
@@ -163,11 +163,11 @@ public class MoraleManager{
 		int iWaterPurifiers = 0;
 		for(int i = 0; i<scg.structures.size(); i++){
 			
-			if(scg.structures.get(i).NAME.equals("farm")){
+			if(scg.structures.get(i).NAME.equals("farm") && scg.structures.get(i).bComplete){
 				iFarmers += scg.structures.get(i).iWorkers;
 			}
 			
-			if(scg.structures.get(i).NAME.equals("waterPurifier")){
+			if(scg.structures.get(i).NAME.equals("waterPurifier") && scg.structures.get(i).bComplete){
 				iWaterPurifiers += scg.structures.get(i).iWorkers;
 			}
 		}
