@@ -36,8 +36,9 @@ public class SpaceColonyEngine implements ISCSError{
 	private StructureFactory StructFact;
 	private StructureList StructList;
 	private MoraleManager mManager;
+	private DebtMannager dMan;
 	
-	private static final String SCS_SAVE_GAME_VERSION = "1.2";
+	private static final String SCS_SAVE_GAME_VERSION = "1.3";
 	
 	/*
 	//Begining of example random events, to check for bugs.
@@ -162,6 +163,7 @@ public class SpaceColonyEngine implements ISCSError{
 
 		_ioman = new SCSConsoleIO();
 		mManager = new MoraleManager();
+		dMan = new DebtMannager();
 		
 
 		//check if the database connection has been
@@ -368,6 +370,8 @@ public class SpaceColonyEngine implements ISCSError{
 			_ioman.lineOut("****************************************");
 			_ioman.lineOut(_scsdm.getDisplayText("TURN_END_BREAK"));
 			_ioman.lineOut("****************************************");
+			dMan.applyInterest(SCG);
+			dMan.payDebt(SCG, _scsdm, _ioman);
 			
 			//save some log information for testing purposes
 			_savedm.saveGameTurnLog(SCG);

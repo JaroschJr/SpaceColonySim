@@ -9,6 +9,8 @@ public class SpaceColonyGame{
 	public String sGuid;
 	public Inventory iInv;
 	
+	public int iDebt = 1000;
+	
 	public int obMorale;
 	public int subMorale;
 	
@@ -26,7 +28,7 @@ public class SpaceColonyGame{
 		iMerchantCountDown = 0;
 		obMorale = 0;
 		subMorale = 50;
-
+		iDebt = 1000;
 	}
 
 }
