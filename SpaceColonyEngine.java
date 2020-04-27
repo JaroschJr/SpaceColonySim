@@ -38,7 +38,7 @@ public class SpaceColonyEngine implements ISCSError{
 	private MoraleManager mManager;
 	private DebtMannager dMan;
 	
-	private static final String SCS_SAVE_GAME_VERSION = "1.3";
+	private static final String SCS_SAVE_GAME_VERSION = "1.4";
 	
 	/*
 	//Begining of example random events, to check for bugs.
@@ -358,6 +358,9 @@ public class SpaceColonyEngine implements ISCSError{
 			_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
 			SINN = _ioman.stringIn("");
 			
+			dMan.applyInterest(SCG);
+			dMan.payDebt(SCG, _scsdm, _ioman);
+			
 			produce();
 			currentEvent.performEvent(SCG, _ioman, _scsdm);
 			validateStructures();
@@ -365,13 +368,13 @@ public class SpaceColonyEngine implements ISCSError{
 			SCG.subMorale = mManager.calcSubjectiveMorale(SCG);
 			popEat();
 			
+			
 			SCG.iTurnCount++;
 			saveCurrentGame();
 			_ioman.lineOut("****************************************");
 			_ioman.lineOut(_scsdm.getDisplayText("TURN_END_BREAK"));
 			_ioman.lineOut("****************************************");
-			dMan.applyInterest(SCG);
-			dMan.payDebt(SCG, _scsdm, _ioman);
+			
 			
 			//save some log information for testing purposes
 			_savedm.saveGameTurnLog(SCG);

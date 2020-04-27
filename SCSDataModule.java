@@ -388,8 +388,9 @@ public class SCSDataModule{
 		int water = scg.iInv.getGoodByName(SCSEnum.eItems.Water.name()).iQuant;
 		int ore = scg.iInv.getGoodByName(SCSEnum.eItems.Ore.name()).iQuant;
 		int ice = scg.iInv.getGoodByName(SCSEnum.eItems.Ice.name()).iQuant;
-		String sql = "INSERT INTO SCS_GAME_LOGS VALUES(\"%1$s\", \"%2$s\", %3$d, %4$d, %5$d, %6$d, %7$d, %8$d, %9$d, %10$d)";
-		String exeSQL = String.format(sql, turnGUID, scg.sGuid, scg.iTurnCount, scg.pop.size(), money, scg.subMorale, food, water, ore, ice);
+		int debt = scg.iDebt;
+		String sql = "INSERT INTO SCS_GAME_LOGS VALUES(\"%1$s\", \"%2$s\", %3$d, %4$d, %5$d, %6$d, %7$d, %8$d, %9$d, %10$d, %11$d)";
+		String exeSQL = String.format(sql, turnGUID, scg.sGuid, scg.iTurnCount, scg.pop.size(), money, scg.subMorale, food, water, ore, ice, debt);
 		
 		try{
 			Statement s = _conn.createStatement();

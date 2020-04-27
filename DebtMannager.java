@@ -7,8 +7,10 @@ public class DebtMannager{
 	
 	
 	public void applyInterest(SpaceColonyGame scg){
-		double iMoney = scg.iInv.getGoodByName("Money").iQuant;
-		scg.iInv.getGoodByName("Money").iQuant = (int) Math.round(iMoney * dInterestRate);
+		double iMoney = scg.iDebt;
+		//System.out.println("debt was " + iMoney);
+		scg.iDebt = (int) Math.round(iMoney * dInterestRate);
+		//System.out.println("and now it is "+ scg.iDebt);
 	}
 	
 	public boolean payDebt(SpaceColonyGame scg, SCSDataModule scsdm, ISCSIO ioman){//The value is weather or not the minimum payment was made
