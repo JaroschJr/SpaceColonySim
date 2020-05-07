@@ -19,6 +19,8 @@ public class SpaceColonyEngine implements ISCSError{
 	private static final String SAVE_DATABASE = "SCSSaves.db";
 	private static final String MASTER_SAVE_DATABASE = "SCSSavesMaster.db";
 	
+	private int debtFrequency = 20;
+	
 	private static String FOLDER_PATH = "";
 	private static String CONSTR = "";
 	private static String SAVECONSTR = "";
@@ -39,6 +41,7 @@ public class SpaceColonyEngine implements ISCSError{
 	private DebtMannager dMan;
 	
 	private static final String SCS_SAVE_GAME_VERSION = "1.4";
+	
 	
 	/*
 	//Begining of example random events, to check for bugs.
@@ -358,8 +361,11 @@ public class SpaceColonyEngine implements ISCSError{
 			_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
 			SINN = _ioman.stringIn("");
 			
-			dMan.applyInterest(SCG);
-			dMan.payDebt(SCG, _scsdm, _ioman);
+			if(SCG.iTurnCount % debtFrequency == 0){
+				dMan.applyInterest(SCG);
+				dMan.payDebt(SCG, _scsdm, _ioman);
+			}
+			
 			
 			produce();
 			currentEvent.performEvent(SCG, _ioman, _scsdm);
