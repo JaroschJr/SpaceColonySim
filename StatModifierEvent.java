@@ -128,7 +128,9 @@ public class StatModifierEvent extends RandomEvent{
 				
 				if(iOutcome>0||iHolder!=0){
 					sToPrint = String.format(sToPrint, StatToMod, iOutcome);
+					ioman.lineOut("________________________________________");
 					ioman.lineOut(sToPrint);
+					ioman.lineOut("________________________________________");
 				}
 			}
 		//System.out.println("The Random Event has an effect of " + iOutcome);

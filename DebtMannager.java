@@ -25,6 +25,10 @@ public class DebtMannager{
 		sTemp = scsdm.getDisplayText("MIN_PAY");
 		sTemp = String.format(sTemp, iMinPayment);
 		ioman.lineOut(sTemp);
+		// Print: You have ___ Money
+		sTemp = scsdm.getDisplayText("YOU_HAVE");
+		sTemp = String.format(sTemp, scg.iInv.getGoodByName("Money").iQuant, scsdm.getDisplayText("MONEY"));
+		ioman.lineOut(sTemp);
 		while( bOngoing ){
 			// print: Pay how much?
 			sTemp = scsdm.getDisplayText("PAY_WHAT");

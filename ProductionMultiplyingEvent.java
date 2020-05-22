@@ -30,7 +30,9 @@ public class ProductionMultiplyingEvent extends RandomEvent{
 		String sToPrint = dbm.getDisplayText(sFluffAccess); 
 		sToPrint = String.format(sToPrint,sTargetProduction, dProdMultFactor);
 		if(bPrint){
+			ioman.lineOut("________________________________________");
 			ioman.lineOut(sToPrint);
+			ioman.lineOut("________________________________________");
 		}
 		//iLastEffect = dprodMultFactor*dMoraleEffect*5;
 		bPrint = false;
