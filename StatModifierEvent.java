@@ -51,7 +51,7 @@ public class StatModifierEvent extends RandomEvent{
 		//System.out.println(StatToMod);
 		//System.out.println("TO HERE");
 		if(super.performEvent(scg, ioman, dbm)){
-			bOut = true;
+			//bOut = true;
 			//the creation of the random number.
 			int iOutcome = 0;
 			int iHolder = 0;
@@ -83,10 +83,12 @@ public class StatModifierEvent extends RandomEvent{
 					//System.out.println("Increasing Population by "+iOutcome +"percent");
 					iOutcome = (int) Math.floor(scg.pop.size()*dWorkingDouble2);
 					iHolder = scg.pop.size();
+					bOut = true;
 					//System.out.println("Increasing Population "+iOutcome +"people");
 				}else{
 					//System.out.println("Decreasing Population by "+iOutcome +"percent");
 					iOutcome = (int) Math.floor(gGoodWorkedWith.iQuant*dWorkingDouble2);
+					bOut = true;
 					//System.out.println("Decreasing Population "+iOutcome +"people");
 				}
 				
@@ -95,23 +97,28 @@ public class StatModifierEvent extends RandomEvent{
 				if(iOutcome>0){
 					iHolder = scg.pop.size();
 					scg.pop.gainPop(iOutcome);
+					bOut = true;
 				}else if(iOutcome<0){
 					iHolder = scg.pop.size();
 					scg.pop.losePop(iOutcome*-1);
+					bOut = true;
 				}
 			}else if(StatToMod.equals("Morale")){
 				//System.out.println("Morale was" + scg.subMorale);
 			//	System.out.println("And we gained " + iOutcome);
 				scg.subMorale +=iOutcome;
+				bOut = true;
 			//	System.out.println("And now we have "+ scg.subMorale);
 				
 			}else{
 				if(checkIsValid(iOutcome, gGoodWorkedWith, scg) == false){
 					iHolder = gGoodWorkedWith.iQuant;
 					gGoodWorkedWith.iQuant = 0;
+					bOut = true;
 				}else{
 					iHolder = gGoodWorkedWith.iQuant;
 					gGoodWorkedWith.iQuant+=iOutcome;
+					bOut = true;
 				}
 			}
 			
