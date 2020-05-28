@@ -377,11 +377,28 @@ public class SpaceColonyEngine implements ISCSError{
 			
 			SCG.iTurnCount++;
 			saveCurrentGame();
+			
+			
+			
+			
 			_ioman.lineOut("****************************************");
 			_ioman.lineOut(_scsdm.getDisplayText("TURN_END_BREAK"));
 			_ioman.lineOut("****************************************");
 			
+			if(SCG.pop.size()==0){
+				_ioman.lineOut(_scsdm.getDisplayText("POPULATION_DEFEAT"));
+				SCG.bIsOngoing = false;
+			}else if(SCG.subMorale<=0){
+				_ioman.lineOut(_scsdm.getDisplayText("MORALE_DEFEAT"));
+				SCG.bIsOngoing = false;
+			}else if(SCG.iDebtMissCount >=3){
+				_ioman.lineOut(_scsdm.getDisplayText("DEBT_DEFEAT"));
+				SCG.bIsOngoing = false;
+			}
 			
+			if(SCG.bIsOngoing == false ){
+				_ioman.lineOut(_scsdm.getDisplayText("DEFEAT_MESSAGE"));
+			}
 			//save some log information for testing purposes
 			_savedm.saveGameTurnLog(SCG);
 		}
@@ -402,6 +419,7 @@ public class SpaceColonyEngine implements ISCSError{
 			}
 			
 	}
+	
 
 	private boolean traderAriveOrNot(){
 		boolean bArive;

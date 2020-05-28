@@ -13,6 +13,7 @@ public class SpaceColonyGame{
 	
 	public int obMorale;
 	public int subMorale;
+	public int iDebtMissCount;
 	
 	public int iTurnCount = 1;
 	
@@ -29,6 +30,7 @@ public class SpaceColonyGame{
 		obMorale = 0;
 		subMorale = 50;
 		iDebt = 1000;
+		iDebtMissCount = 0;
 	}
 
 }

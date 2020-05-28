@@ -30,7 +30,7 @@ public class RandomEvent {
 			//System.out.println("Look over here in RandomEvent");
 			//scg.subMorale+=dMoraleEffect;
 		}//end if
-		else{
+		else{ 
 			bRet = false;
 		}//end else
 		return bRet;

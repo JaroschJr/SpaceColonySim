@@ -43,6 +43,7 @@ public class DebtMannager{
 			}else if(iInput>=iMinPayment){
 				scg.iInv.getGoodByName("Money").iQuant -=iInput;
 				scg.iDebt -= iInput;
+				scg.iDebtMissCount = 0;
 				bOngoing = false;
 				bMinPayed = true;
 			}else if(iInput<iMinPayment){
@@ -55,6 +56,7 @@ public class DebtMannager{
 					scg.iInv.getGoodByName("Money").iQuant -=iInput;
 					scg.iDebt -= iInput;
 					scg.iDebt+=iMissedMinFine;
+					scg.iDebtMissCount++;
 					bOngoing= false;
 				}else{
 					
