@@ -241,8 +241,8 @@ public class SCSDataModule{
 			//Sample SQL:
 			//For the Save
 			//System.out.println("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT) VALUES (" + scg.sGuid +", "+sName+", " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+")");
-			String sGameSaveTemplate = "INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT, MORALE, DEBT) VALUES ( '%1$s', '%2$s', %3$s , %4$s , %5$s , %6$s , %7$s) ";
-			String sSQLThing = String.format(sGameSaveTemplate, scg.sGuid, sName, scg.iTurnCount, scg.pop.size(), scg.iMerchantCountDown, scg.subMorale, scg.iDebt);
+			String sGameSaveTemplate = "INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT, MORALE, DEBT, PAYMENTS_MISSED) VALUES ( '%1$s', '%2$s', %3$s , %4$s , %5$s , %6$s , %7$s, %8$s) ";
+			String sSQLThing = String.format(sGameSaveTemplate, scg.sGuid, sName, scg.iTurnCount, scg.pop.size(), scg.iMerchantCountDown, scg.subMorale, scg.iDebt, scg.iDebtMissCount);
 			//sStatement.execute("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT, MORALE) VALUES ('" + scg.sGuid +"', '"+sName+"', " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+", "+ scg.subMorale+")");
 			sStatement.execute(sSQLThing);
 			for(int i = 0; i<scg.structures.size(); i++){
@@ -315,6 +315,7 @@ public class SCSDataModule{
 			scg.iMerchantCountDown = rTargSave.getInt("MERCH_COUNT");
 			scg.subMorale = rTargSave.getInt("MORALE");
 			scg.iDebt = rTargSave.getInt("DEBT");
+			scg.iDebtMissCount = rTargSave.getInt("PAYMENTS_MISSED");
 			int iNewPop = rTargSave.getInt("POP");
 			scg.pop = new Population();
 			scg.pop.gainPop(iNewPop);

@@ -40,7 +40,7 @@ public class SpaceColonyEngine implements ISCSError{
 	private MoraleManager mManager;
 	private DebtMannager dMan;
 	
-	private static final String SCS_SAVE_GAME_VERSION = "1.4";
+	private static final String SCS_SAVE_GAME_VERSION = "1.5";
 	
 	
 	/*
