@@ -9,7 +9,9 @@ public class DebtMannager{
 	public void applyInterest(SpaceColonyGame scg){
 		double iMoney = scg.iDebt;
 		//System.out.println("debt was " + iMoney);
-		scg.iDebt = (int) Math.round(iMoney * dInterestRate);
+		if(iMoney>0){
+			scg.iDebt = (int) Math.round(iMoney * dInterestRate);
+		}
 		//System.out.println("and now it is "+ scg.iDebt);
 	}
 	
@@ -41,11 +43,22 @@ public class DebtMannager{
 				//sTemp = String.format(sTemp);
 				ioman.lineOut(sTemp);
 			}else if(iInput>=iMinPayment){
+				
 				scg.iInv.getGoodByName("Money").iQuant -=iInput;
 				scg.iDebt -= iInput;
 				scg.iDebtMissCount = 0;
 				bOngoing = false;
 				bMinPayed = true;
+				
+			}else if(iInput >= scg.iDebt){
+				iInput = scg.iDebt;
+				
+				scg.iInv.getGoodByName("Money").iQuant -=iInput;
+				scg.iDebt -= iInput;
+				scg.iDebtMissCount = 0;
+				bOngoing = false;
+				bMinPayed = true;
+			
 			}else if(iInput<iMinPayment){
 				sTemp = scsdm.getDisplayText("PAY_BELOW_MINIMUM");
 				sTemp = String.format(sTemp, iMissedMinFine);

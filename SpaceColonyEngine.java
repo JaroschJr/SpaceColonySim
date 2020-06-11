@@ -362,8 +362,10 @@ public class SpaceColonyEngine implements ISCSError{
 			SINN = _ioman.stringIn("");
 			
 			if(SCG.iTurnCount % debtFrequency == 0){
-				dMan.applyInterest(SCG);
-				dMan.payDebt(SCG, _scsdm, _ioman);
+				if(SCG.iDebt>0){
+					dMan.applyInterest(SCG);
+					dMan.payDebt(SCG, _scsdm, _ioman);
+				}
 			}
 			
 			
