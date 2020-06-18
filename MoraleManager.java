@@ -167,6 +167,10 @@ public class MoraleManager{
 				iFarmers += scg.structures.get(i).iWorkers;
 			}
 			
+			if(scg.structures.get(i).NAME.equals("advFarm") && scg.structures.get(i).bComplete){
+				iFarmers += scg.structures.get(i).iWorkers;
+			}
+			
 			if(scg.structures.get(i).NAME.equals("waterPurifier") && scg.structures.get(i).bComplete){
 				iWaterPurifiers += scg.structures.get(i).iWorkers;
 			}
