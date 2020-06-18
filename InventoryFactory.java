@@ -70,6 +70,7 @@ public class InventoryFactory{
 		//System.out.println("ID is " + outRecipe.ID);
 		outRecipe.MAN_HOURS = resultSet.getInt(Recipe.FIELD_MAN_HOURS);
 		//System.out.println("ID is " + outRecipe.ID);
+		outRecipe.YIELD = resultSet.getInt(Recipe.FIELD_YIELD);
 		
 		//An exemplary SQL Query is 
 		/*

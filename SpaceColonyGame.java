@@ -9,7 +9,7 @@ public class SpaceColonyGame{
 	public String sGuid;
 	public Inventory iInv;
 	
-	public int iDebt = 1000;
+	public int iDebt = 10000;
 	
 	public int obMorale;
 	public int subMorale;
@@ -17,7 +17,7 @@ public class SpaceColonyGame{
 	
 	public int iTurnCount = 1;
 	
-	public int iMerchantCountDown = 1000;
+	public int iMerchantCountDown = 10000;
 	
 	public Population pop;
 	

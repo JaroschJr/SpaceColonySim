@@ -335,6 +335,11 @@ public class SpaceColonyEngine implements ISCSError{
 			report();
 			String SINN;
 			//Tennative suggestion: Some kind of status update?
+			/*
+			for (int i = 0; i< listOfRecipes.size(); i++){
+				System.out.println(listOfRecipes.get(i).toString());
+			}
+			*/
 			currentEvent = events.generateEvent();
 			//System.out.println(currentEvent.toString());
 			//truncate it so it does one and only one iteration.

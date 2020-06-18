@@ -1,9 +1,9 @@
 import java.lang.Math;
 import java.util.ArrayList;
 public class DebtMannager{
-	int iMinPayment = 10;
-	int iMissedMinFine = 10;
-	double dInterestRate = 1.01;
+	int iMinPayment = 20;
+	int iMissedMinFine = 25;
+	double dInterestRate = 1.005;
 	
 	
 	public void applyInterest(SpaceColonyGame scg){

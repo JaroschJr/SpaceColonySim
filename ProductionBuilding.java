@@ -106,7 +106,7 @@ public class ProductionBuilding extends Structure{
 		
 		if(enoughMats){
 			goodBeingCompared = scg.iInv.getGoodByName(currentRecipe.NAME);
-			goodBeingCompared.iQuant++;
+			goodBeingCompared.iQuant += currentRecipe.YIELD;
 			for(int i = 0; i<currentRecipe.size(); i++){
 				goodBeingCompared = scg.iInv.getGoodByName(currentRecipe.get(i).sName);
 				goodBeingCompared.iQuant -= currentRecipe.get(i).iQuant;
