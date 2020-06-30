@@ -334,6 +334,11 @@ public class SpaceColonyEngine implements ISCSError{
 		while(SCG.bIsOngoing == true){//Per the flowchart on the Cloud:
 			report();
 			String SINN;
+			/*for(int i = 0; i<SCG.structures.size(); i++){
+				System.out.println(SCG.structures.get(i));
+			}*/
+			
+			
 			//Tennative suggestion: Some kind of status update?
 			/*
 			for (int i = 0; i< listOfRecipes.size(); i++){
@@ -666,11 +671,11 @@ public class SpaceColonyEngine implements ISCSError{
 							bWorkingBuilding.bBuildingSelf = true;
 						}
 						
-					}else if(bWorkingBuilding instanceof ProductionBuilding){
+					}else if(bWorkingBuilding instanceof ProductionBuilding){//This part must be rewriten to account for that it is being searched by GUID now and not name
 						ProductionBuilding bTempo = (ProductionBuilding) bWorkingBuilding;
 						
 						if(bTempo.sPosibleRecipes.size() == 1){
-							bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(0)));
+							bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByGuid(bTempo.sPosibleRecipes.get(0)));
 						}else{
 							String[][] sRecipePick = new String[bTempo.sPosibleRecipes.size()+1][4];
 							sRecipePick[0][0] = "";
@@ -680,9 +685,9 @@ public class SpaceColonyEngine implements ISCSError{
 							
 							for(int i = 0; i <bTempo.sPosibleRecipes.size(); i++){
 								sRecipePick[i+1][0]=" " + (i+1) +"-";
-								sRecipePick[i+1][1] = _scsdm.getDisplayText(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)).TEXT_CODE);
-								sRecipePick[i+1][2] = Integer.toString(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)).MAN_HOURS);
-								sRecipePick[i+1][3] = getRecipeDisplay(listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(i)));
+								sRecipePick[i+1][1] = _scsdm.getDisplayText(listOfRecipes.getRecipeByGuid(bTempo.sPosibleRecipes.get(i)).TEXT_CODE);
+								sRecipePick[i+1][2] = Integer.toString(listOfRecipes.getRecipeByGuid(bTempo.sPosibleRecipes.get(i)).MAN_HOURS);
+								sRecipePick[i+1][3] = getRecipeDisplay(listOfRecipes.getRecipeByGuid(bTempo.sPosibleRecipes.get(i)));
 							}
 							
 							int recipResponse = 0;
@@ -696,7 +701,7 @@ public class SpaceColonyEngine implements ISCSError{
 							if(recipResponse == 0){
 								bTempo.setWork(SCG.pop, 0, null);
 							}else{
-								bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByName(bTempo.sPosibleRecipes.get(recipResponse-1)));
+								bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByGuid(bTempo.sPosibleRecipes.get(recipResponse-1)));
 							}
 						}
 						
@@ -1055,6 +1060,7 @@ public class SpaceColonyEngine implements ISCSError{
 	
 	public void produce(){
 		for(int i = 0; i<SCG.structures.size(); i++){
+			
 			SCG.structures.get(i).doProduction(SCG, currentEvent);
 		}
 	}

@@ -83,7 +83,7 @@ public class InventoryFactory{
 		
 		ResultSet rOtherResultSet;
 		try{
-			rOtherResultSet = _data.getResultSet("select a.NAME as RECIPE_NAME, a.MAN_HOURS, b.QUANTITY, c.NAME as INGREDIENT_NAME from SCS_RECIPES a, SCS_RECIPE_GOODS b, SCS_INVENTORY_ITEMS c where b.RECIPE = a.ID and b.GOOD = c.ID and a.NAME = '" + outRecipe.NAME + "'");
+			rOtherResultSet = _data.getResultSet("select a.NAME as RECIPE_NAME, a.MAN_HOURS, b.QUANTITY, c.NAME as INGREDIENT_NAME from SCS_RECIPES a, SCS_RECIPE_GOODS b, SCS_INVENTORY_ITEMS c where b.RECIPE = a.ID and b.GOOD = c.ID and a.ID = '" + outRecipe.ID + "'");
 			boolean bMoreLines = true;
 			bMoreLines = rOtherResultSet.next();
 			

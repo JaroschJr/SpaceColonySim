@@ -62,8 +62,10 @@ public class StructureFactory{
 		outPB.iCompleteness = outPB.HOURS_TO_BUILD;
 		outPB.bComplete = true;
 		
-		ResultSet rResultSet = _data.getResultSet("select a.NAME as RECIPE from SCS_RECIPES a, SCS_STRUCTURES b, SCS_STRUCTURE_RECIPIES c where c.RECIPE = a.ID and c.STRUCTURE_USING = b.ID and b.NAME = '" + outPB.NAME +"'");
-		
+		//ResultSet rResultSet = _data.getResultSet("select a.NAME as RECIPE from SCS_RECIPES a, SCS_STRUCTURES b, SCS_STRUCTURE_RECIPIES c where c.RECIPE = a.ID and c.STRUCTURE_USING = b.ID and b.NAME = '" + outPB.NAME +"'");
+		ResultSet rResultSet = _data.getResultSet("select a.ID as RECIPE from SCS_RECIPES a, SCS_STRUCTURES b, SCS_STRUCTURE_RECIPIES c where c.RECIPE = a.ID and c.STRUCTURE_USING = b.ID and b.NAME = '" + outPB.NAME +"'");
+		//a possible alternate form to search by GUID: "select a.NAME as RECIPE from SCS_RECIPES a, SCS_STRUCTURES b, SCS_STRUCTURE_RECIPIES c where c.RECIPE = a.ID and c.STRUCTURE_USING = b.ID and b.NAME = '" + outPB.NAME +"'"
+		//System.out.println("select a.NAME as RECIPE from SCS_RECIPES a, SCS_STRUCTURES b, SCS_STRUCTURE_RECIPIES c where c.RECIPE = a.ID and c.STRUCTURE_USING = b.ID and b.NAME = '" + outPB.NAME +"'");
 		boolean bMoreLines = true;
 		bMoreLines = rResultSet.next();
 		outPB.sPosibleRecipes = new ArrayList<String>();

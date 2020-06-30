@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 public class ProductionBuilding extends Structure{
-	ArrayList<String> sPosibleRecipes;//names of the various recipies, so as to point to them.
+	ArrayList<String> sPosibleRecipes;//GUID of the various recipies, so as to point to them.
 	Recipe currentRecipe;
 	
 	@Override
@@ -106,15 +106,14 @@ public class ProductionBuilding extends Structure{
 		
 		if(enoughMats){
 			goodBeingCompared = scg.iInv.getGoodByName(currentRecipe.NAME);
+			//System.out.println("You had " + goodBeingCompared.iQuant);
+			//System.out.println("The yield is " + currentRecipe.YIELD);
 			goodBeingCompared.iQuant += currentRecipe.YIELD;
+			//System.out.println("Now you have " + goodBeingCompared.iQuant);
 			for(int i = 0; i<currentRecipe.size(); i++){
 				goodBeingCompared = scg.iInv.getGoodByName(currentRecipe.get(i).sName);
 				goodBeingCompared.iQuant -= currentRecipe.get(i).iQuant;
 			}
 		}	
 	}
-
-
-	
-
 }

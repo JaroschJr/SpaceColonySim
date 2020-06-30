@@ -14,5 +14,19 @@ public class RecipeList extends ArrayList<Recipe>{
 		}
 		return rOut;
 	}
+	
+	public Recipe getRecipeByGuid(String guid){
+		Recipe rOut = new Recipe();
+		for(int i = 0; i <size(); i++){
+			//gOut = get(i);
+			if(get(i).ID.equals(guid.toString())){
+				//System.out.println(get(i).sName.toString()+" = "+  name.toString());
+				rOut = get(i);
+			}else{
+				
+			}
+		}
+		return rOut;
+	}
 
 }
