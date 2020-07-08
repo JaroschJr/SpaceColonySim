@@ -17,7 +17,7 @@ public class SpaceColonyGame{
 	
 	public int iTurnCount = 1;
 	
-	public int iMerchantCountDown = 10000;
+	public int iMerchantCountDown = 5;
 	
 	public Population pop;
 	
@@ -26,10 +26,10 @@ public class SpaceColonyGame{
 	public void gameReset(){
 		bIsOngoing = true;
 		iTurnCount = 1;
-		iMerchantCountDown = 1000;
+		iMerchantCountDown = 5;
 		obMorale = 0;
 		subMorale = 50;
-		iDebt = 0;
+		iDebt = 10000;
 		iDebtMissCount = 0;
 	}
 
