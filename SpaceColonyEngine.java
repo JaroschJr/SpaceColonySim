@@ -568,6 +568,7 @@ public class SpaceColonyEngine implements ISCSError{
 			}
 			for(int j = 0; j<text[i].length; j++){
 				//System.out.println("line " + i + " column " +j);
+				//System.out.println(text[i][j]);
 				sOut += text[i][j]+ getSpacer(18-text[i][j].length());
 			}
 			_ioman.lineOut(sOut);
@@ -590,11 +591,11 @@ public class SpaceColonyEngine implements ISCSError{
 	
 	public void viewAndSetProduction(){
 		while(true){
-			String[][] structReport = new String[SCG.structures.size()+2][3];
+			String[][] structReport = new String[SCG.structures.size()+3][3];
 			structReport[0][0] = _scsdm.getDisplayText("BUILDING");
 			structReport[0][1] = _scsdm.getDisplayText("WORKERS");
 			structReport[0][2] = _scsdm.getDisplayText("RECIPE");
-				for(int i = 1;i<=SCG.structures.size(); i++){
+				for(int i = 1;i<=SCG.structures.size(); i++){//Come back here.
 				
 					if(i<10){
 						structReport[i][0] =" "+i+"- " + _scsdm.getDisplayText(SCG.structures.get(i-1).TEXT_CODE);
@@ -639,6 +640,15 @@ public class SpaceColonyEngine implements ISCSError{
 			}
 			structReport[SCG.structures.size()+1][1] = "";
 			structReport[SCG.structures.size()+1][2] = "";
+			
+			//The Demolish Structures part
+			if(SCG.structures.size()<10){
+				structReport[SCG.structures.size()+2][0] = " "+(SCG.structures.size()+2)+"-" + _scsdm.getDisplayText("DEMOLISH");
+			}else{
+				structReport[SCG.structures.size()+2][0] = ""+(SCG.structures.size()+2)+"-" + _scsdm.getDisplayText("DEMOLISH");
+			}
+			structReport[SCG.structures.size()+2][1] = "";
+			structReport[SCG.structures.size()+2][2] = "";
 			
 			
 			Structure bWorkingBuilding;
@@ -720,6 +730,8 @@ public class SpaceColonyEngine implements ISCSError{
 				}
 			}else if(iAnswer == (SCG.structures.size()+1)){
 				buildNewStructure();
+			}else if(iAnswer == (SCG.structures.size()+2)){
+				removeBuilding();
 			}else{
 				break;
 			}	
@@ -1245,6 +1257,31 @@ public class SpaceColonyEngine implements ISCSError{
 			b = (b&&gCheck.iQuant>=recip.get(i).iQuant);
 		}
 		return b;
+		
+	}
+	
+	public void removeBuilding(){
+		String[][] sQuestion = new String[SCG.structures.size()+1][1];
+		sQuestion[0][0] = " ";
+		//sQuestion[0][1] = " ";
+		for(int i = 1;i<=SCG.structures.size(); i++){
+			if(i<10){
+				
+				sQuestion[i][0] =" "+i+"- " + _scsdm.getDisplayText(SCG.structures.get(i-1).TEXT_CODE);
+				//System.out.println(SCG.structures.get(i-1).toString());
+			}else{
+				sQuestion[i][0] =i+"- " + _scsdm.getDisplayText(SCG.structures.get(i-1).TEXT_CODE);
+				//System.out.println(SCG.structures.get(i-1).toString());
+			}
+		}
+		int iDemoTarget = selectScreen(_scsdm.getDisplayText("DEMOLISH"), _scsdm.getDisplayText("DEMOLISH_SELECT"), sQuestion );
+		
+		if(iDemoTarget == 0){
+			
+		}else{
+			SCG.structures.get(iDemoTarget-1).setWork(SCG.pop,0);
+			SCG.structures.remove(iDemoTarget-1);
+		}
 		
 	}
 	
