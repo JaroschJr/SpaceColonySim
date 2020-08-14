@@ -681,7 +681,7 @@ public class SpaceColonyEngine implements ISCSError{
 							bWorkingBuilding.bBuildingSelf = true;
 						}
 						
-					}else if(bWorkingBuilding instanceof ProductionBuilding){//This part must be rewriten to account for that it is being searched by GUID now and not name
+					}else if(bWorkingBuilding instanceof ProductionBuilding){
 						ProductionBuilding bTempo = (ProductionBuilding) bWorkingBuilding;
 						
 						if(bTempo.sPosibleRecipes.size() == 1){

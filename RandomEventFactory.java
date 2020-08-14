@@ -78,7 +78,10 @@ public class RandomEventFactory
 		rResultEvent = createEvent(classType);
 		
         //4. set the properties - call readFromDB on the event
+		//System.out.println(classType.toString());
+		//System.out.println(rResultEvent.toString());
 		rResultEvent.readFromDB(resultSet);
+		//System.out.println(rResultEvent.toString());
         //5. return the event
 		return rResultEvent;
     }
@@ -93,6 +96,7 @@ public class RandomEventFactory
 				break;
 			case StatModifierEvent: rReturnEvent = new StatModifierEvent();
 				break;
+			case DestroyStructureEvent: rReturnEvent = new DestroyStructureEvent();
 			
 		}
         //2. return the event
