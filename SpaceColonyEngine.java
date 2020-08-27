@@ -453,7 +453,8 @@ public class SpaceColonyEngine implements ISCSError{
 		int answer = 0;
 		_ioman.lineOut(_scsdm.getDisplayText("TURN_REPORT_TURN") +getSpacer((20-_scsdm.getDisplayText("TURN_REPORT_TURN").length())- Integer.toString(SCG.iTurnCount).length()) + SCG.iTurnCount);
 		_ioman.lineOut(_scsdm.getDisplayText("TURN_REPORT_POPULATION") +getSpacer((20-_scsdm.getDisplayText("TURN_REPORT_POPULATION").length())- Integer.toString(SCG.pop.size()).length()) + SCG.pop.size());
-		_ioman.lineOut(_scsdm.getDisplayText("MORALE") +getSpacer((20-_scsdm.getDisplayText("MORALE").length())- Integer.toString(SCG.pop.size()).length()) + SCG.subMorale);
+		_ioman.lineOut(_scsdm.getDisplayText("MORALE") +getSpacer((20-_scsdm.getDisplayText("MORALE").length())- Integer.toString(SCG.subMorale).length()) + SCG.subMorale);
+		_ioman.lineOut(_scsdm.getDisplayText("DEBT") + getSpacer((20-_scsdm.getDisplayText("DEBT").length())- Integer.toString(SCG.iDebt).length()) + SCG.iDebt);
 		_ioman.lineOut(mManager.moraleReport(SCG,_scsdm));
 		_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
 		 _ioman.stringIn("");
@@ -654,7 +655,9 @@ public class SpaceColonyEngine implements ISCSError{
 			Structure bWorkingBuilding;
 			int iAnswer = selectScreen(_scsdm.getDisplayText("SELECT_CURRENT_ASSIGNMENT"), _scsdm.getDisplayText("WHICH_TO_CHANGE" ) + ". "+ SCG.pop.howManyUnassigned() + " " + _scsdm.getDisplayText("IDLE_WORKERS"), structReport);
 			if(iAnswer>0&&iAnswer <=SCG.structures.size()){
+				//
 				bWorkingBuilding = SCG.structures.get(iAnswer-1);
+				/*
 				String[][] sQuantAsk = new String[bWorkingBuilding.MAX_WORKERS+1][2];
 				sQuantAsk[0][0] = "   ";
 				sQuantAsk[0][1] = "   ";
@@ -670,13 +673,18 @@ public class SpaceColonyEngine implements ISCSError{
 				
 				
 				int iNewWorkers = selectScreen(" ", _scsdm.getDisplayText("HOW_MANY_WORKERS"), sQuantAsk);
-				
-				//int iNewWorkers =_ioman.intIn(_scsdm.getDisplayText("HOW_MANY_WORKERS")); 
-				if(iNewWorkers>0){
+				*/
+				int iNewWorkers;// = howManyWorkers(bWorkingBuilding);
+				if(true){//BEFORE it was iNewWorkers>0
 					if(bWorkingBuilding.bComplete == false){
 						//System.out.println(" " +bWorkingBuilding.bComplete);
 						//System.out.println("Reaches B");
-						bWorkingBuilding.setWork(SCG.pop, iNewWorkers);
+						iNewWorkers = howManyWorkers(bWorkingBuilding);
+						
+						if(iNewWorkers > 0){
+							bWorkingBuilding.setWork(SCG.pop, iNewWorkers);
+						}
+						
 						if(bWorkingBuilding.iWorkers>0){
 							bWorkingBuilding.bBuildingSelf = true;
 						}
@@ -685,7 +693,12 @@ public class SpaceColonyEngine implements ISCSError{
 						ProductionBuilding bTempo = (ProductionBuilding) bWorkingBuilding;
 						
 						if(bTempo.sPosibleRecipes.size() == 1){
-							bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByGuid(bTempo.sPosibleRecipes.get(0)));
+							iNewWorkers = howManyWorkers(bWorkingBuilding);
+							if(iNewWorkers >0){
+								bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByGuid(bTempo.sPosibleRecipes.get(0)));
+							}else{
+								bTempo.setWork(SCG.pop, 0, null);
+							}
 						}else{
 							String[][] sRecipePick = new String[bTempo.sPosibleRecipes.size()+1][4];
 							sRecipePick[0][0] = "";
@@ -711,11 +724,17 @@ public class SpaceColonyEngine implements ISCSError{
 							if(recipResponse == 0){
 								bTempo.setWork(SCG.pop, 0, null);
 							}else{
-								bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByGuid(bTempo.sPosibleRecipes.get(recipResponse-1)));
+								iNewWorkers = howManyWorkers(bWorkingBuilding);
+								if(iNewWorkers >0){
+									bTempo.setWork(SCG.pop, iNewWorkers, listOfRecipes.getRecipeByGuid(bTempo.sPosibleRecipes.get(recipResponse-1)));
+								}else{
+									bTempo.setWork(SCG.pop, 0, null);
+								}
 							}
 						}
 						
 					}else{
+						iNewWorkers = howManyWorkers(bWorkingBuilding);
 						bWorkingBuilding.setWork(SCG.pop, iNewWorkers);
 					}
 					
@@ -736,6 +755,25 @@ public class SpaceColonyEngine implements ISCSError{
 				break;
 			}	
 		}
+	}
+	
+	public int howManyWorkers(Structure bWorkingBuilding){
+		
+		String[][] sQuantAsk = new String[bWorkingBuilding.MAX_WORKERS+1][2];
+			sQuantAsk[0][0] = "   ";
+			sQuantAsk[0][1] = "   ";
+				
+			for(int i = 1; i<=bWorkingBuilding.MAX_WORKERS; i++){
+				if(i<10){
+					sQuantAsk[i][0] =" "+i+"- ";
+				}else{
+					sQuantAsk[i][0] =i+"- ";
+				}
+				sQuantAsk[i][1] = Integer.toString( i);
+			}
+					
+			int iNewWorkers = selectScreen(" ", _scsdm.getDisplayText("HOW_MANY_WORKERS"), sQuantAsk);
+			return iNewWorkers;
 	}
 	
 	public String getSpacer(int iSize){
