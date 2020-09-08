@@ -63,8 +63,8 @@ public class SpaceColonyEngine implements ISCSError{
 		
 		
 		FOLDER_PATH = args[0];
-		CONSTR = SQLITE + ":" + FOLDER_PATH + "\\" + GAME_DATABASE;
-		SAVECONSTR = SQLITE + ":" + FOLDER_PATH + "\\" + SAVE_DATABASE;
+		CONSTR = SQLITE + ":" + FOLDER_PATH + File.separator + GAME_DATABASE;
+		SAVECONSTR = SQLITE + ":" + FOLDER_PATH + File.separator + SAVE_DATABASE;
 		//Random rand = new Random();
 		SpaceColonyEngine engine = new SpaceColonyEngine();
 		engine.initialize();
@@ -120,8 +120,8 @@ public class SpaceColonyEngine implements ISCSError{
 			
 				try {
 					//delete the SCSSaves.db file
-					File dbPath = new File(FOLDER_PATH + "\\" + SAVE_DATABASE);
-					File masterDbPath = new File(FOLDER_PATH + "\\" + MASTER_SAVE_DATABASE);
+					File dbPath = new File(FOLDER_PATH + File.separator + SAVE_DATABASE);
+					File masterDbPath = new File(FOLDER_PATH + File.separator + MASTER_SAVE_DATABASE);
 					Files.deleteIfExists(dbPath.toPath());
 					
 					//copy over the blank master database SCSSavesMaster.db
