@@ -1,7 +1,7 @@
 import java.lang.Math;
 import java.util.ArrayList;
 public class DebtMannager{
-	int iMinPayment = 20;
+	int iMinPayment;
 	int iMissedMinFine = 25;
 	double dInterestRate = 1.005;
 	
@@ -16,6 +16,7 @@ public class DebtMannager{
 	}
 	
 	public boolean payDebt(SpaceColonyGame scg, SCSDataModule scsdm, ISCSIO ioman){//The value is weather or not the minimum payment was made
+		iMinPayment = (int) (scg.iDebt*dInterestRate-scg.iDebt)/2;
 		boolean bOngoing = true;
 		boolean bMinPayed = false;
 		String sTemp = "";
