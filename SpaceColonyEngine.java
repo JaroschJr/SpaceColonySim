@@ -814,7 +814,14 @@ public class SpaceColonyEngine implements ISCSError{
 	}
 	
 	public TraderList makeBuyList(){
-		TraderList tOut = new TraderList();
+		int maxSize = 200;
+		for(int i = 0; i<SCG.structures.size(); i++){
+			if(SCG.structures.get(i).NAME.equals("dockingRig")){
+				maxSize += SCG.structures.get(i).iWorkers*10;
+			}
+		}
+		
+		TraderList tOut = new TraderList(maxSize);
 		for(int i = 0; i<SCG.iInv.size(); i++){
 			if(SCG.iInv.get(i).MERCHANT_MAX_CARRY!=0){
 				Good gThing = SCG.iInv.get(i).clone();
@@ -850,7 +857,7 @@ public class SpaceColonyEngine implements ISCSError{
 				gTemp.iQuant = (gTemp.MERCHANT_MIN_CARRY + rand.nextInt(gTemp.MERCHANT_MAX_CARRY-gTemp.MERCHANT_MIN_CARRY));
 				//gTemp.iPrice = gTemp.BASE_PRICE+rand.nextInt(2*gTemp.BASE_PRICE);
 				//tOut.getGoodByName(gTemp.sName).iPrice = gTemp.iPrice;
-				if(((gTemp.iQuant+tOut.getTotalQuant())>=(tOut.MaxSpace-30))){
+				if(((gTemp.iQuant+tOut.getTotalQuant())>=(tOut.MaxSpace- (int) (tOut.MaxSpace * 0.15)))){
 					break;
 				}else{
 					tOut.getGoodByName(gTemp.sName).iQuant = gTemp.iQuant;
