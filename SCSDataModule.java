@@ -155,7 +155,7 @@ public class SCSDataModule{
 			ResultSet _FlufText = sStatement.executeQuery(SQLQuery);
 			sProxy = _FlufText.getString("DISPLAY_TEXT");
 		}catch(SQLException EXCEPTIONVARIABLE){
-			errorHandler.handleException( EXCEPTIONVARIABLE, "", false  );
+			errorHandler.handleException( EXCEPTIONVARIABLE, SQLQuery, false  );
 		}
 		// finish this, trychatch stuf, the like, ect.
 		return sProxy;
