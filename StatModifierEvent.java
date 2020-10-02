@@ -134,7 +134,8 @@ public class StatModifierEvent extends RandomEvent{
 				}
 				
 				if(iOutcome>0||iHolder!=0){
-					sToPrint = String.format(sToPrint, StatToMod, iOutcome);
+					sToPrint = String.format(sToPrint, dbm.getDisplayText(scg.iInv.getGoodByName(StatToMod).sTextCode), iOutcome);
+					//ioman.lineOut("HERE"+scg.iInv.getGoodByName(StatToMod).sTextCode);
 					ioman.lineOut("________________________________________");
 					ioman.lineOut(sToPrint);
 					ioman.lineOut("________________________________________");

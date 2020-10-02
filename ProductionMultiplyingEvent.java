@@ -28,7 +28,7 @@ public class ProductionMultiplyingEvent extends RandomEvent{
 	public boolean performEvent(SpaceColonyGame scg, ISCSIO ioman, SCSDataModule dbm){
 		//it will multiply the production by a certain amount. currently this is not posible. come back to this once the rest of it is finished.
 		String sToPrint = dbm.getDisplayText(sFluffAccess); 
-		sToPrint = String.format(sToPrint,sTargetProduction, dProdMultFactor);
+		sToPrint = String.format(sToPrint,dbm.getDisplayText(sTargetProduction), dProdMultFactor);
 		if(bPrint){
 			ioman.lineOut("________________________________________");
 			ioman.lineOut(sToPrint);
