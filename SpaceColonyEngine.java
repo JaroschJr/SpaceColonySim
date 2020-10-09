@@ -622,7 +622,7 @@ public class SpaceColonyEngine implements ISCSError{
 					
 						//System.out.println(tempPBSlot.toString());
 						if(tempPBSlot.currentRecipe!=null){
-							structReport[i][2] = tempPBSlot.currentRecipe.NAME;
+							structReport[i][2] = _scsdm.getDisplayText(tempPBSlot.currentRecipe.TEXT_CODE);
 						}else{
 							structReport[i][2] = "-------";
 						}
