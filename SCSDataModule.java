@@ -241,8 +241,9 @@ public class SCSDataModule{
 			//Sample SQL:
 			//For the Save
 			//System.out.println("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT) VALUES (" + scg.sGuid +", "+sName+", " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+")");
-			String sGameSaveTemplate = "INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT, MORALE, DEBT, PAYMENTS_MISSED) VALUES ( '%1$s', '%2$s', %3$s , %4$s , %5$s , %6$s , %7$s, %8$s) ";
-			String sSQLThing = String.format(sGameSaveTemplate, scg.sGuid, sName, scg.iTurnCount, scg.pop.size(), scg.iMerchantCountDown, scg.subMorale, scg.iDebt, scg.iDebtMissCount);
+			String sGameSaveTemplate = "INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT, MORALE, DEBT, PAYMENTS_MISSED,REQUEST_GOOD, REQUEST_QUANT, REQUEST_DEADLINE) VALUES ( '%1$s', '%2$s', %3$s , %4$s , %5$s , %6$s , %7$s, %8$s , '%9$s' , %10$s, %11$s) ";
+			//System.out.println(String.format(sGameSaveTemplate, scg.sGuid, sName, scg.iTurnCount, scg.pop.size(), scg.iMerchantCountDown, scg.subMorale, scg.iDebt, scg.iDebtMissCount, scg.request.need.sName, scg.request.need.iQuant, scg.request.countdown));
+			String sSQLThing = String.format(sGameSaveTemplate, scg.sGuid, sName, scg.iTurnCount, scg.pop.size(), scg.iMerchantCountDown, scg.subMorale, scg.iDebt, scg.iDebtMissCount, scg.request.need.sName, scg.request.need.iQuant, scg.request.countdown);
 			//sStatement.execute("INSERT INTO SCS_SAVE_GAMES(GUID, SAVE_NAME, TURN, POP, MERCH_COUNT, MORALE) VALUES ('" + scg.sGuid +"', '"+sName+"', " +scg.iTurnCount+", "+scg.pop.size()+", "+scg.iMerchantCountDown+", "+ scg.subMorale+")");
 			sStatement.execute(sSQLThing);
 			for(int i = 0; i<scg.structures.size(); i++){
@@ -326,6 +327,11 @@ public class SCSDataModule{
 				currentGood.iQuant = rInvent.getInt("QUANTITY");
 				
 			}
+			
+			scg.request = new ProductOrder();
+			scg.request.need = scg.iInv.getGoodByName(rTargSave.getString("REQUEST_GOOD"));
+			scg.request.need.iQuant = rTargSave.getInt("REQUEST_QUANT");
+			scg.request.countdown = rTargSave.getInt("REQUEST_DEADLINE");
 			
 			ResultSet rStructures = getResultSet("SELECT * FROM SCS_SAVE_STRUCTURES WHERE SAVE_GUID IS '"+sTargGuid+"'");
 			StructureList masterStructList = structFact.getStructureList();

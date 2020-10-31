@@ -109,6 +109,7 @@ public class InventoryFactory{
 		gOut.MERCHANT_MAX_CARRY = resultSet.getInt(Good.FIELD_MERCHANT_MAX_CARRY);
 		gOut.MERCHANT_FREQ = resultSet.getInt(Good.FIELD_MERCHANT_FREQ);
 		gOut.BASE_PRICE = resultSet.getInt(Good.FIELD_BASE_PRICE);
+		gOut.ORDER_FREQ = resultSet.getInt(Good.FIELD_ORDER_FREQ);
 		return gOut;
 		
 	}

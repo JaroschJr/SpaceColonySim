@@ -72,6 +72,17 @@ public class Inventory extends ArrayList<Good>{
 	}
 	
 	@Override
+	public Inventory clone(){
+		Inventory iOut = new Inventory();
+		
+		for(int i = 0; i < size(); i++){
+			iOut.add(get(i).clone());
+		}
+		
+		return iOut;
+	}
+	
+	@Override
 	public String toString(){
 		String sOut = "Total Quantity " +getTotalQuant();
 		for(int i = 0; i< size(); i++){

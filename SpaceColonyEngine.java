@@ -8,6 +8,7 @@
 import java.util.Random;
 import java.util.ArrayList;
 import java.io.File;
+import java.util.Formatter;
 import java.nio.file.*;
 
 public class SpaceColonyEngine implements ISCSError{
@@ -40,7 +41,7 @@ public class SpaceColonyEngine implements ISCSError{
 	private MoraleManager mManager;
 	private DebtMannager dMan;
 	
-	private static final String SCS_SAVE_GAME_VERSION = "1.5";
+	private static final String SCS_SAVE_GAME_VERSION = "1.6";
 	
 	
 	/*
@@ -332,8 +333,10 @@ public class SpaceColonyEngine implements ISCSError{
 		}//end if
 		
 		while(SCG.bIsOngoing == true){//Per the flowchart on the Cloud:
+			//System.out.println(SCG.iInv.toString());
 			report();
 			String SINN;
+		
 			/*for(int i = 0; i<SCG.structures.size(); i++){
 				System.out.println(SCG.structures.get(i));
 			}*/
@@ -353,6 +356,25 @@ public class SpaceColonyEngine implements ISCSError{
 			SCG.bIsOngoing = false;//truncate it so it does one and only one iteration. Its looping infinitely caused issues during testing to complex to understand here.
 			}
 			*/
+			
+			//Order related things
+			if(SCG.request == null){
+				SCG.request = new ProductOrder(SCG);
+				_ioman.lineOut(String.format(_scsdm.getDisplayText("NEW_ORDER"),  SCG.request.need.iQuant, _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.countdown));
+				//System.out.println(SCG.request.toString());
+			}else if(SCG.request.fulfilled){
+				SCG.request = new ProductOrder(SCG);
+				_ioman.lineOut(String.format(_scsdm.getDisplayText("NEW_ORDER"),  SCG.request.need.iQuant, _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.countdown));
+			}else if(SCG.iTurnCount == SCG.request.countdown ){
+				if(SCG.request.isFulfillable(SCG)){
+					SCG.request.fulfill(SCG);
+				}else{
+					SCG.request.fulfilled = true;
+				}
+				
+				
+			}
+	
 			
 			_ioman.lineOut("");
 			viewAndSetProduction();
@@ -452,10 +474,14 @@ public class SpaceColonyEngine implements ISCSError{
 	private void report(){
 		int answer = 0;
 		_ioman.lineOut(_scsdm.getDisplayText("TURN_REPORT_TURN") +getSpacer((20-_scsdm.getDisplayText("TURN_REPORT_TURN").length())- Integer.toString(SCG.iTurnCount).length()) + SCG.iTurnCount);
+		//_ioman.lineOut(_scsdm.getDisplayText("ORDER")+getSpacer((20-_scsdm.getDisplayText("TURN_REPORT_TURN").length()))
 		_ioman.lineOut(_scsdm.getDisplayText("TURN_REPORT_POPULATION") +getSpacer((20-_scsdm.getDisplayText("TURN_REPORT_POPULATION").length())- Integer.toString(SCG.pop.size()).length()) + SCG.pop.size());
 		_ioman.lineOut(_scsdm.getDisplayText("MORALE") +getSpacer((20-_scsdm.getDisplayText("MORALE").length())- Integer.toString(SCG.subMorale).length()) + SCG.subMorale);
 		_ioman.lineOut(_scsdm.getDisplayText("DEBT") + getSpacer((20-_scsdm.getDisplayText("DEBT").length())- Integer.toString(SCG.iDebt).length()) + SCG.iDebt);
 		_ioman.lineOut(mManager.moraleReport(SCG,_scsdm));
+		if(SCG.request!=null){
+			_ioman.lineOut(String.format(_scsdm.getDisplayText("TURN_REPORT_ORDER"), _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.need.iQuant, SCG.request.countdown));
+		}
 		_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
 		 _ioman.stringIn("");
 		for(int i = 0; i<SCG.iInv.size(); i++){

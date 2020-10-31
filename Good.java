@@ -8,6 +8,7 @@ public class Good{
 	public static final String FIELD_MERCHANT_MAX_CARRY = "MERCHANT_MAX_CARRY";
 	public static final String FIELD_MERCHANT_FREQ = "MERCHANT_FREQ";
 	public static final String FIELD_BASE_PRICE = "BASE_PRICE";
+	public static final String FIELD_ORDER_FREQ = "ORDER_FREQ";
 	
 	String sName;
 	String sTextCode;
@@ -17,6 +18,7 @@ public class Good{
 	int MERCHANT_MIN_CARRY;
 	int MERCHANT_MAX_CARRY;
 	int MERCHANT_FREQ;
+	int ORDER_FREQ;
 	int BASE_PRICE;
 	int iPrice = 0;
 	/*
@@ -30,7 +32,7 @@ public class Good{
 	 
 	 @Override
 	 public String toString(){
-		 return sName +" "+ sTextCode +" "+ sGuid +" "+ iQuant+ " MERCHANT_MIN_CARRY " + MERCHANT_MAX_CARRY + " MERCHANT_MAX_CARRY " + MERCHANT_MIN_CARRY + " MERCH_FREQ " + MERCHANT_FREQ + " BASE_PRICE " + BASE_PRICE + " iPrice " + iPrice;
+		 return sName +" "+ sTextCode +" "+ sGuid +" "+ iQuant+ " MERCHANT_MIN_CARRY " + MERCHANT_MAX_CARRY + " MERCHANT_MAX_CARRY " + MERCHANT_MIN_CARRY + " MERCH_FREQ " + MERCHANT_FREQ + " BASE_PRICE " + BASE_PRICE + " iPrice " + iPrice + " ORDER FREQ " + ORDER_FREQ;
 	 }
 	 
 	 public Good clone(){
@@ -44,6 +46,7 @@ public class Good{
 		 gOut.MERCHANT_MAX_CARRY = MERCHANT_MAX_CARRY;
 		 gOut.MERCHANT_FREQ = MERCHANT_FREQ;
 		 gOut.BASE_PRICE = BASE_PRICE;
+		 gOut.ORDER_FREQ = ORDER_FREQ;
 		 gOut.iPrice = iPrice;
 		 return gOut;
 	 }

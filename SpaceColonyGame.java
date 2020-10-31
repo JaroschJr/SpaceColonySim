@@ -8,6 +8,7 @@ public class SpaceColonyGame{
 	public boolean bIsOngoing;
 	public String sGuid;
 	public Inventory iInv;
+	public ProductOrder request;
 	
 	public int iDebt = 10000;
 	
@@ -31,6 +32,7 @@ public class SpaceColonyGame{
 		subMorale = 50;
 		iDebt = 10000;
 		iDebtMissCount = 0;
+		request = null;
 	}
 
 }
