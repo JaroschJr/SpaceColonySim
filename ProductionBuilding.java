@@ -66,6 +66,8 @@ public class ProductionBuilding extends Structure{
 					//System.out.println("And then it was " + tEvent.bPrint);
 					
 					times = (int) Math.round((iWorkers/currentRecipe.MAN_HOURS)*tEvent.dProdMultFactor);
+				}else if(this.TEXT_CODE.equals( tEvent.sTargetProduction)){
+					times = (int) Math.round((iWorkers/currentRecipe.MAN_HOURS)*tEvent.dProdMultFactor);
 				}else{
 					//System.out.println("Before the evennt bPrint was " + tEvent.bPrint);
 					//tEvent.bPrint = false;

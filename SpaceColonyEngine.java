@@ -358,21 +358,24 @@ public class SpaceColonyEngine implements ISCSError{
 			*/
 			
 			//Order related things
-			if(SCG.request == null){
-				SCG.request = new ProductOrder(SCG);
-				_ioman.lineOut(String.format(_scsdm.getDisplayText("NEW_ORDER"),  SCG.request.need.iQuant, _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.countdown));
-				//System.out.println(SCG.request.toString());
-			}else if(SCG.request.fulfilled){
-				SCG.request = new ProductOrder(SCG);
-				_ioman.lineOut(String.format(_scsdm.getDisplayText("NEW_ORDER"),  SCG.request.need.iQuant, _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.countdown));
-			}else if(SCG.iTurnCount == SCG.request.countdown ){
-				if(SCG.request.isFulfillable(SCG)){
-					SCG.request.fulfill(SCG);
-				}else{
-					SCG.request.fulfilled = true;
+			if(SCG.iTurnCount>=25){
+				if(SCG.request == null){//for the first time.
+					SCG.request = new ProductOrder(SCG);
+					_ioman.lineOut(String.format(_scsdm.getDisplayText("NEW_ORDER"),  SCG.request.need.iQuant, _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.countdown));
+					//System.out.println(SCG.request.toString());
+				}else if(SCG.request.fulfilled){
+					SCG.request = new ProductOrder(SCG);
+					_ioman.lineOut(String.format(_scsdm.getDisplayText("NEW_ORDER"),  SCG.request.need.iQuant, _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.countdown));
+				}else if(SCG.iTurnCount == SCG.request.countdown ){
+					if(SCG.request.isFulfillable(SCG)){
+						SCG.request.fulfill(SCG);
+					}else{
+						SCG.iDebt += SCG.request.need.iQuant*SCG.request.need.BASE_PRICE;
+						SCG.request.fulfilled = true;
+					}
+					
+					
 				}
-				
-				
 			}
 	
 			
