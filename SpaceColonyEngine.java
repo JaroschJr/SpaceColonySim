@@ -403,7 +403,7 @@ public class SpaceColonyEngine implements ISCSError{
 				}
 			}
 			
-			
+			//System.out.println("HERE NO 3");
 			produce();
 			currentEvent.performEvent(SCG, _ioman, _scsdm);
 			validateStructures();

@@ -123,8 +123,11 @@ public class StatModifierEvent extends RandomEvent{
 			}
 			
 			scg.iInv.setGoodQuantByName(StatToMod, gGoodWorkedWith.iQuant);
-			
+			//System.out.println("BETWEEN HERE");
+			//System.out.println(sFluffAccess);
 			sToPrint = dbm.getDisplayText(sFluffAccess);
+			//System.out.println(sToPrint);
+			//System.out.println("AND HERE");
 			
 				
 			if(doesItPrint(StatToMod, iOutcome, iHolder, bNeg)){
@@ -134,7 +137,19 @@ public class StatModifierEvent extends RandomEvent{
 				}
 				
 				if(iOutcome>0||iHolder!=0){
-					sToPrint = String.format(sToPrint, dbm.getDisplayText(scg.iInv.getGoodByName(StatToMod).sTextCode), iOutcome);
+					//System.out.println(scg.iInv.getGoodByName(StatToMod).sTextCode);
+					//System.out.println(dbm.getDisplayText(scg.iInv.getGoodByName(StatToMod).sTextCode));
+					//System.out.println(toString());
+					//special cases
+					if(StatToMod.equals("Population")){
+						sToPrint = String.format(sToPrint, dbm.getDisplayText("POPULATION"), iOutcome);
+					}else if(StatToMod.equals("Morale")){
+						sToPrint = String.format(sToPrint, dbm.getDisplayText("MORALE"), iOutcome);
+					}else{
+						sToPrint = String.format(sToPrint, dbm.getDisplayText(scg.iInv.getGoodByName(StatToMod).sTextCode), iOutcome);
+					}
+					
+					//sToPrint = String.format(sToPrint, dbm.getDisplayText(scg.iInv.getGoodByName(StatToMod).sTextCode), iOutcome);
 					//ioman.lineOut("HERE"+scg.iInv.getGoodByName(StatToMod).sTextCode);
 					ioman.lineOut("________________________________________");
 					ioman.lineOut(sToPrint);
