@@ -10,6 +10,7 @@ public class SCSConsoleIO implements ISCSIO
 
     public String stringIn(String caption)
     {
+		lineOut(caption);
         return System.console().readLine();
     }
 

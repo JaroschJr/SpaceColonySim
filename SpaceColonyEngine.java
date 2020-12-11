@@ -386,7 +386,7 @@ public class SpaceColonyEngine implements ISCSError{
 			
 			if(traderAriveOrNot()){
 			_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
-			SINN = _ioman.stringIn("");
+			SINN = inputListen("");
 				merchantThings();
 				SCG.iMerchantCountDown = 3+rand.nextInt(6);
 			}else{
@@ -394,7 +394,7 @@ public class SpaceColonyEngine implements ISCSError{
 			}
 			
 			_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
-			SINN = _ioman.stringIn("");
+			SINN = inputListen("");
 			
 			if(SCG.iTurnCount % debtFrequency == 0){
 				if(SCG.iDebt>0){
@@ -486,7 +486,9 @@ public class SpaceColonyEngine implements ISCSError{
 			_ioman.lineOut(String.format(_scsdm.getDisplayText("TURN_REPORT_ORDER"), _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.need.iQuant, SCG.request.countdown));
 		}
 		_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
-		 _ioman.stringIn("");
+		 inputListen("");
+		 fullItemReport();
+		/*
 		for(int i = 0; i<SCG.iInv.size(); i++){
 			String sOut = "";
 			Good gPrint = SCG.iInv.get(i);
@@ -499,7 +501,7 @@ public class SpaceColonyEngine implements ISCSError{
 			}
 			
 		}
-		
+		*/
 		if(SCG.iInv.hasUnreported()){
 			String[][] sAsk = new String[2][2];
 			sAsk[0][0] = " ";
@@ -582,7 +584,7 @@ public class SpaceColonyEngine implements ISCSError{
 			
 			
 		_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
-		String SINN = _ioman.stringIn("");
+		String SINN = inputListen("");
 	}
 	
 	
@@ -606,7 +608,7 @@ public class SpaceColonyEngine implements ISCSError{
 		//iAnswer = _ioman.intIn(question);
 		
 		while(true){
-			iAnswer = _ioman.intIn(question);
+			iAnswer = intInputListen(question);
 			if(iAnswer>=0&&iAnswer<=(text.length-1)){
 				break;
 			}else{
@@ -987,7 +989,7 @@ public class SpaceColonyEngine implements ISCSError{
 			
 			int bResponse = selectScreen(_scsdm.getDisplayText("BUY_WHAT"),_scsdm.getDisplayText("MONEY") + ": " +SCG.iInv.getGoodByName("Money").iQuant, aCatalogue);
 			if(bResponse == (iEntriesToPrint+1)){
-				int hires = _ioman.intIn(_scsdm.getDisplayText("HOW_MANY"));
+				int hires = intInputListen(_scsdm.getDisplayText("HOW_MANY"));
 				if(hires>=tList.recruits){
 					hires=tList.recruits;
 				}
@@ -1011,7 +1013,7 @@ public class SpaceColonyEngine implements ISCSError{
 				}
 				
 				while(true){
-					iBuyAmount = _ioman.intIn(_scsdm.getDisplayText("HOW_MANY"));
+					iBuyAmount = intInputListen(_scsdm.getDisplayText("HOW_MANY"));
 					if(iBuyAmount <=0){
 						break;
 					}
@@ -1103,7 +1105,7 @@ public class SpaceColonyEngine implements ISCSError{
 				}
 				
 				while(true){
-					iSellAmount = _ioman.intIn(_scsdm.getDisplayText("HOW_MANY"));
+					iSellAmount = intInputListen(_scsdm.getDisplayText("HOW_MANY"));
 					if(iSellAmount <=0){
 						break;
 					}
@@ -1182,7 +1184,7 @@ public class SpaceColonyEngine implements ISCSError{
 			_savedm.saveGame(SCG, sSaveNames.get(iAns-1));
 		}else if(iAns==sSaveNames.size()+1){
 			System.out.println(_scsdm.getDisplayText("NEW_SAVE_NAME"));
-			String newName = _ioman.stringIn(_scsdm.getDisplayText("NEW_SAVE_NAME"));
+			String newName = inputListen(_scsdm.getDisplayText("NEW_SAVE_NAME"));
 			if(newName.equals("")){
 				
 			}else{
@@ -1357,6 +1359,122 @@ public class SpaceColonyEngine implements ISCSError{
 			SCG.structures.remove(iDemoTarget-1);
 		}
 		
+	}
+	
+	public int intInputListen(String display){
+		//System.out.println("DISPLAY " + display);
+		String sin = _ioman.stringIn(display);
+		int iOut = 0;
+		if(sin.equalsIgnoreCase("i")){
+			fullItemReport();
+			return intInputListen(display);
+		}else if(sin.equalsIgnoreCase("b")){
+			buildingReport();
+			return intInputListen(display);
+		}
+		
+		try{
+            iOut = Integer.parseInt(sin);
+        }//end try
+        catch(NumberFormatException nfe){
+			iOut = intInputListen(display);
+        }
+		
+		return iOut;
+	}
+	
+	public String inputListen(String display){
+		String sin = _ioman.stringIn(display);
+		
+		if(sin.equalsIgnoreCase("i")){
+			fullItemReport();
+			return "";
+		}else if(sin.equalsIgnoreCase("b")){
+			buildingReport();
+			return "";
+		}
+		return sin;
+		
+	}
+	
+	public void buildingReport(){
+		String[][] structReport = new String[SCG.structures.size()+2][3];
+		structReport[0][0] = _scsdm.getDisplayText("BUILDING");
+		structReport[0][1] = _scsdm.getDisplayText("WORKERS");
+		structReport[0][2] = _scsdm.getDisplayText("RECIPE");
+			for(int i = 1;i<=SCG.structures.size(); i++){//Come back here.
+			
+				if(i<10){
+					structReport[i][0] =" "+i+"- " + _scsdm.getDisplayText(SCG.structures.get(i-1).TEXT_CODE);
+					//System.out.println(SCG.structures.get(i-1).toString());
+				}else{
+					structReport[i][0] =i+"- " + _scsdm.getDisplayText(SCG.structures.get(i-1).TEXT_CODE);
+						//System.out.println(SCG.structures.get(i-1).toString());
+				}
+			
+					
+				if(SCG.structures.get(i-1).MAX_WORKERS!=0){
+				structReport[i][1] = Integer.toString( SCG.structures.get(i-1).iWorkers) + " / " + Integer.toString(SCG.structures.get(i-1).MAX_WORKERS);
+				//System.out.println(SCG.structures.get(i-1).toString());
+				}else{
+					structReport[i][1] = "-------";
+				}
+					
+				if(SCG.structures.get(i-1).bComplete == false){
+					structReport[i][2] = _scsdm.getDisplayText("SELF")+ " (" + SCG.structures.get(i-1).howDone() + ")";
+				}else if(SCG.structures.get(i-1) instanceof ProductionBuilding){
+					ProductionBuilding tempPBSlot = (ProductionBuilding) SCG.structures.get(i-1);
+					//System.out.println(SCG.structures.get(i-1));
+				
+					//System.out.println(tempPBSlot.toString());
+					if(tempPBSlot.currentRecipe!=null){
+						structReport[i][2] = _scsdm.getDisplayText(tempPBSlot.currentRecipe.TEXT_CODE);
+					}else{
+						structReport[i][2] = "-------";
+					}
+					//System.out.println(SCG.structures.get(i-1).toString());
+				}else{
+						structReport[i][2] = "-------";
+				}
+			}
+		//structReport[SCG.structures.size()+1][0] = _scsdm.getDisplayText("IDLE_WORKERS");
+		//structReport[SCG.structures.size()+1][1] = Integer.toString(SCG.pop.howManyUnassigned());
+		//structReport[SCG.structures.size()+1][2] = "-------";
+		if(SCG.structures.size()<10){
+			structReport[SCG.structures.size()+1][0] = " "+(SCG.structures.size()+1)+"-" + _scsdm.getDisplayText("NEW_BUILDING");
+		}else{
+			structReport[SCG.structures.size()+1][0] = ""+(SCG.structures.size()+1)+"-" + _scsdm.getDisplayText("NEW_BUILDING");
+		}
+		structReport[SCG.structures.size()+1][1] = "";
+		structReport[SCG.structures.size()+1][2] = "";
+		/*
+		//The Demolish Structures part
+		if(SCG.structures.size()<10){
+			structReport[SCG.structures.size()+2][0] = " "+(SCG.structures.size()+2)+"-" + _scsdm.getDisplayText("DEMOLISH");
+		}else{
+			structReport[SCG.structures.size()+2][0] = ""+(SCG.structures.size()+2)+"-" + _scsdm.getDisplayText("DEMOLISH");
+		}
+		structReport[SCG.structures.size()+2][1] = "";
+		structReport[SCG.structures.size()+2][2] = "";
+		*/
+		
+		for(int i = 0; i<structReport.length; i++){
+			String sOut = "";
+			//System.out.println( i + " vs " + structReport.length);
+			for(int j = 0; j<structReport[i].length; j++){
+				sOut+=structReport[i][j]+getSpacer(20-structReport[i][j].length());
+			}
+			_ioman.lineOut(sOut);
+			
+			
+		}
+			
+			
+			
+			
+			
+			
+			
 	}
 	
 	
