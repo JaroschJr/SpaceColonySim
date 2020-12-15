@@ -1247,8 +1247,12 @@ public class SpaceColonyEngine implements ISCSError{
 		}
 		*/
 		//sSaves[sSaveNames.size()+1][1] = _scsdm.getDisplayText("NEW_SAVE");
+		
 		int iAns = selectScreen(_scsdm.getDisplayText("SELECT_LOAD"), " ", sSaves);
-		if(iAns<=sSaveNames.size()){
+		if(iAns == 0){
+			SCG.gameReset();
+			SCG.iMerchantCountDown = 2+rand.nextInt(3);
+		}else if(iAns<=sSaveNames.size()){
 			System.out.println("Loading");
 			_savedm.loadGameByName(sSaveNames.get(iAns-1), SCG, _scsdm);
 			
