@@ -46,7 +46,7 @@ public class ProductOrder{
 	}
 	
 	public boolean isFulfillable(SpaceColonyGame scg){
-		boolean bOut = scg.iInv.getGoodByName(need.sName).iQuant>need.iQuant;
+		boolean bOut = scg.iInv.getGoodByName(need.sName).iQuant>=need.iQuant;
 		return bOut;
 		
 	}

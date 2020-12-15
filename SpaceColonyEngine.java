@@ -488,6 +488,8 @@ public class SpaceColonyEngine implements ISCSError{
 		_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
 		 inputListen("");
 		 fullItemReport();
+		 _ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
+		String SINN = inputListen("");
 		/*
 		for(int i = 0; i<SCG.iInv.size(); i++){
 			String sOut = "";
@@ -501,7 +503,7 @@ public class SpaceColonyEngine implements ISCSError{
 			}
 			
 		}
-		*/
+		
 		if(SCG.iInv.hasUnreported()){
 			String[][] sAsk = new String[2][2];
 			sAsk[0][0] = " ";
@@ -514,6 +516,7 @@ public class SpaceColonyEngine implements ISCSError{
 			}
 			
 		}
+		*/
 
 		//for a gap:
 		_ioman.lineOut(" ");
@@ -581,10 +584,6 @@ public class SpaceColonyEngine implements ISCSError{
 			_ioman.lineOut(sOut);
 		}
 			
-			
-			
-		_ioman.lineOut(_scsdm.getDisplayText("CONTINUE"));
-		String SINN = inputListen("");
 	}
 	
 	
