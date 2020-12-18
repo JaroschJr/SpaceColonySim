@@ -358,15 +358,19 @@ public class SpaceColonyEngine implements ISCSError{
 			*/
 			
 			//Order related things
+			System.out.println("it gets here");
 			if(SCG.iTurnCount>=25){
 				if(SCG.request == null){//for the first time.
+					System.out.println("And it gets here");
 					SCG.request = new ProductOrder(SCG);
 					_ioman.lineOut(String.format(_scsdm.getDisplayText("NEW_ORDER"),  SCG.request.need.iQuant, _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.countdown));
 					//System.out.println(SCG.request.toString());
 				}else if(SCG.request.fulfilled){
+					System.out.println("or here");
 					SCG.request = new ProductOrder(SCG);
 					_ioman.lineOut(String.format(_scsdm.getDisplayText("NEW_ORDER"),  SCG.request.need.iQuant, _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.countdown));
 				}else if(SCG.iTurnCount == SCG.request.countdown ){
+					System.out.println("it comes here");
 					if(SCG.request.isFulfillable(SCG)){
 						SCG.request.fulfill(SCG);
 					}else{
@@ -1182,7 +1186,7 @@ public class SpaceColonyEngine implements ISCSError{
 		}else if(iAns<=sSaveNames.size()){
 			_savedm.saveGame(SCG, sSaveNames.get(iAns-1));
 		}else if(iAns==sSaveNames.size()+1){
-			System.out.println(_scsdm.getDisplayText("NEW_SAVE_NAME"));
+			//System.out.println(_scsdm.getDisplayText("NEW_SAVE_NAME"));
 			String newName = inputListen(_scsdm.getDisplayText("NEW_SAVE_NAME"));
 			if(newName.equals("")){
 				

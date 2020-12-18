@@ -210,6 +210,8 @@ public class SCSDataModule{
 		String lastSQLString=" ";
 		try{
 			//System.out.println("Gets to 1");
+			scg.sGuid = getGuid();
+			/*
 			boolean bNew = true;
 			if(scg.sGuid == null){
 				bNew = true;
@@ -217,6 +219,8 @@ public class SCSDataModule{
 			}else{
 				bNew = false;
 			}
+			*/
+			
 			Statement sStatement = _conn.createStatement();
 			//System.out.println("Gets to 2");
 				//Eliminate existing save.
