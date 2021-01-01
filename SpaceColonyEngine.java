@@ -361,21 +361,22 @@ public class SpaceColonyEngine implements ISCSError{
 			System.out.println("it gets here");
 			if(SCG.iTurnCount>=25){
 				if(SCG.request == null){//for the first time.
-					System.out.println("And it gets here");
+					//System.out.println("And it gets here");
 					SCG.request = new ProductOrder(SCG);
 					_ioman.lineOut(String.format(_scsdm.getDisplayText("NEW_ORDER"),  SCG.request.need.iQuant, _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.countdown));
 					//System.out.println(SCG.request.toString());
 				}else if(SCG.request.fulfilled){
-					System.out.println("or here");
+					//System.out.println("or here");
 					SCG.request = new ProductOrder(SCG);
 					_ioman.lineOut(String.format(_scsdm.getDisplayText("NEW_ORDER"),  SCG.request.need.iQuant, _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.countdown));
 				}else if(SCG.iTurnCount == SCG.request.countdown ){
-					System.out.println("it comes here");
+					//System.out.println("it comes here");
 					if(SCG.request.isFulfillable(SCG)){
 						SCG.request.fulfill(SCG);
+						SCG.request = null;
 					}else{
 						SCG.iDebt += SCG.request.need.iQuant*SCG.request.need.BASE_PRICE;
-						SCG.request.fulfilled = true;
+						SCG.request = null;
 					}
 					
 					
