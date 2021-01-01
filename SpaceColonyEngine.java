@@ -373,9 +373,11 @@ public class SpaceColonyEngine implements ISCSError{
 					//System.out.println("it comes here");
 					if(SCG.request.isFulfillable(SCG)){
 						SCG.request.fulfill(SCG);
+						_ioman.lineOut(_scsdm.getDisplayText("ORDER_FULFILLED"));
 						SCG.request = null;
 					}else{
 						SCG.iDebt += SCG.request.need.iQuant*SCG.request.need.BASE_PRICE;
+						_ioman.lineOut(String.format(_scsdm.getDisplayText("ORDER_FAILED"), SCG.request.need.iQuant*SCG.request.need.BASE_PRICE));
 						SCG.request = null;
 					}
 					
