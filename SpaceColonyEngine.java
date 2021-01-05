@@ -358,7 +358,7 @@ public class SpaceColonyEngine implements ISCSError{
 			*/
 			
 			//Order related things
-			System.out.println("it gets here");
+			//System.out.println("it gets here");
 			if(SCG.iTurnCount>=25){
 				if(SCG.request == null){//for the first time.
 					//System.out.println("And it gets here");
