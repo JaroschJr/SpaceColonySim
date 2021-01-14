@@ -718,11 +718,11 @@ public class SpaceColonyEngine implements ISCSError{
 						//System.out.println("Reaches B");
 						iNewWorkers = howManyWorkers(bWorkingBuilding);
 						
-						if(iNewWorkers > 0){
+						if(iNewWorkers >= 0){
 							bWorkingBuilding.setWork(SCG.pop, iNewWorkers);
 						}
 						
-						if(bWorkingBuilding.iWorkers>0){
+						if(bWorkingBuilding.iWorkers>=0){
 							bWorkingBuilding.bBuildingSelf = true;
 						}
 						
