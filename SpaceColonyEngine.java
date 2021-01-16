@@ -1381,6 +1381,18 @@ public class SpaceColonyEngine implements ISCSError{
 		}else if(sin.equalsIgnoreCase("b")){
 			buildingReport();
 			return intInputListen(display);
+		}else if(sin.equalsIgnoreCase("d")){
+			_ioman.lineOut(_scsdm.getDisplayText("DEBT") + getSpacer((20-_scsdm.getDisplayText("DEBT").length())- Integer.toString(SCG.iDebt).length()) + SCG.iDebt);
+			return intInputListen(display);
+			
+		}else if(sin.equalsIgnoreCase("o")){
+			
+			if(SCG.request!=null){
+				_ioman.lineOut(String.format(_scsdm.getDisplayText("TURN_REPORT_ORDER"), _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.need.iQuant, SCG.request.countdown));
+			}else{
+				_ioman.lineOut(_scsdm.getDisplayText("NO_DEBT));
+			}
+			return intInputListen(display); 
 		}
 		
 		try{
