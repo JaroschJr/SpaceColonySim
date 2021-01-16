@@ -1390,7 +1390,7 @@ public class SpaceColonyEngine implements ISCSError{
 			if(SCG.request!=null){
 				_ioman.lineOut(String.format(_scsdm.getDisplayText("TURN_REPORT_ORDER"), _scsdm.getDisplayText(SCG.request.need.sTextCode), SCG.request.need.iQuant, SCG.request.countdown));
 			}else{
-				_ioman.lineOut(_scsdm.getDisplayText("NO_DEBT));
+				_ioman.lineOut(_scsdm.getDisplayText("NO_ORDER"));
 			}
 			return intInputListen(display); 
 		}
