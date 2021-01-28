@@ -1376,6 +1376,9 @@ public class SpaceColonyEngine implements ISCSError{
 		String sin = _ioman.stringIn(display);
 		int iOut = 0;
 		if(sin.equalsIgnoreCase("i")){
+			_ioman.lineOut(_scsdm.getDisplayText("TURN_REPORT_TURN") +getSpacer((20-_scsdm.getDisplayText("TURN_REPORT_TURN").length())- Integer.toString(SCG.iTurnCount).length()) + SCG.iTurnCount);
+			//_ioman.lineOut(_scsdm.getDisplayText("ORDER")+getSpacer((20-_scsdm.getDisplayText("TURN_REPORT_TURN").length()))
+			_ioman.lineOut(_scsdm.getDisplayText("TURN_REPORT_POPULATION") +getSpacer((20-_scsdm.getDisplayText("TURN_REPORT_POPULATION").length())- Integer.toString(SCG.pop.size()).length()) + SCG.pop.size());
 			fullItemReport();
 			return intInputListen(display);
 		}else if(sin.equalsIgnoreCase("b")){
@@ -1385,6 +1388,9 @@ public class SpaceColonyEngine implements ISCSError{
 			_ioman.lineOut(_scsdm.getDisplayText("DEBT") + getSpacer((20-_scsdm.getDisplayText("DEBT").length())- Integer.toString(SCG.iDebt).length()) + SCG.iDebt);
 			return intInputListen(display);
 			
+		}else if(sin.equalsIgnoreCase("m")){
+			_ioman.lineOut(_scsdm.getDisplayText("MORALE") +getSpacer((20-_scsdm.getDisplayText("MORALE").length())- Integer.toString(SCG.subMorale).length()) + SCG.subMorale);
+			_ioman.lineOut(mManager.moraleReport(SCG,_scsdm));
 		}else if(sin.equalsIgnoreCase("o")){
 			
 			if(SCG.request!=null){
