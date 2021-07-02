@@ -1,8 +1,8 @@
 import java.sql.*;
-public class MultipleRanodmEvents extends RandomEvent{
+public class MultipleRandomEvents extends RandomEvent{
 	
 	//Constuctor
-	public MultipleRanodmEvents(){
+	public MultipleRandomEvents(){
 		
 	}
 	

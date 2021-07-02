@@ -110,7 +110,7 @@ public class SpaceColonyEngine implements ISCSError{
 			System.out.println("database manually and then restart");
 			System.out.println();
 			System.out.println("Please type the word 'UPDATE' to perform the update.");
-			String answer = System.console().readLine();
+			String answer = _ioman.stringIn("");
 			
 			if(answer.equalsIgnoreCase("UPDATE")) {
 				System.out.println("Updating saved games database");
@@ -162,10 +162,11 @@ public class SpaceColonyEngine implements ISCSError{
 		_savedm.errorHandler = this;
 		_savedm.setConnectionString(SAVECONSTR);
 		_savedm.connect();
-		
+
+		_ioman = new SCSConsoleIO(this);
+
 		checkForUpgrade();
 
-		_ioman = new SCSConsoleIO();
 		mManager = new MoraleManager();
 		dMan = new DebtMannager();
 		

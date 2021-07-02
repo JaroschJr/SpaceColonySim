@@ -61,8 +61,8 @@ public class SCSDataModuleTest implements ISCSError{
 		Thing.disConnect();
 	}
 
-	public void handleException(Exception ThisException){
-		System.out.println(ThisException.getMessage());
-
-		}
+	@Override
+	public void handleException(Exception thisException, String sExtraInfo, boolean bFatal) {
+		System.out.println(thisException.getMessage());
+	}
 }

@@ -1,5 +1,5 @@
 public class RecipEntry{
-	SCSEnum.eItem item;
+	SCSEnum.eItems item;
 	int iAmmount;
 	//posibly some other things.
 }
