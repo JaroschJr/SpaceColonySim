@@ -251,8 +251,8 @@ public class SpaceColonyEngine implements ISCSError{
 		boolean done = false;
 					//load or new.
 		while(done == false){
-			System.out.println(_scsdm.getDisplayText("NEW_OR_LOAD"));
-			String sInput = System.console().readLine();
+			//System.out.println(_scsdm.getDisplayText("NEW_OR_LOAD"));
+			String sInput = _ioman.stringIn(_scsdm.getDisplayText("NEW_OR_LOAD"));
 			sInput = sInput.toUpperCase();
 			switch(sInput){
 				case "N":
